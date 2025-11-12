@@ -1,0 +1,216 @@
+Professional Quoting Tool Development Prompt
+Build a comprehensive quoting and proposal generation platform using Next.js 15+, Tailwind CSS, and Neon Database (PostgreSQL) with JWT-based authentication, enabling businesses to create, manage, and track professional commercial proposals and quotes.Optivalue-Tek-Commercial-Proposal-_-Dell-Laptops-and-Desktops.docx​neon+1​
+Core Technology Stack
+Frontend: Next.js 15 (App Router), React 19, Tailwind CSS, TypeScript
+Backend: Next.js API Routes, JWT authentication with HTTP-only cookies
+Database: Neon Database (PostgreSQL), Drizzle ORM or Prisma
+Authentication: Custom JWT implementation with bcrypt for password hashing
+PDF Generation: React-PDF or Puppeteer for quote/invoice exports
+UI Components: Shadcn/ui or Radix UI primitives with Tailwindneon+2​
+Design System Implementation
+Color Palette:
+Primary: #0046FF (Bright Blue) - CTAs, links, active states
+Secondary: #001BB7 (Deep Blue) - Headers, navigation
+Accent: #FF8040 (Warm Orange) - Highlights, notifications, progress indicators
+Background: #F5F1DC (Cream Beige) - Page backgrounds, cards
+Text: #2C2C2C (Charcoal) - Body text, headingsOptivalue-Tek-Commercial-Proposal-_-Dell-Laptops-and-Desktops.docx​
+Typography:
+Primary: Inter for UI elements and data
+Secondary: Open Sans for body text and descriptions
+Font weights: 400 (regular), 500 (medium), 600 (semibold), 700 (bold)
+Layout Principles:
+Clean card-based design with subtle shadows (shadow-sm, shadow-md)
+8px baseline grid system for consistent spacing
+Progressive disclosure with collapsible sections
+Breadcrumb navigation and progress indicators for multi-step workflows
+Mobile-first responsive design (breakpoints: sm:640px, md:768px, lg:1024px, xl:1280px)linkedin+1​
+Authentication System
+JWT Implementation:
+Email and password authentication using bcrypt (10 salt rounds)
+JWT tokens stored in HTTP-only cookies with secure and sameSite flags
+Access token expiry: 15 minutes
+Refresh token expiry: 7 days
+Password requirements: minimum 8 characters, uppercase, lowercase, number, special characternextjs+1​
+User Roles:
+Admin: Full system access, user management, global settings
+Manager: Team management, quote approval workflows, analytics access
+User: Create/edit own quotes, client management, basic reporting
+Viewer: Read-only access to assigned quotesvarstreetinc+1​
+Admin Panel Features
+User Management Dashboard:
+Create, edit, delete, and disable user accounts
+Role assignment and permission management
+User activity logs and last login tracking
+Bulk user operations (import/export CSV)
+Password reset functionality
+User search and advanced filteringtailadmin+1​
+System Settings:
+Company profile (name, logo, address, GST/tax ID)
+Email configuration (SMTP settings, templates)
+Tax rate management by region
+Currency and internationalization settings
+Quote numbering format customization
+Document templates and brandingvarstreetinc​Optivalue-Tek-Commercial-Proposal-_-Dell-Laptops-and-Desktops.docx​
+Quote Builder Features
+Client Management:
+Comprehensive client database with contact details
+Billing and shipping address management
+Client communication history
+Custom fields (GSTIN, phone, email, company registration)
+Client categorization and taggingyounium​Optivalue-Tek-Commercial-Proposal-_-Dell-Laptops-and-Desktops.docx​
+Quote Creation Workflow:
+Basic Information:
+Auto-generated quote number with custom prefix/format
+Quote date and validity period
+Client selection from database or quick add
+Attention to (contact person)
+Reference number/PO numberOptivalue-Tek-Commercial-Proposal-_-Dell-Laptops-and-Desktops.docx​varstreetinc​
+Line Items Management:
+Dynamic table with add/remove rows
+Columns: SN, Product/Service Description, Quantity, Unit Price, Subtotal
+Product catalog integration with search
+Inline editing with auto-calculation
+Support for product configurations/variations
+Item notes and specifications
+Bulk import from CSV/Excelvarstreetinc​Optivalue-Tek-Commercial-Proposal-_-Dell-Laptops-and-Desktops.docx​
+Pricing Calculations:
+Subtotal, discount (percentage or fixed), tax calculations
+Multiple tax rates (CGST, SGST, IGST for India)
+Shipping/handling charges
+Currency conversion support
+Configurable rounding rulesyounium​Optivalue-Tek-Commercial-Proposal-_-Dell-Laptops-and-Desktops.docx​
+Terms & Conditions:
+Customizable sections: Payment terms, Delivery, Taxes, Warranty, Support
+Template library for common T&C
+Rich text editor for custom clauses
+Version control for T&C changesOptivalue-Tek-Commercial-Proposal-_-Dell-Laptops-and-Desktops.docx​varstreetinc​
+Additional Sections:
+Executive summary/abstract
+Special notes and instructions
+Detailed BOM (Bill of Materials) as annexure
+Service level agreements
+Project timeline/milestonesOptivalue-Tek-Commercial-Proposal-_-Dell-Laptops-and-Desktops.docx​
+Template System
+Quote Templates:
+Multiple pre-designed layouts (Professional, Modern, Minimal, Detailed)
+Customizable header/footer with company branding
+Logo placement options
+Color scheme customization per template
+Conditional sections (show/hide based on quote type)
+Template preview before generationvarstreetinc​Optivalue-Tek-Commercial-Proposal-_-Dell-Laptops-and-Desktops.docx​
+Template Variables:
+Company details, client information, quote items
+Dynamic calculations and totals
+Signature blocks with digital signature support
+QR codes for quick verification
+Watermarks for draft/approved statusOptivalue-Tek-Commercial-Proposal-_-Dell-Laptops-and-Desktops.docx​
+Real-Time PDF Preview
+Live preview panel alongside quote builder
+Instant updates as data is entered
+Page break visualization
+Mobile-responsive preview
+Download, email, or share directly from preview
+Multiple export formats (PDF, DOCX, Excel)younium+1​
+Invoice Generation
+Convert approved quotes to invoices (one-click)
+Invoice numbering separate from quotes
+Payment status tracking (Pending, Partial, Paid, Overdue)
+Payment method recording
+Invoice history and audit trail
+Automated payment reminders
+Receipt generation upon paymentyounium​
+Analytics Dashboard
+Key Metrics:
+Total quotes created (monthly, quarterly, annual)
+Quote conversion rate (quote to invoice)
+Average quote value and deal size
+Revenue forecasting based on pipeline
+Top clients by revenue
+Product/service performance analysistailadmin+1​
+Visualizations:
+Interactive charts using Recharts or Chart.js
+Revenue trend lines
+Quote status funnel (Draft → Sent → Approved → Invoiced)
+Regional sales distribution maps
+Team performance comparisontailadmin​
+Reports:
+Exportable reports (PDF, Excel, CSV)
+Custom date range selection
+Scheduled report delivery via email
+Drill-down capabilities for detailed analysisyounium​
+Database Schema (Neon PostgreSQL)
+Core Tables:
+sql
+users (id, email, password_hash, name, role, status, created_at, updated_at)
+clients (id, name, email, phone, billing_address, shipping_address, gstin, created_by, created_at)
+quotes (id, quote_number, client_id, status, validity_days, created_by, subtotal, tax, total, notes, created_at, updated_at)
+quote_items (id, quote_id, description, quantity, unit_price, subtotal, sort_order)
+templates (id, name, layout, customization_json, created_by, is_active)
+invoices (id, invoice_number, quote_id, payment_status, due_date, paid_amount, created_at)
+activity_logs (id, user_id, action, entity_type, entity_id, timestamp)
+settings (id, key, value, updated_by, updated_at)
+
+API Routes Structure
+text
+/api/auth/login, /signup, /logout, /refresh, /me
+/api/users (CRUD operations)
+/api/clients (CRUD operations)
+/api/quotes (CRUD, duplicate, convert-to-invoice)
+/api/quotes/[id]/pdf (generate PDF)
+/api/quotes/[id]/email (send via email)
+/api/invoices (CRUD operations)
+/api/templates (CRUD operations)
+/api/analytics (dashboard metrics, reports)
+/api/settings (system configuration)
+
+Mobile Application Considerations
+Progressive Web App (PWA) capabilities
+Offline mode with local storage sync
+Mobile-optimized quote creation workflow
+Camera integration for receipt/document capture
+Push notifications for quote approvals
+Biometric authentication supporttailadmin+1​
+Security & Performance
+Security:
+Input validation and sanitization
+SQL injection prevention via parameterized queries
+CSRF protection with tokens
+Rate limiting on API endpoints
+Audit logging for sensitive operations
+Regular security headers (helmet.js)nextjs​
+Performance:
+Server-side rendering for faster initial load
+Image optimization with next/image
+Code splitting and lazy loading
+Database query optimization with indexes
+Caching strategy (Redis for sessions)
+CDN for static assetslinkedin​
+Accessibility Features
+WCAG 2.1 AA compliance
+Keyboard navigation support
+Screen reader compatibility
+High contrast mode toggle
+Focus indicators and skip links
+Semantic HTML structurelinkedin+1​
+Development Phases
+Phase 1 (Core MVP):
+Authentication system and admin panel
+Basic quote builder with line items
+Client management
+Simple PDF generation
+Essential API routeslinkedin​
+Phase 2 (Enhanced Features):
+Template system with customization
+Real-time PDF preview
+Invoice generation
+Email integration
+Tax calculation enginevarstreetinc+1​
+Phase 3 (Advanced):
+Analytics dashboard
+Approval workflows
+Mobile PWA
+Advanced reporting
+Integration APIstailadmin+1​
+
+
+also make sure there should be a backup email which is stored in the database for that particular user, that is sent the link to reset the password when the user clicks on the reset password in the login page.
