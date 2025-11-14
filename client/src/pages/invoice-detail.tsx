@@ -3,12 +3,14 @@ import { useLocation, useRoute } from "wouter";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Download, Send, Loader2 } from "lucide-react";
+import { ArrowLeft, Download, Send, Loader2, Edit, CreditCard } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
@@ -52,11 +54,63 @@ export default function InvoiceDetail() {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [emailData, setEmailData] = useState({ email: "", message: "" });
   const [isDownloading, setIsDownloading] = useState(false);
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [paymentData, setPaymentData] = useState({ status: "", paidAmount: "" });
 
   const { data: invoice, isLoading } = useQuery<InvoiceDetail>({
     queryKey: ["/api/invoices", params?.id],
     enabled: !!params?.id,
   });
+
+  const updatePaymentMutation = useMutation({
+    mutationFn: async (data: { paymentStatus?: string; paidAmount?: string }) => {
+      return await apiRequest("PUT", `/api/invoices/${params?.id}/payment-status`, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/invoices", params?.id] });
+      queryClient.invalidateQueries({ queryKey: ["/api/invoices"] });
+      toast({
+        title: "Success",
+        description: "Payment details updated successfully.",
+      });
+      setShowPaymentDialog(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update payment details.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleOpenPaymentDialog = () => {
+    if (invoice) {
+      setPaymentData({
+        status: invoice.paymentStatus,
+        paidAmount: invoice.paidAmount,
+      });
+      setShowPaymentDialog(true);
+    }
+  };
+
+  const handleUpdatePayment = () => {
+    const updates: { paymentStatus?: string; paidAmount?: string } = {};
+
+    if (paymentData.status !== invoice?.paymentStatus) {
+      updates.paymentStatus = paymentData.status;
+    }
+
+    if (paymentData.paidAmount !== invoice?.paidAmount) {
+      updates.paidAmount = paymentData.paidAmount;
+    }
+
+    if (Object.keys(updates).length > 0) {
+      updatePaymentMutation.mutate(updates);
+    } else {
+      setShowPaymentDialog(false);
+    }
+  };
 
   const downloadPdfMutation = useMutation({
     mutationFn: async () => {
@@ -270,7 +324,18 @@ export default function InvoiceDetail() {
         <div>
           <Card className="sticky top-6">
             <CardHeader>
-              <CardTitle>Invoice Summary</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle>Invoice Summary</CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleOpenPaymentDialog}
+                  data-testid="button-edit-payment"
+                >
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Payment
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -385,6 +450,84 @@ export default function InvoiceDetail() {
                 </>
               ) : (
                 "Send Email"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Update Payment Details</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="payment-status">Payment Status</Label>
+              <Select
+                value={paymentData.status}
+                onValueChange={(value) => setPaymentData({ ...paymentData, status: value })}
+              >
+                <SelectTrigger id="payment-status" data-testid="select-payment-status">
+                  <SelectValue placeholder="Select payment status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="partial">Partial</SelectItem>
+                  <SelectItem value="paid">Paid</SelectItem>
+                  <SelectItem value="overdue">Overdue</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="paid-amount">Paid Amount</Label>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-bold">₹</span>
+                <Input
+                  id="paid-amount"
+                  type="number"
+                  placeholder="0.00"
+                  value={paymentData.paidAmount}
+                  onChange={(e) => setPaymentData({ ...paymentData, paidAmount: e.target.value })}
+                  min="0"
+                  max={invoice?.total}
+                  step="0.01"
+                  data-testid="input-paid-amount"
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Total invoice amount: ₹{Number(invoice?.total || 0).toLocaleString()}
+              </p>
+              {paymentData.paidAmount && (
+                <p className="text-sm text-muted-foreground">
+                  Outstanding: ₹{(Number(invoice?.total || 0) - Number(paymentData.paidAmount)).toLocaleString()}
+                </p>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowPaymentDialog(false)}
+              data-testid="button-payment-cancel"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleUpdatePayment}
+              disabled={updatePaymentMutation.isPending}
+              data-testid="button-payment-update"
+            >
+              {updatePaymentMutation.isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                <>
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Update Payment
+                </>
               )}
             </Button>
           </DialogFooter>

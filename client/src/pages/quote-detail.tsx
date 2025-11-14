@@ -3,7 +3,7 @@ import { useLocation, useRoute } from "wouter";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Download, Send, Check, X, Receipt, Loader2 } from "lucide-react";
+import { ArrowLeft, Download, Send, Check, X, Receipt, Loader2, Pencil } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -207,6 +207,17 @@ export default function QuoteDetail() {
           </div>
         </div>
         <div className="flex gap-2">
+          {quote.status !== "invoiced" && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setLocation(`/quotes/${params?.id}/edit`)}
+              data-testid="button-edit-quote"
+            >
+              <Pencil className="h-4 w-4 mr-2" />
+              Edit
+            </Button>
+          )}
           <Button
             variant="outline"
             size="sm"

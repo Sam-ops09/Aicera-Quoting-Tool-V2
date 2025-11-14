@@ -80,6 +80,7 @@ function AuthenticatedLayout() {
               <Route path="/clients" component={() => <ProtectedRoute component={Clients} />} />
               <Route path="/quotes" component={() => <ProtectedRoute component={Quotes} />} />
               <Route path="/quotes/create" component={() => <ProtectedRoute component={QuoteCreate} />} />
+              <Route path="/quotes/:id/edit" component={() => <ProtectedRoute component={QuoteCreate} />} />
               <Route path="/quotes/:id" component={() => <ProtectedRoute component={QuoteDetail} />} />
               <Route path="/invoices" component={() => <ProtectedRoute component={Invoices} />} />
               <Route path="/invoices/:id" component={() => <ProtectedRoute component={InvoiceDetail} />} />

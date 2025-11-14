@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search, Mail, Phone, MapPin, Loader2, Edit, Trash2, Users } from "lucide-react";
+import { Plus, Search, Mail, Phone, Loader2, Edit, Trash2, Users } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,13 +18,28 @@ import { z } from "zod";
 export default function Clients() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const { toast } = useToast();
 
   const { data: clients, isLoading } = useQuery<Client[]>({
     queryKey: ["/api/clients"],
   });
 
-  const form = useForm<z.infer<typeof insertClientSchema>>({
+  const createForm = useForm<z.infer<typeof insertClientSchema>>({
+    resolver: zodResolver(insertClientSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      billingAddress: "",
+      shippingAddress: "",
+      gstin: "",
+      contactPerson: "",
+    },
+  });
+
+  const editForm = useForm<z.infer<typeof insertClientSchema>>({
     resolver: zodResolver(insertClientSchema),
     defaultValues: {
       name: "",
@@ -44,7 +59,7 @@ export default function Clients() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/clients"] });
       setIsCreateDialogOpen(false);
-      form.reset();
+      createForm.reset();
       toast({
         title: "Client created",
         description: "New client has been added successfully.",
@@ -53,6 +68,28 @@ export default function Clients() {
     onError: (error: any) => {
       toast({
         title: "Failed to create client",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: z.infer<typeof insertClientSchema> }) => {
+      return await apiRequest("PUT", `/api/clients/${id}`, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/clients"] });
+      setIsEditDialogOpen(false);
+      setSelectedClient(null);
+      toast({
+        title: "Client updated",
+        description: "Client has been updated successfully.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Failed to update client",
         description: error.message,
         variant: "destructive",
       });
@@ -72,8 +109,28 @@ export default function Clients() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof insertClientSchema>) => {
+  const onCreateSubmit = async (values: z.infer<typeof insertClientSchema>) => {
     await createMutation.mutateAsync(values);
+  };
+
+  const onEditSubmit = async (values: z.infer<typeof insertClientSchema>) => {
+    if (selectedClient) {
+      await updateMutation.mutateAsync({ id: selectedClient.id, data: values });
+    }
+  };
+
+  const handleEditClick = (client: Client) => {
+    setSelectedClient(client);
+    editForm.reset({
+      name: client.name,
+      email: client.email,
+      phone: client.phone || "",
+      billingAddress: client.billingAddress || "",
+      shippingAddress: client.shippingAddress || "",
+      gstin: client.gstin || "",
+      contactPerson: client.contactPerson || "",
+    });
+    setIsEditDialogOpen(true);
   };
 
   const filteredClients = clients?.filter(client =>
@@ -116,11 +173,11 @@ export default function Clients() {
               <DialogTitle>Create New Client</DialogTitle>
               <DialogDescription>Add a new client to your database</DialogDescription>
             </DialogHeader>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <Form {...createForm}>
+              <form onSubmit={createForm.handleSubmit(onCreateSubmit)} className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2">
                   <FormField
-                    control={form.control}
+                    control={createForm.control}
                     name="name"
                     render={({ field }) => (
                       <FormItem>
@@ -133,7 +190,7 @@ export default function Clients() {
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={createForm.control}
                     name="contactPerson"
                     render={({ field }) => (
                       <FormItem>
@@ -148,7 +205,7 @@ export default function Clients() {
                 </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <FormField
-                    control={form.control}
+                    control={createForm.control}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
@@ -161,7 +218,7 @@ export default function Clients() {
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={createForm.control}
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
@@ -175,7 +232,7 @@ export default function Clients() {
                   />
                 </div>
                 <FormField
-                  control={form.control}
+                  control={createForm.control}
                   name="gstin"
                   render={({ field }) => (
                     <FormItem>
@@ -188,7 +245,7 @@ export default function Clients() {
                   )}
                 />
                 <FormField
-                  control={form.control}
+                  control={createForm.control}
                   name="billingAddress"
                   render={({ field }) => (
                     <FormItem>
@@ -201,7 +258,7 @@ export default function Clients() {
                   )}
                 />
                 <FormField
-                  control={form.control}
+                  control={createForm.control}
                   name="shippingAddress"
                   render={({ field }) => (
                     <FormItem>
@@ -223,6 +280,119 @@ export default function Clients() {
         </Dialog>
       </div>
 
+      {/* Edit Client Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Client</DialogTitle>
+            <DialogDescription>Update client information</DialogDescription>
+          </DialogHeader>
+          <Form {...editForm}>
+            <form onSubmit={editForm.handleSubmit(onEditSubmit)} className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2">
+                <FormField
+                  control={editForm.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Company Name *</FormLabel>
+                      <FormControl>
+                        <Input {...field} data-testid="input-edit-client-name" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={editForm.control}
+                  name="contactPerson"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Contact Person</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ""} data-testid="input-edit-contact-person" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                <FormField
+                  control={editForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email *</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="email" data-testid="input-edit-client-email" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={editForm.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ""} data-testid="input-edit-client-phone" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <FormField
+                control={editForm.control}
+                name="gstin"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>GSTIN</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ""} data-testid="input-edit-client-gstin" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={editForm.control}
+                name="billingAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Billing Address</FormLabel>
+                    <FormControl>
+                      <Textarea {...field} value={field.value || ""} data-testid="input-edit-billing-address" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={editForm.control}
+                name="shippingAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Shipping Address</FormLabel>
+                    <FormControl>
+                      <Textarea {...field} value={field.value || ""} data-testid="input-edit-shipping-address" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full" disabled={updateMutation.isPending} data-testid="button-update-client">
+                {updateMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Update Client
+              </Button>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
@@ -241,14 +411,24 @@ export default function Clients() {
               <CardHeader>
                 <CardTitle className="flex items-start justify-between">
                   <span className="text-lg">{client.name}</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => deleteMutation.mutate(client.id)}
-                    data-testid={`button-delete-client-${client.id}`}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleEditClick(client)}
+                      data-testid={`button-edit-client-${client.id}`}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => deleteMutation.mutate(client.id)}
+                      data-testid={`button-delete-client-${client.id}`}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">

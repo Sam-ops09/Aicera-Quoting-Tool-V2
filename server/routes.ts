@@ -486,6 +486,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.put("/api/clients/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const { name, email } = req.body;
+
+      // Validate required fields
+      if (!name || !email) {
+        return res.status(400).json({ error: "Client name and email are required" });
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: "Invalid email format" });
+      }
+
+      const client = await storage.updateClient(req.params.id, req.body);
+
+      if (!client) {
+        return res.status(404).json({ error: "Client not found" });
+      }
+
+      await storage.createActivityLog({
+        userId: req.user!.id,
+        action: "update_client",
+        entityType: "client",
+        entityId: client.id,
+      });
+
+      return res.json(client);
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message || "Failed to update client" });
+    }
+  });
+
   app.delete("/api/clients/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
     try {
       await storage.deleteClient(req.params.id);
@@ -602,6 +636,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.patch("/api/quotes/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
     try {
+      // Check if quote exists and is not invoiced
+      const existingQuote = await storage.getQuote(req.params.id);
+      if (!existingQuote) {
+        return res.status(404).json({ error: "Quote not found" });
+      }
+
+      // Prevent editing invoiced quotes
+      if (existingQuote.status === "invoiced") {
+        return res.status(400).json({ error: "Cannot edit an invoiced quote" });
+      }
+
       const quote = await storage.updateQuote(req.params.id, req.body);
       if (!quote) {
         return res.status(404).json({ error: "Quote not found" });
@@ -617,6 +662,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.json(quote);
     } catch (error) {
       return res.status(500).json({ error: "Failed to update quote" });
+    }
+  });
+
+  app.put("/api/quotes/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      // Check if quote exists and is not invoiced
+      const existingQuote = await storage.getQuote(req.params.id);
+      if (!existingQuote) {
+        return res.status(404).json({ error: "Quote not found" });
+      }
+
+      // Prevent editing invoiced quotes
+      if (existingQuote.status === "invoiced") {
+        return res.status(400).json({ error: "Cannot edit an invoiced quote" });
+      }
+
+      const { items, ...quoteData } = req.body;
+
+      // Update quote
+      const quote = await storage.updateQuote(req.params.id, quoteData);
+      if (!quote) {
+        return res.status(404).json({ error: "Quote not found" });
+      }
+
+      // Update quote items if provided
+      if (items && Array.isArray(items)) {
+        // Delete existing items
+        await storage.deleteQuoteItems(req.params.id);
+
+        // Create new items
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          await storage.createQuoteItem({
+            quoteId: quote.id,
+            description: item.description,
+            quantity: item.quantity,
+            unitPrice: String(item.unitPrice),
+            subtotal: String(item.quantity * item.unitPrice),
+            sortOrder: i,
+          });
+        }
+      }
+
+      await storage.createActivityLog({
+        userId: req.user!.id,
+        action: "update_quote",
+        entityType: "quote",
+        entityId: quote.id,
+      });
+
+      return res.json(quote);
+    } catch (error: any) {
+      console.error("Update quote error:", error);
+      return res.status(500).json({ error: error.message || "Failed to update quote" });
     }
   });
 
@@ -788,7 +887,122 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Record Invoice Payment
+  // Get Invoice by ID
+  app.get("/api/invoices/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const invoice = await storage.getInvoice(req.params.id);
+      if (!invoice) {
+        return res.status(404).json({ error: "Invoice not found" });
+      }
+
+      const quote = await storage.getQuote(invoice.quoteId);
+      if (!quote) {
+        return res.status(404).json({ error: "Related quote not found" });
+      }
+
+      const client = await storage.getClient(quote.clientId);
+      if (!client) {
+        return res.status(404).json({ error: "Client not found" });
+      }
+
+      const items = await storage.getQuoteItems(quote.id);
+
+      const invoiceDetail = {
+        ...invoice,
+        quoteNumber: quote.quoteNumber,
+        status: quote.status,
+        client: {
+          name: client.name,
+          email: client.email,
+          phone: client.phone || "",
+          billingAddress: client.billingAddress || "",
+          gstin: client.gstin || "",
+        },
+        items: items.map(item => ({
+          id: item.id,
+          description: item.description,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          subtotal: item.subtotal,
+        })),
+        subtotal: quote.subtotal,
+        discount: quote.discount,
+        cgst: quote.cgst,
+        sgst: quote.sgst,
+        igst: quote.igst,
+        shippingCharges: quote.shippingCharges,
+        total: quote.total,
+      };
+
+      return res.json(invoiceDetail);
+    } catch (error: any) {
+      console.error("Get invoice error:", error);
+      return res.status(500).json({ error: error.message || "Failed to fetch invoice" });
+    }
+  });
+
+  // Update Invoice Payment Status and Amount
+  app.put("/api/invoices/:id/payment-status", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const { paymentStatus, paidAmount } = req.body;
+
+      const invoice = await storage.getInvoice(req.params.id);
+      if (!invoice) {
+        return res.status(404).json({ error: "Invoice not found" });
+      }
+
+      const quote = await storage.getQuote(invoice.quoteId);
+      if (!quote) {
+        return res.status(404).json({ error: "Related quote not found" });
+      }
+
+      const updateData: Partial<typeof invoice> = {};
+
+      if (paymentStatus !== undefined) {
+        updateData.paymentStatus = paymentStatus;
+      }
+
+      if (paidAmount !== undefined) {
+        const numPaidAmount = Number(paidAmount);
+        const totalAmount = Number(quote.total);
+
+        if (numPaidAmount < 0 || numPaidAmount > totalAmount) {
+          return res.status(400).json({ error: "Invalid paid amount" });
+        }
+
+        updateData.paidAmount = String(numPaidAmount);
+
+        // Auto-update status based on amount if not explicitly set
+        if (paymentStatus === undefined) {
+          if (numPaidAmount >= totalAmount) {
+            updateData.paymentStatus = "paid";
+          } else if (numPaidAmount > 0) {
+            updateData.paymentStatus = "partial";
+          } else {
+            updateData.paymentStatus = "pending";
+          }
+        }
+
+        updateData.lastPaymentDate = new Date();
+      }
+
+      const updatedInvoice = await storage.updateInvoice(req.params.id, updateData);
+
+      await storage.createActivityLog({
+        userId: req.user!.id,
+        action: "update_payment_status",
+        entityType: "invoice",
+        entityId: invoice.id,
+      });
+
+      return res.json(updatedInvoice);
+    } catch (error: any) {
+      console.error("Update payment status error:", error);
+      return res.status(500).json({ error: error.message || "Failed to update payment status" });
+    }
+  });
+
+  // Record Invoice Payment (incremental)
   app.post("/api/invoices/:id/payment", authMiddleware, async (req: AuthRequest, res: Response) => {
     try {
       const { amount, method, notes } = req.body;

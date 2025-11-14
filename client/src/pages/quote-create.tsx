@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useLocation } from "wouter";
+import { useLocation, useRoute } from "wouter";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -34,6 +34,33 @@ interface QuoteCreatePayload {
   items: { description: string; quantity: number; unitPrice: number }[];
 }
 
+interface QuoteDetail {
+  id: string;
+  quoteNumber: string;
+  status: string;
+  clientId: string;
+  validityDays: number;
+  referenceNumber?: string;
+  attentionTo?: string;
+  notes?: string;
+  termsAndConditions?: string;
+  quoteDate?: string;
+  items: Array<{
+    id: string;
+    description: string;
+    quantity: number;
+    unitPrice: string;
+    subtotal: string;
+  }>;
+  subtotal: string;
+  discount: string;
+  cgst: string;
+  sgst: string;
+  igst: string;
+  shippingCharges: string;
+  total: string;
+}
+
 const quoteFormSchema = z.object({
   clientId: z.string().min(1, "Client is required"),
   validityDays: z.coerce.number().min(1, "Validity period is required"),
@@ -55,10 +82,17 @@ const quoteFormSchema = z.object({
 
 export default function QuoteCreate() {
   const [, setLocation] = useLocation();
+  const [, params] = useRoute("/quotes/:id/edit");
   const { toast } = useToast();
+  const isEditMode = !!params?.id;
 
   const { data: clients } = useQuery<Client[]>({
     queryKey: ["/api/clients"],
+  });
+
+  const { data: existingQuote, isLoading: isLoadingQuote } = useQuery<QuoteDetail>({
+    queryKey: ["/api/quotes", params?.id],
+    enabled: isEditMode,
   });
 
   const form = useForm<z.infer<typeof quoteFormSchema>>({
@@ -78,6 +112,45 @@ export default function QuoteCreate() {
       items: [{ description: "", quantity: 1, unitPrice: 0 }],
     },
   });
+
+  // Load existing quote data when in edit mode
+  useEffect(() => {
+    if (existingQuote && isEditMode) {
+      const subtotal = Number(existingQuote.subtotal);
+      const discountAmount = Number(existingQuote.discount);
+      const cgstAmount = Number(existingQuote.cgst);
+      const sgstAmount = Number(existingQuote.sgst);
+      const igstAmount = Number(existingQuote.igst);
+
+      // Calculate tax base (subtotal - discount)
+      const taxBase = subtotal - discountAmount;
+
+      // Calculate percentages from amounts
+      const discountPercent = subtotal > 0 ? (discountAmount / subtotal) * 100 : 0;
+      const cgstPercent = taxBase > 0 ? (cgstAmount / taxBase) * 100 : 0;
+      const sgstPercent = taxBase > 0 ? (sgstAmount / taxBase) * 100 : 0;
+      const igstPercent = taxBase > 0 ? (igstAmount / taxBase) * 100 : 0;
+
+      form.reset({
+        clientId: existingQuote.clientId,
+        validityDays: existingQuote.validityDays,
+        referenceNumber: existingQuote.referenceNumber || "",
+        attentionTo: existingQuote.attentionTo || "",
+        discount: Number(discountPercent.toFixed(2)),
+        cgst: Number(cgstPercent.toFixed(2)),
+        sgst: Number(sgstPercent.toFixed(2)),
+        igst: Number(igstPercent.toFixed(2)),
+        shippingCharges: Number(existingQuote.shippingCharges),
+        notes: existingQuote.notes || "",
+        termsAndConditions: existingQuote.termsAndConditions || "",
+        items: existingQuote.items.map(item => ({
+          description: item.description,
+          quantity: item.quantity,
+          unitPrice: Number(item.unitPrice),
+        })),
+      });
+    }
+  }, [existingQuote, isEditMode, form]);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -99,6 +172,28 @@ export default function QuoteCreate() {
     onError: (error: any) => {
       toast({
         title: "Failed to create quote",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async (data: QuoteCreatePayload) => {
+      return await apiRequest("PUT", `/api/quotes/${params?.id}`, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/quotes"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/quotes", params?.id] });
+      toast({
+        title: "Quote updated",
+        description: "Your quote has been updated successfully.",
+      });
+      setLocation(`/quotes/${params?.id}`);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Failed to update quote",
         description: error.message,
         variant: "destructive",
       });
@@ -135,12 +230,38 @@ export default function QuoteCreate() {
       total: total.toString(),
       notes: values.notes || undefined,
       termsAndConditions: values.termsAndConditions || undefined,
-      status: "draft",
-      quoteDate: new Date().toISOString(),
+      status: isEditMode ? (existingQuote?.status as any) : "draft",
+      quoteDate: isEditMode ? (existingQuote?.quoteDate || new Date().toISOString()) : new Date().toISOString(),
       items: values.items.map(i => ({ description: i.description, quantity: i.quantity, unitPrice: i.unitPrice })),
     };
-    await createMutation.mutateAsync(quoteData);
+
+    if (isEditMode) {
+      await updateMutation.mutateAsync(quoteData);
+    } else {
+      await createMutation.mutateAsync(quoteData);
+    }
   };
+
+  if (isEditMode && isLoadingQuote) {
+    return (
+      <div className="p-6 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (isEditMode && existingQuote?.status === "invoiced") {
+    return (
+      <div className="p-6">
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">This quote has been invoiced and cannot be edited.</p>
+          <Button className="mt-4" onClick={() => setLocation(`/quotes/${params?.id}`)}>
+            Back to Quote
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">
@@ -148,15 +269,17 @@ export default function QuoteCreate() {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setLocation("/quotes")}
+          onClick={() => setLocation(isEditMode ? `/quotes/${params?.id}` : "/quotes")}
           data-testid="button-back"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Create New Quote</h1>
+          <h1 className="text-3xl font-bold text-foreground">
+            {isEditMode ? `Edit Quote ${existingQuote?.quoteNumber}` : "Create New Quote"}
+          </h1>
           <p className="text-muted-foreground font-['Open_Sans'] mt-1">
-            Fill in the details to generate a professional quote
+            {isEditMode ? "Update the quote details" : "Fill in the details to generate a professional quote"}
           </p>
         </div>
       </div>
@@ -523,11 +646,11 @@ export default function QuoteCreate() {
                   <Button
                     type="submit"
                     className="w-full"
-                    disabled={createMutation.isPending}
+                    disabled={createMutation.isPending || updateMutation.isPending}
                     data-testid="button-create-quote"
                   >
-                    {createMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Create Quote
+                    {(createMutation.isPending || updateMutation.isPending) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {isEditMode ? "Update Quote" : "Create Quote"}
                   </Button>
                 </CardContent>
               </Card>

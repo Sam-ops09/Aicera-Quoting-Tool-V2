@@ -56,6 +56,7 @@ export interface IStorage {
   getClientsByCreator(createdBy: string): Promise<Client[]>;
   getAllClients(): Promise<Client[]>;
   createClient(client: InsertClient & { createdBy: string }): Promise<Client>;
+  updateClient(id: string, data: Partial<Client>): Promise<Client | undefined>;
   deleteClient(id: string): Promise<void>;
 
   // Quotes
@@ -198,6 +199,15 @@ export class DatabaseStorage implements IStorage {
   async createClient(client: InsertClient & { createdBy: string }): Promise<Client> {
     const [newClient] = await db.insert(clients).values(client).returning();
     return newClient;
+  }
+
+  async updateClient(id: string, data: Partial<Client>): Promise<Client | undefined> {
+    const [updated] = await db
+      .update(clients)
+      .set(data)
+      .where(eq(clients.id, id))
+      .returning();
+    return updated || undefined;
   }
 
   async deleteClient(id: string): Promise<void> {

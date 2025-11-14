@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search, FileText, Eye, Download, Send, Loader2 } from "lucide-react";
+import { Plus, Search, FileText, Eye, Download, Send, Loader2, Pencil } from "lucide-react";
 import { useLocation } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Quote } from "@shared/schema";
@@ -179,6 +179,16 @@ export default function Quotes() {
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
+                    {quote.status !== "invoiced" && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setLocation(`/quotes/${quote.id}/edit`)}
+                        data-testid={`button-edit-quote-${quote.id}`}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    )}
                     <Button
                       variant="outline"
                       size="sm"
