@@ -708,6 +708,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const { items, ...quoteData } = req.body;
 
+      // Convert date strings to Date objects if present
+      if (quoteData.quoteDate && typeof quoteData.quoteDate === 'string') {
+        quoteData.quoteDate = new Date(quoteData.quoteDate);
+      }
+      if (quoteData.validUntil && typeof quoteData.validUntil === 'string') {
+        quoteData.validUntil = new Date(quoteData.validUntil);
+      }
+
       // Update quote
       const quote = await storage.updateQuote(req.params.id, quoteData);
       if (!quote) {
