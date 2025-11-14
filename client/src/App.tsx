@@ -13,6 +13,7 @@ import Login from "@/pages/login";
 import Signup from "@/pages/signup";
 import Dashboard from "@/pages/dashboard";
 import Clients from "@/pages/clients";
+import ClientDetail from "@/pages/client-detail";
 import Quotes from "@/pages/quotes";
 import QuoteCreate from "@/pages/quote-create";
 import QuoteDetail from "@/pages/quote-detail";
@@ -22,6 +23,7 @@ import Analytics from "@/pages/analytics";
 import AdminUsers from "@/pages/admin-users";
 import AdminSettings from "@/pages/admin-settings";
 import { Loader2 } from "lucide-react";
+import React from "react";
 
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
   const { user, isLoading } = useAuth();
@@ -78,6 +80,7 @@ function AuthenticatedLayout() {
             <Switch>
               <Route path="/" component={() => <ProtectedRoute component={Dashboard} />} />
               <Route path="/clients" component={() => <ProtectedRoute component={Clients} />} />
+              <Route path="/clients/:id" component={() => <ProtectedRoute component={ClientDetail} />} />
               <Route path="/quotes" component={() => <ProtectedRoute component={Quotes} />} />
               <Route path="/quotes/create" component={() => <ProtectedRoute component={QuoteCreate} />} />
               <Route path="/quotes/:id/edit" component={() => <ProtectedRoute component={QuoteCreate} />} />

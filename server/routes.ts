@@ -453,6 +453,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/clients/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const client = await storage.getClient(req.params.id);
+      if (!client) {
+        return res.status(404).json({ error: "Client not found" });
+      }
+      return res.json(client);
+    } catch (error) {
+      return res.status(500).json({ error: "Failed to fetch client" });
+    }
+  });
+
   app.post("/api/clients", authMiddleware, async (req: AuthRequest, res: Response) => {
     try {
       const { name, email, phone } = req.body;

@@ -159,6 +159,17 @@ export default function QuoteCreate() {
     milestones: [],
   });
 
+  // Pre-select client from URL query parameter (for new quotes from client detail page)
+  useEffect(() => {
+    if (!isEditMode) {
+      const params = new URLSearchParams(window.location.search);
+      const clientIdParam = params.get('clientId');
+      if (clientIdParam) {
+        form.setValue('clientId', clientIdParam);
+      }
+    }
+  }, [isEditMode, form]);
+
   // Load existing quote data when in edit mode
   useEffect(() => {
     if (existingQuote && isEditMode) {

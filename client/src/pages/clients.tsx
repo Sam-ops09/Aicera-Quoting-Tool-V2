@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { Link } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search, Mail, Phone, Loader2, Edit, Trash2, Users } from "lucide-react";
+import { Plus, Search, Mail, Phone, Loader2, Edit, Trash2, Users, Eye } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
@@ -410,13 +411,27 @@ export default function Clients() {
             <Card key={client.id} className="hover-elevate" data-testid={`client-card-${client.id}`}>
               <CardHeader>
                 <CardTitle className="flex items-start justify-between">
-                  <span className="text-lg">{client.name}</span>
+                  <Link href={`/clients/${client.id}`}>
+                    <span className="text-lg hover:text-primary cursor-pointer transition-colors">
+                      {client.name}
+                    </span>
+                  </Link>
                   <div className="flex gap-1">
+                    <Link href={`/clients/${client.id}`}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        title="View Details"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                    </Link>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={() => handleEditClick(client)}
                       data-testid={`button-edit-client-${client.id}`}
+                      title="Edit Client"
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -425,6 +440,7 @@ export default function Clients() {
                       size="icon"
                       onClick={() => deleteMutation.mutate(client.id)}
                       data-testid={`button-delete-client-${client.id}`}
+                      title="Delete Client"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

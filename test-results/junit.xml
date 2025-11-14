@@ -1,1136 +1,176 @@
-<testsuites id="" name="" tests="87" failures="53" skipped="0" errors="0" time="22.180778000000004">
-<testsuite name="analytics.spec.ts" timestamp="2025-11-14T13:34:40.296Z" hostname="chromium" tests="29" failures="1" skipped="0" time="28.683" errors="0">
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should accept numeric time range parameter" classname="analytics.spec.ts" time="2.8">
+<testsuites id="" name="" tests="42" failures="0" skipped="42" errors="0" time="0.19457799999999997">
+<testsuite name="client-management-improvements.spec.ts" timestamp="2025-11-14T14:26:47.196Z" hostname="chromium" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="Client Management UI Improvements › should display clients list with enhanced UI" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should accept various numeric time ranges" classname="analytics.spec.ts" time="1.019">
-<failure message="analytics.spec.ts:26:3 should accept various numeric time ranges" type="FAILURE">
-<![CDATA[  [chromium] › analytics.spec.ts:26:3 › Analytics - Time Range Endpoint (\d+ constraint) › should accept various numeric time ranges 
-
-    Error: Signup failed: duplicate key value violates unique constraint "users_email_unique"
-
-       at setup.ts:98
-
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-       97 |     const error = await signupRes.json();
-    >  98 |     throw new Error(`Signup failed: ${error.error}`);
-          |           ^
-       99 |   }
-      100 |   
-      101 |   const userResponse = await signupRes.json();
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:98:11)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:27:38
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should navigate to client detail page" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should route non-numeric strings to specialized endpoints" classname="analytics.spec.ts" time="2.436">
+<testcase name="Client Management UI Improvements › should display client information on detail page" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should handle single digit numeric values" classname="analytics.spec.ts" time="2.482">
+<testcase name="Client Management UI Improvements › should display analytics for client" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should handle large numeric values" classname="analytics.spec.ts" time="1.263">
+<testcase name="Client Management UI Improvements › should add tags to client" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should return analytics data structure for valid time range" classname="analytics.spec.ts" time="1.5">
+<testcase name="Client Management UI Improvements › should remove tags from client" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should require authentication for time range endpoint" classname="analytics.spec.ts" time="0.008">
+<testcase name="Client Management UI Improvements › should display communication tabs" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should not interfere with specialized analytics endpoints" classname="analytics.spec.ts" time="1.928">
+<testcase name="Client Management UI Improvements › should log communication with client" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Revenue Forecasting › should return revenue forecast" classname="analytics.spec.ts" time="0.933">
+<testcase name="Client Management UI Improvements › should display quote history in quotes tab" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Revenue Forecasting › should support monthsAhead parameter" classname="analytics.spec.ts" time="1.474">
+<testcase name="Client Management UI Improvements › should navigate back to clients list" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Revenue Forecasting › should return 401 without authentication" classname="analytics.spec.ts" time="0.004">
+<testcase name="Client Management UI Improvements › should filter communication by type" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Deal Distribution Analysis › should return deal distribution by amount ranges" classname="analytics.spec.ts" time="0.726">
+<testcase name="Client Management UI Improvements › should delete communication" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Deal Distribution Analysis › should include pricing ranges in distribution" classname="analytics.spec.ts" time="0.822">
+<testcase name="Client Management UI Improvements › should show empty state for quotes when no quotes exist" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Regional Sales Distribution › should return sales by region" classname="analytics.spec.ts" time="0.803">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Regional Sales Distribution › should include performance metrics per region" classname="analytics.spec.ts" time="0.896">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Custom Report Generation › should generate custom report with filters" classname="analytics.spec.ts" time="0.851">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Custom Report Generation › should support filtering options" classname="analytics.spec.ts" time="0.846">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Custom Report Generation › should handle amount range filtering" classname="analytics.spec.ts" time="0.881">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Sales Pipeline Visualization › should return quote counts by pipeline stage" classname="analytics.spec.ts" time="0.947">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Sales Pipeline Visualization › should show progress through sales pipeline" classname="analytics.spec.ts" time="1.105">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Client Lifetime Value (LTV) › should require authentication for LTV endpoint" classname="analytics.spec.ts" time="0.008">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Client Lifetime Value (LTV) › should return LTV data for authenticated user" classname="analytics.spec.ts" time="0.793">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Competitor Insights › should provide market insights data" classname="analytics.spec.ts" time="0.887">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Competitor Insights › should require admin role for insights" classname="analytics.spec.ts" time="0.906">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Authorization › should return 401 for unauthenticated requests" classname="analytics.spec.ts" time="0.006">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Authorization › should reject invalid token" classname="analytics.spec.ts" time="0.004">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Edge Cases › should handle empty forecast gracefully" classname="analytics.spec.ts" time="0.786">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Edge Cases › should handle invalid date ranges" classname="analytics.spec.ts" time="0.785">
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Edge Cases › should handle zero revenue scenarios" classname="analytics.spec.ts" time="0.784">
+<testcase name="Client Management UI Improvements › should display client metrics correctly" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
-<testsuite name="analytics.spec.ts" timestamp="2025-11-14T13:34:40.296Z" hostname="firefox" tests="29" failures="23" skipped="0" time="15.28" errors="0">
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should accept numeric time range parameter" classname="analytics.spec.ts" time="1.3">
+<testsuite name="client-management-improvements.spec.ts" timestamp="2025-11-14T14:26:47.196Z" hostname="firefox" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="Client Management UI Improvements › should display clients list with enhanced UI" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should accept various numeric time ranges" classname="analytics.spec.ts" time="2.159">
-<failure message="analytics.spec.ts:26:3 should accept various numeric time ranges" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:26:3 › Analytics - Time Range Endpoint (\d+ constraint) › should accept various numeric time ranges 
-
-    Error: expect(received).toContain(expected) // indexOf
-
-    Expected value: 429
-    Received array: [200, 500]
-
-      38 |
-      39 |       // Should successfully route to the numeric endpoint
-    > 40 |       expect([200, 500]).toContain(response.status());
-         |                          ^
-      41 |     }
-      42 |   });
-      43 |
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:40:26
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should navigate to client detail page" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should route non-numeric strings to specialized endpoints" classname="analytics.spec.ts" time="1.256">
+<testcase name="Client Management UI Improvements › should display client information on detail page" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should handle single digit numeric values" classname="analytics.spec.ts" time="1.312">
+<testcase name="Client Management UI Improvements › should display analytics for client" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should handle large numeric values" classname="analytics.spec.ts" time="0.888">
+<testcase name="Client Management UI Improvements › should add tags to client" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should return analytics data structure for valid time range" classname="analytics.spec.ts" time="0.882">
+<testcase name="Client Management UI Improvements › should remove tags from client" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should require authentication for time range endpoint" classname="analytics.spec.ts" time="0.004">
+<testcase name="Client Management UI Improvements › should display communication tabs" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should not interfere with specialized analytics endpoints" classname="analytics.spec.ts" time="0.638">
-<failure message="analytics.spec.ts:105:3 should not interfere with specialized analytics endpoints" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:105:3 › Analytics - Time Range Endpoint (\d+ constraint) › should not interfere with specialized analytics endpoints 
-
-    Error: expect(received).toContain(expected) // indexOf
-
-    Expected value: 429
-    Received array: [200, 404]
-
-      118 |       const response = await makeAuthenticatedRequest(authRequest, endpoint, 'GET');
-      119 |       // These endpoints should all return 200 (not be caught by the numeric constraint)
-    > 120 |       expect([200, 404]).toContain(response.status());
-          |                          ^
-      121 |     }
-      122 |   });
-      123 | });
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:120:26
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should log communication with client" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Revenue Forecasting › should return revenue forecast" classname="analytics.spec.ts" time="0.577">
-<failure message="analytics.spec.ts:127:5 should return revenue forecast" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:127:5 › Analytics - Phase 3 Features › Revenue Forecasting › should return revenue forecast 
-
-    Error: expect(received).toBe(expected) // Object.is equality
-
-    Expected: 200
-    Received: 429
-
-      136 |       );
-      137 |
-    > 138 |       expect(response.status()).toBe(200);
-          |                                 ^
-      139 |       const data = await response.json();
-      140 |
-      141 |       expect(Array.isArray(data)).toBeTruthy();
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:138:33
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should display quote history in quotes tab" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Revenue Forecasting › should support monthsAhead parameter" classname="analytics.spec.ts" time="0.327">
-<failure message="analytics.spec.ts:144:5 should support monthsAhead parameter" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:144:5 › Analytics - Phase 3 Features › Revenue Forecasting › should support monthsAhead parameter 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:145:40
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should navigate back to clients list" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Revenue Forecasting › should return 401 without authentication" classname="analytics.spec.ts" time="0.006">
-<failure message="analytics.spec.ts:158:5 should return 401 without authentication" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:158:5 › Analytics - Phase 3 Features › Revenue Forecasting › should return 401 without authentication 
-
-    Error: expect(received).toBe(expected) // Object.is equality
-
-    Expected: 401
-    Received: 429
-
-      158 |     test('should return 401 without authentication', async ({ request }) => {
-      159 |       const response = await request.get('http://localhost:5000/api/analytics/forecast');
-    > 160 |       expect(response.status()).toBe(401);
-          |                                 ^
-      161 |     });
-      162 |   });
-      163 |
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:160:33
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should filter communication by type" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Deal Distribution Analysis › should return deal distribution by amount ranges" classname="analytics.spec.ts" time="0.329">
-<failure message="analytics.spec.ts:165:5 should return deal distribution by amount ranges" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:165:5 › Analytics - Phase 3 Features › Deal Distribution Analysis › should return deal distribution by amount ranges 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:168:40
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should delete communication" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Deal Distribution Analysis › should include pricing ranges in distribution" classname="analytics.spec.ts" time="0.34">
-<failure message="analytics.spec.ts:188:5 should include pricing ranges in distribution" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:188:5 › Analytics - Phase 3 Features › Deal Distribution Analysis › should include pricing ranges in distribution 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:191:40
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should show empty state for quotes when no quotes exist" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Regional Sales Distribution › should return sales by region" classname="analytics.spec.ts" time="0.329">
-<failure message="analytics.spec.ts:207:5 should return sales by region" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:207:5 › Analytics - Phase 3 Features › Regional Sales Distribution › should return sales by region 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:210:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Regional Sales Distribution › should include performance metrics per region" classname="analytics.spec.ts" time="0.327">
-<failure message="analytics.spec.ts:228:5 should include performance metrics per region" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:228:5 › Analytics - Phase 3 Features › Regional Sales Distribution › should include performance metrics per region 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:231:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Custom Report Generation › should generate custom report with filters" classname="analytics.spec.ts" time="0.327">
-<failure message="analytics.spec.ts:246:5 should generate custom report with filters" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:246:5 › Analytics - Phase 3 Features › Custom Report Generation › should generate custom report with filters 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:249:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Custom Report Generation › should support filtering options" classname="analytics.spec.ts" time="0.327">
-<failure message="analytics.spec.ts:269:5 should support filtering options" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:269:5 › Analytics - Phase 3 Features › Custom Report Generation › should support filtering options 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:272:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Custom Report Generation › should handle amount range filtering" classname="analytics.spec.ts" time="0.333">
-<failure message="analytics.spec.ts:289:5 should handle amount range filtering" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:289:5 › Analytics - Phase 3 Features › Custom Report Generation › should handle amount range filtering 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:292:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Sales Pipeline Visualization › should return quote counts by pipeline stage" classname="analytics.spec.ts" time="0.332">
-<failure message="analytics.spec.ts:312:5 should return quote counts by pipeline stage" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:312:5 › Analytics - Phase 3 Features › Sales Pipeline Visualization › should return quote counts by pipeline stage 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:315:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Sales Pipeline Visualization › should show progress through sales pipeline" classname="analytics.spec.ts" time="0.331">
-<failure message="analytics.spec.ts:334:5 should show progress through sales pipeline" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:334:5 › Analytics - Phase 3 Features › Sales Pipeline Visualization › should show progress through sales pipeline 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:337:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Client Lifetime Value (LTV) › should require authentication for LTV endpoint" classname="analytics.spec.ts" time="0.33">
-<failure message="analytics.spec.ts:352:5 should require authentication for LTV endpoint" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:352:5 › Analytics - Phase 3 Features › Client Lifetime Value (LTV) › should require authentication for LTV endpoint 
-
-    Error: expect(received).toBe(expected) // Object.is equality
-
-    Expected: 401
-    Received: 429
-
-      357 |       );
-      358 |
-    > 359 |       expect(response.status()).toBe(401);
-          |                                 ^
-      360 |     });
-      361 |
-      362 |     test('should return LTV data for authenticated user', async ({
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:359:33
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Client Lifetime Value (LTV) › should return LTV data for authenticated user" classname="analytics.spec.ts" time="0.327">
-<failure message="analytics.spec.ts:362:5 should return LTV data for authenticated user" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:362:5 › Analytics - Phase 3 Features › Client Lifetime Value (LTV) › should return LTV data for authenticated user 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:365:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Competitor Insights › should provide market insights data" classname="analytics.spec.ts" time="0.326">
-<failure message="analytics.spec.ts:380:5 should provide market insights data" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:380:5 › Analytics - Phase 3 Features › Competitor Insights › should provide market insights data 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:383:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Competitor Insights › should require admin role for insights" classname="analytics.spec.ts" time="0.325">
-<failure message="analytics.spec.ts:396:5 should require admin role for insights" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:396:5 › Analytics - Phase 3 Features › Competitor Insights › should require admin role for insights 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:399:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Authorization › should return 401 for unauthenticated requests" classname="analytics.spec.ts" time="0.327">
-<failure message="analytics.spec.ts:413:5 should return 401 for unauthenticated requests" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:413:5 › Analytics - Phase 3 Features › Analytics Authorization › should return 401 for unauthenticated requests 
-
-    Error: expect(received).toBe(expected) // Object.is equality
-
-    Expected: 401
-    Received: 429
-
-      415 |     }) => {
-      416 |       const response = await request.get('http://localhost:5000/api/analytics/forecast');
-    > 417 |       expect(response.status()).toBe(401);
-          |                                 ^
-      418 |     });
-      419 |
-      420 |     test('should reject invalid token', async ({
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:417:33
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Authorization › should reject invalid token" classname="analytics.spec.ts" time="0.345">
-<failure message="analytics.spec.ts:420:5 should reject invalid token" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:420:5 › Analytics - Phase 3 Features › Analytics Authorization › should reject invalid token 
-
-    Error: expect(received).toBe(expected) // Object.is equality
-
-    Expected: 401
-    Received: 429
-
-      427 |       });
-      428 |
-    > 429 |       expect(response.status()).toBe(401);
-          |                                 ^
-      430 |     });
-      431 |   });
-      432 |
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:429:33
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Edge Cases › should handle empty forecast gracefully" classname="analytics.spec.ts" time="0.325">
-<failure message="analytics.spec.ts:434:5 should handle empty forecast gracefully" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:434:5 › Analytics - Phase 3 Features › Analytics Edge Cases › should handle empty forecast gracefully 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:437:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Edge Cases › should handle invalid date ranges" classname="analytics.spec.ts" time="0.325">
-<failure message="analytics.spec.ts:450:5 should handle invalid date ranges" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:450:5 › Analytics - Phase 3 Features › Analytics Edge Cases › should handle invalid date ranges 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:453:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Edge Cases › should handle zero revenue scenarios" classname="analytics.spec.ts" time="0.326">
-<failure message="analytics.spec.ts:469:5 should handle zero revenue scenarios" type="FAILURE">
-<![CDATA[  [firefox] › analytics.spec.ts:469:5 › Analytics - Phase 3 Features › Analytics Edge Cases › should handle zero revenue scenarios 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:472:40
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should display client metrics correctly" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
-<testsuite name="analytics.spec.ts" timestamp="2025-11-14T13:34:40.296Z" hostname="webkit" tests="29" failures="29" skipped="0" time="9.55" errors="0">
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should accept numeric time range parameter" classname="analytics.spec.ts" time="0.328">
-<failure message="analytics.spec.ts:4:3 should accept numeric time range parameter" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:4:3 › Analytics - Time Range Endpoint (\d+ constraint) › should accept numeric time range parameter 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:5:38
-]]>
-</failure>
+<testsuite name="client-management-improvements.spec.ts" timestamp="2025-11-14T14:26:47.196Z" hostname="webkit" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="Client Management UI Improvements › should display clients list with enhanced UI" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should accept various numeric time ranges" classname="analytics.spec.ts" time="0.328">
-<failure message="analytics.spec.ts:26:3 should accept various numeric time ranges" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:26:3 › Analytics - Time Range Endpoint (\d+ constraint) › should accept various numeric time ranges 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:27:38
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should navigate to client detail page" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should route non-numeric strings to specialized endpoints" classname="analytics.spec.ts" time="0.326">
-<failure message="analytics.spec.ts:44:3 should route non-numeric strings to specialized endpoints" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:44:3 › Analytics - Time Range Endpoint (\d+ constraint) › should route non-numeric strings to specialized endpoints 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:45:38
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should display client information on detail page" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should handle single digit numeric values" classname="analytics.spec.ts" time="0.328">
-<failure message="analytics.spec.ts:58:3 should handle single digit numeric values" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:58:3 › Analytics - Time Range Endpoint (\d+ constraint) › should handle single digit numeric values 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:59:38
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should display analytics for client" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should handle large numeric values" classname="analytics.spec.ts" time="0.343">
-<failure message="analytics.spec.ts:70:3 should handle large numeric values" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:70:3 › Analytics - Time Range Endpoint (\d+ constraint) › should handle large numeric values 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:71:38
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should add tags to client" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should return analytics data structure for valid time range" classname="analytics.spec.ts" time="0.331">
-<failure message="analytics.spec.ts:82:3 should return analytics data structure for valid time range" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:82:3 › Analytics - Time Range Endpoint (\d+ constraint) › should return analytics data structure for valid time range 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:83:38
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should remove tags from client" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should require authentication for time range endpoint" classname="analytics.spec.ts" time="0.33">
-<failure message="analytics.spec.ts:100:3 should require authentication for time range endpoint" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:100:3 › Analytics - Time Range Endpoint (\d+ constraint) › should require authentication for time range endpoint 
-
-    Error: expect(received).toBe(expected) // Object.is equality
-
-    Expected: 401
-    Received: 429
-
-      100 |   test('should require authentication for time range endpoint', async ({ request }) => {
-      101 |     const response = await request.get('http://localhost:5000/api/analytics/12');
-    > 102 |     expect(response.status()).toBe(401);
-          |                               ^
-      103 |   });
-      104 |
-      105 |   test('should not interfere with specialized analytics endpoints', async ({ request }) => {
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:102:31
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should display communication tabs" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Time Range Endpoint (\d+ constraint) › should not interfere with specialized analytics endpoints" classname="analytics.spec.ts" time="0.327">
-<failure message="analytics.spec.ts:105:3 should not interfere with specialized analytics endpoints" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:105:3 › Analytics - Time Range Endpoint (\d+ constraint) › should not interfere with specialized analytics endpoints 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:106:38
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should log communication with client" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Revenue Forecasting › should return revenue forecast" classname="analytics.spec.ts" time="0.326">
-<failure message="analytics.spec.ts:127:5 should return revenue forecast" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:127:5 › Analytics - Phase 3 Features › Revenue Forecasting › should return revenue forecast 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:130:40
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should display quote history in quotes tab" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Revenue Forecasting › should support monthsAhead parameter" classname="analytics.spec.ts" time="0.327">
-<failure message="analytics.spec.ts:144:5 should support monthsAhead parameter" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:144:5 › Analytics - Phase 3 Features › Revenue Forecasting › should support monthsAhead parameter 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:145:40
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should navigate back to clients list" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Revenue Forecasting › should return 401 without authentication" classname="analytics.spec.ts" time="0.329">
-<failure message="analytics.spec.ts:158:5 should return 401 without authentication" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:158:5 › Analytics - Phase 3 Features › Revenue Forecasting › should return 401 without authentication 
-
-    Error: expect(received).toBe(expected) // Object.is equality
-
-    Expected: 401
-    Received: 429
-
-      158 |     test('should return 401 without authentication', async ({ request }) => {
-      159 |       const response = await request.get('http://localhost:5000/api/analytics/forecast');
-    > 160 |       expect(response.status()).toBe(401);
-          |                                 ^
-      161 |     });
-      162 |   });
-      163 |
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:160:33
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should filter communication by type" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Deal Distribution Analysis › should return deal distribution by amount ranges" classname="analytics.spec.ts" time="0.325">
-<failure message="analytics.spec.ts:165:5 should return deal distribution by amount ranges" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:165:5 › Analytics - Phase 3 Features › Deal Distribution Analysis › should return deal distribution by amount ranges 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:168:40
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should delete communication" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Deal Distribution Analysis › should include pricing ranges in distribution" classname="analytics.spec.ts" time="0.328">
-<failure message="analytics.spec.ts:188:5 should include pricing ranges in distribution" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:188:5 › Analytics - Phase 3 Features › Deal Distribution Analysis › should include pricing ranges in distribution 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:191:40
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should show empty state for quotes when no quotes exist" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Analytics - Phase 3 Features › Regional Sales Distribution › should return sales by region" classname="analytics.spec.ts" time="0.329">
-<failure message="analytics.spec.ts:207:5 should return sales by region" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:207:5 › Analytics - Phase 3 Features › Regional Sales Distribution › should return sales by region 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:210:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Regional Sales Distribution › should include performance metrics per region" classname="analytics.spec.ts" time="0.334">
-<failure message="analytics.spec.ts:228:5 should include performance metrics per region" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:228:5 › Analytics - Phase 3 Features › Regional Sales Distribution › should include performance metrics per region 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:231:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Custom Report Generation › should generate custom report with filters" classname="analytics.spec.ts" time="0.327">
-<failure message="analytics.spec.ts:246:5 should generate custom report with filters" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:246:5 › Analytics - Phase 3 Features › Custom Report Generation › should generate custom report with filters 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:249:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Custom Report Generation › should support filtering options" classname="analytics.spec.ts" time="0.325">
-<failure message="analytics.spec.ts:269:5 should support filtering options" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:269:5 › Analytics - Phase 3 Features › Custom Report Generation › should support filtering options 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:272:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Custom Report Generation › should handle amount range filtering" classname="analytics.spec.ts" time="0.332">
-<failure message="analytics.spec.ts:289:5 should handle amount range filtering" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:289:5 › Analytics - Phase 3 Features › Custom Report Generation › should handle amount range filtering 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:292:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Sales Pipeline Visualization › should return quote counts by pipeline stage" classname="analytics.spec.ts" time="0.329">
-<failure message="analytics.spec.ts:312:5 should return quote counts by pipeline stage" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:312:5 › Analytics - Phase 3 Features › Sales Pipeline Visualization › should return quote counts by pipeline stage 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:315:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Sales Pipeline Visualization › should show progress through sales pipeline" classname="analytics.spec.ts" time="0.326">
-<failure message="analytics.spec.ts:334:5 should show progress through sales pipeline" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:334:5 › Analytics - Phase 3 Features › Sales Pipeline Visualization › should show progress through sales pipeline 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:337:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Client Lifetime Value (LTV) › should require authentication for LTV endpoint" classname="analytics.spec.ts" time="0.328">
-<failure message="analytics.spec.ts:352:5 should require authentication for LTV endpoint" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:352:5 › Analytics - Phase 3 Features › Client Lifetime Value (LTV) › should require authentication for LTV endpoint 
-
-    Error: expect(received).toBe(expected) // Object.is equality
-
-    Expected: 401
-    Received: 429
-
-      357 |       );
-      358 |
-    > 359 |       expect(response.status()).toBe(401);
-          |                                 ^
-      360 |     });
-      361 |
-      362 |     test('should return LTV data for authenticated user', async ({
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:359:33
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Client Lifetime Value (LTV) › should return LTV data for authenticated user" classname="analytics.spec.ts" time="0.33">
-<failure message="analytics.spec.ts:362:5 should return LTV data for authenticated user" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:362:5 › Analytics - Phase 3 Features › Client Lifetime Value (LTV) › should return LTV data for authenticated user 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:365:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Competitor Insights › should provide market insights data" classname="analytics.spec.ts" time="0.33">
-<failure message="analytics.spec.ts:380:5 should provide market insights data" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:380:5 › Analytics - Phase 3 Features › Competitor Insights › should provide market insights data 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:383:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Competitor Insights › should require admin role for insights" classname="analytics.spec.ts" time="0.328">
-<failure message="analytics.spec.ts:396:5 should require admin role for insights" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:396:5 › Analytics - Phase 3 Features › Competitor Insights › should require admin role for insights 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:399:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Authorization › should return 401 for unauthenticated requests" classname="analytics.spec.ts" time="0.335">
-<failure message="analytics.spec.ts:413:5 should return 401 for unauthenticated requests" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:413:5 › Analytics - Phase 3 Features › Analytics Authorization › should return 401 for unauthenticated requests 
-
-    Error: expect(received).toBe(expected) // Object.is equality
-
-    Expected: 401
-    Received: 429
-
-      415 |     }) => {
-      416 |       const response = await request.get('http://localhost:5000/api/analytics/forecast');
-    > 417 |       expect(response.status()).toBe(401);
-          |                                 ^
-      418 |     });
-      419 |
-      420 |     test('should reject invalid token', async ({
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:417:33
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Authorization › should reject invalid token" classname="analytics.spec.ts" time="0.333">
-<failure message="analytics.spec.ts:420:5 should reject invalid token" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:420:5 › Analytics - Phase 3 Features › Analytics Authorization › should reject invalid token 
-
-    Error: expect(received).toBe(expected) // Object.is equality
-
-    Expected: 401
-    Received: 429
-
-      427 |       });
-      428 |
-    > 429 |       expect(response.status()).toBe(401);
-          |                                 ^
-      430 |     });
-      431 |   });
-      432 |
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:429:33
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Edge Cases › should handle empty forecast gracefully" classname="analytics.spec.ts" time="0.326">
-<failure message="analytics.spec.ts:434:5 should handle empty forecast gracefully" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:434:5 › Analytics - Phase 3 Features › Analytics Edge Cases › should handle empty forecast gracefully 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:437:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Edge Cases › should handle invalid date ranges" classname="analytics.spec.ts" time="0.332">
-<failure message="analytics.spec.ts:450:5 should handle invalid date ranges" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:450:5 › Analytics - Phase 3 Features › Analytics Edge Cases › should handle invalid date ranges 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:453:40
-]]>
-</failure>
-</testcase>
-<testcase name="Analytics - Phase 3 Features › Analytics Edge Cases › should handle zero revenue scenarios" classname="analytics.spec.ts" time="0.33">
-<failure message="analytics.spec.ts:469:5 should handle zero revenue scenarios" type="FAILURE">
-<![CDATA[  [webkit] › analytics.spec.ts:469:5 › Analytics - Phase 3 Features › Analytics Edge Cases › should handle zero revenue scenarios 
-
-    SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
-
-       at setup.ts:97
-
-       95 |   
-       96 |   if (signupRes.status() !== 200 && signupRes.status() !== 201) {
-    >  97 |     const error = await signupRes.json();
-          |                   ^
-       98 |     throw new Error(`Signup failed: ${error.error}`);
-       99 |   }
-      100 |   
-        at createTestUser (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:97:19)
-        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/analytics.spec.ts:472:40
-]]>
-</failure>
+<testcase name="Client Management UI Improvements › should display client metrics correctly" classname="client-management-improvements.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
 </testsuites>
