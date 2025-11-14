@@ -15,6 +15,25 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { Client } from "@shared/schema";
 
+interface QuoteCreatePayload {
+  clientId: string;
+  validityDays: number;
+  referenceNumber?: string;
+  attentionTo?: string;
+  discount: string; // monetary discount amount
+  cgst: string;
+  sgst: string;
+  igst: string;
+  shippingCharges: string;
+  subtotal: string;
+  total: string;
+  notes?: string;
+  termsAndConditions?: string;
+  status: "draft" | "sent" | "approved" | "rejected" | "invoiced";
+  quoteDate: string;
+  items: { description: string; quantity: number; unitPrice: number }[];
+}
+
 const quoteFormSchema = z.object({
   clientId: z.string().min(1, "Client is required"),
   validityDays: z.coerce.number().min(1, "Validity period is required"),
@@ -66,7 +85,7 @@ export default function QuoteCreate() {
   });
 
   const createMutation = useMutation({
-    mutationFn: async (data: z.infer<typeof quoteFormSchema>) => {
+    mutationFn: async (data: QuoteCreatePayload) => {
       return await apiRequest("POST", "/api/quotes", data);
     },
     onSuccess: () => {
@@ -102,16 +121,23 @@ export default function QuoteCreate() {
   const total = taxableAmount + cgstAmount + sgstAmount + igstAmount + shippingCharges;
 
   const onSubmit = async (values: z.infer<typeof quoteFormSchema>) => {
-    const quoteData = {
-      ...values,
-      subtotal: subtotal.toString(),
+    const quoteData: QuoteCreatePayload = {
+      clientId: values.clientId,
+      validityDays: values.validityDays,
+      referenceNumber: values.referenceNumber || undefined,
+      attentionTo: values.attentionTo || undefined,
       discount: discountAmount.toString(),
       cgst: cgstAmount.toString(),
       sgst: sgstAmount.toString(),
       igst: igstAmount.toString(),
+      shippingCharges: shippingCharges.toString(),
+      subtotal: subtotal.toString(),
       total: total.toString(),
-      status: "draft" as const,
+      notes: values.notes || undefined,
+      termsAndConditions: values.termsAndConditions || undefined,
+      status: "draft",
       quoteDate: new Date().toISOString(),
+      items: values.items.map(i => ({ description: i.description, quantity: i.quantity, unitPrice: i.unitPrice })),
     };
     await createMutation.mutateAsync(quoteData);
   };

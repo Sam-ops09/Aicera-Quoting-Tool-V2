@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Receipt } from "lucide-react";
+import { Search, Receipt, Eye, Download, Send, Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import { useLocation } from "wouter";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 interface Invoice {
   id: string;
@@ -21,10 +24,44 @@ interface Invoice {
 }
 
 export default function Invoices() {
+  const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+  const [downloadingInvoiceId, setDownloadingInvoiceId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const { data: invoices, isLoading } = useQuery<Invoice[]>({
     queryKey: ["/api/invoices"],
+  });
+
+  const downloadPdfMutation = useMutation({
+    mutationFn: async (invoiceId: string) => {
+      const response = await fetch(`/api/invoices/${invoiceId}/pdf`, {
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to download PDF");
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Invoice-${invoiceId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Invoice PDF downloaded successfully.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to download invoice PDF.",
+        variant: "destructive",
+      });
+    },
   });
 
   const filteredInvoices = invoices?.filter(invoice =>
@@ -112,6 +149,41 @@ export default function Invoices() {
                         <p className="font-medium">₹{Number(invoice.paidAmount).toLocaleString()}</p>
                       </div>
                     </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setLocation(`/invoices/${invoice.id}`)}
+                      data-testid={`button-view-invoice-${invoice.id}`}
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setDownloadingInvoiceId(invoice.id);
+                        downloadPdfMutation.mutate(invoice.id);
+                        setTimeout(() => setDownloadingInvoiceId(null), 2000);
+                      }}
+                      disabled={downloadingInvoiceId === invoice.id}
+                      data-testid={`button-download-invoice-${invoice.id}`}
+                    >
+                      {downloadingInvoiceId === invoice.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Download className="h-4 w-4" />
+                      )}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setLocation(`/invoices/${invoice.id}`)}
+                      data-testid={`button-email-invoice-${invoice.id}`}
+                    >
+                      <Send className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               </CardContent>

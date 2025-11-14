@@ -1,0 +1,1790 @@
+{
+  "config": {
+    "configFile": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/playwright.config.ts",
+    "rootDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/junit.xml"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 4,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5000",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "pdf-and-email.spec.ts",
+      "file": "pdf-and-email.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "PDF Download and Email API Features",
+          "file": "pdf-and-email.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "quote PDF endpoint should be accessible and return PDF",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Quote not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 78,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 362,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:39.935Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Quote not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 78,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-b7e5e51bb4dec32e98da",
+              "file": "pdf-and-email.spec.ts",
+              "line": 77,
+              "column": 3
+            },
+            {
+              "title": "quote email endpoint should accept valid recipient",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Quote not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 92,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "skipped",
+                      "duration": 358,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:39.953Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Quote not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 92,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-fb9e2f6de4929329ac71",
+              "file": "pdf-and-email.spec.ts",
+              "line": 91,
+              "column": 3
+            },
+            {
+              "title": "quote email endpoint should handle empty message",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Quote not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 110,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 357,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:39.957Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Quote not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 110,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-08f2f3963ac784614ee0",
+              "file": "pdf-and-email.spec.ts",
+              "line": 109,
+              "column": 3
+            },
+            {
+              "title": "quote PDF should return 404 for non-existent quote",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "User not created",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 128,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 354,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:39.952Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "User not created",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 128,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-ac1d308fd9ec647a4550",
+              "file": "pdf-and-email.spec.ts",
+              "line": 127,
+              "column": 3
+            },
+            {
+              "title": "unauthenticated request should not access PDF",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:40.341Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-ef33c09bb724c1e64242",
+              "file": "pdf-and-email.spec.ts",
+              "line": 139,
+              "column": 3
+            },
+            {
+              "title": "quote PDF endpoint should be accessible and return PDF",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Quote not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 78,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 369,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:41.407Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Quote not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 78,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-2a7b437dea306a7e1d14",
+              "file": "pdf-and-email.spec.ts",
+              "line": 77,
+              "column": 3
+            },
+            {
+              "title": "quote email endpoint should accept valid recipient",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Quote not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 92,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 8,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:41.813Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Quote not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 92,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-dd993f41bde11716dc84",
+              "file": "pdf-and-email.spec.ts",
+              "line": 91,
+              "column": 3
+            },
+            {
+              "title": "quote email endpoint should handle empty message",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Quote not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 110,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 8,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:41.830Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Quote not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 110,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-ef3e5b85b7846133e3b0",
+              "file": "pdf-and-email.spec.ts",
+              "line": 109,
+              "column": 3
+            },
+            {
+              "title": "quote PDF should return 404 for non-existent quote",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "User not created",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 128,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 7,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:41.847Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "User not created",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 128,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-4d35771b4aa75c5b2d9e",
+              "file": "pdf-and-email.spec.ts",
+              "line": 127,
+              "column": 3
+            },
+            {
+              "title": "unauthenticated request should not access PDF",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 11,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:41.861Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-e05e56d094972f9396b2",
+              "file": "pdf-and-email.spec.ts",
+              "line": 139,
+              "column": 3
+            },
+            {
+              "title": "quote PDF endpoint should be accessible and return PDF",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Quote not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 78,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 337,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:42.948Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Quote not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 78,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-c931b8585436c1542b76",
+              "file": "pdf-and-email.spec.ts",
+              "line": 77,
+              "column": 3
+            },
+            {
+              "title": "quote email endpoint should accept valid recipient",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Quote not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 92,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 9,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:43.303Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Quote not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 92,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-bcf6263502425e57237b",
+              "file": "pdf-and-email.spec.ts",
+              "line": 91,
+              "column": 3
+            },
+            {
+              "title": "quote email endpoint should handle empty message",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Quote not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 110,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 13,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:43.324Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Quote not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 110,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-63ef88b1711455500bd5",
+              "file": "pdf-and-email.spec.ts",
+              "line": 109,
+              "column": 3
+            },
+            {
+              "title": "quote PDF should return 404 for non-existent quote",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "User not created",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 128,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 7,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:43.346Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "User not created",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 128,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-18bc3a5f0578baae1aa6",
+              "file": "pdf-and-email.spec.ts",
+              "line": 127,
+              "column": 3
+            },
+            {
+              "title": "unauthenticated request should not access PDF",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 13,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:20:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:43.365Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-e3c976ce92f6920ec1ef",
+              "file": "pdf-and-email.spec.ts",
+              "line": 139,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Invoice PDF and Email Features",
+          "file": "pdf-and-email.spec.ts",
+          "line": 148,
+          "column": 6,
+          "specs": [
+            {
+              "title": "invoice PDF endpoint should be accessible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Invoice not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 234,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 11,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:158:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:40.348Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Invoice not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 234,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-23e9e213fdf8a9beb4e8",
+              "file": "pdf-and-email.spec.ts",
+              "line": 233,
+              "column": 3
+            },
+            {
+              "title": "invoice email endpoint should accept valid recipient",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Invoice not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 248,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "skipped",
+                      "duration": 10,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:158:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:40.350Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Invoice not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 248,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-b43695e7ac8904cf26b3",
+              "file": "pdf-and-email.spec.ts",
+              "line": 247,
+              "column": 3
+            },
+            {
+              "title": "invoice PDF should return 404 for non-existent invoice",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "User not created",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 265,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 6,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:158:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:40.359Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "User not created",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 265,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-9b6bfbf3de45f31ac3a5",
+              "file": "pdf-and-email.spec.ts",
+              "line": 264,
+              "column": 3
+            },
+            {
+              "title": "invoice PDF endpoint should be accessible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Invoice not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 234,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 4,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:158:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:41.879Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Invoice not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 234,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-74099336e29d860bc7b2",
+              "file": "pdf-and-email.spec.ts",
+              "line": 233,
+              "column": 3
+            },
+            {
+              "title": "invoice email endpoint should accept valid recipient",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Invoice not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 248,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 5,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:158:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:41.892Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Invoice not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 248,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-db562b7b85e6d9e2a108",
+              "file": "pdf-and-email.spec.ts",
+              "line": 247,
+              "column": 3
+            },
+            {
+              "title": "invoice PDF should return 404 for non-existent invoice",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "User not created",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 265,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 10,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:158:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:41.904Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "User not created",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 265,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-447a77b97e7041c0a033",
+              "file": "pdf-and-email.spec.ts",
+              "line": 264,
+              "column": 3
+            },
+            {
+              "title": "invoice PDF endpoint should be accessible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Invoice not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 234,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 6,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:158:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:43.391Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Invoice not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 234,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-fef9fe7b4f8b6bb4d61a",
+              "file": "pdf-and-email.spec.ts",
+              "line": 233,
+              "column": 3
+            },
+            {
+              "title": "invoice email endpoint should accept valid recipient",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Invoice not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 248,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 8,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:158:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:43.405Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Invoice not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 248,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-ef121d7ed79b100e1c7f",
+              "file": "pdf-and-email.spec.ts",
+              "line": 247,
+              "column": 3
+            },
+            {
+              "title": "invoice PDF should return 404 for non-existent invoice",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "User not created",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 265,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 9,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [
+                        {
+                          "text": "Setup error: SyntaxError: Unexpected token 'T', \"Too many r\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at APIResponse.json \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright-core@1.56.1/node_modules/\u001b[4mplaywright-core\u001b[24m/lib/client/fetch.js:301:17\u001b[90m)\u001b[39m\n    at createTestUser \u001b[90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/setup.ts:97:19\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/\u001b[39mtests/e2e/pdf-and-email.spec.ts:158:26\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:305:11\n    at TimeoutManager.withRunnable \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/timeoutManager.js:67:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:303:7\u001b[90m)\u001b[39m\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/fixtureRunner.js:228:5\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:469:11\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:468:9\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:302:9\n    at TestInfoImpl._runAsStep \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/testInfo.js:294:7\u001b[90m)\u001b[39m\n    at \u001b[90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:298:7\n    at WorkerMain._runTest \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:283:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/worker/workerMain.js:198:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/\u001b[39mnode_modules/\u001b[4m.pnpm\u001b[24m/playwright@1.56.1/node_modules/\u001b[4mplaywright\u001b[24m/lib/common/process.js:65:22\u001b[90m)\u001b[39m\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:43.420Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "User not created",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 265,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-576aaef2bdd63e9516ab",
+              "file": "pdf-and-email.spec.ts",
+              "line": 264,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "UI Components Verification",
+          "file": "pdf-and-email.spec.ts",
+          "line": 277,
+          "column": 6,
+          "specs": [
+            {
+              "title": "quotes page should load without critical errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1586,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:40.363Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-3a77c64755764cd10829",
+              "file": "pdf-and-email.spec.ts",
+              "line": 278,
+              "column": 3
+            },
+            {
+              "title": "app should have proper component structure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1648,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:40.366Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-d66d6a6d9864d4f50e38",
+              "file": "pdf-and-email.spec.ts",
+              "line": 289,
+              "column": 3
+            },
+            {
+              "title": "navigation should be properly implemented",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1639,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:40.370Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-94416efd4eaecba798c5",
+              "file": "pdf-and-email.spec.ts",
+              "line": 301,
+              "column": 3
+            },
+            {
+              "title": "quotes page should load without critical errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 3750,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:41.922Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-e788d575d70ac87f5703",
+              "file": "pdf-and-email.spec.ts",
+              "line": 278,
+              "column": 3
+            },
+            {
+              "title": "app should have proper component structure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4054,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:42.863Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-a4245d489de2d60561e1",
+              "file": "pdf-and-email.spec.ts",
+              "line": 289,
+              "column": 3
+            },
+            {
+              "title": "navigation should be properly implemented",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3364,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:42.900Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-61e6aef3df07645e4b73",
+              "file": "pdf-and-email.spec.ts",
+              "line": 301,
+              "column": 3
+            },
+            {
+              "title": "quotes page should load without critical errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2261,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:43.440Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-c69bb94f0eee71cd7a7a",
+              "file": "pdf-and-email.spec.ts",
+              "line": 278,
+              "column": 3
+            },
+            {
+              "title": "app should have proper component structure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1464,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:46.222Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-166461569cec867947b3",
+              "file": "pdf-and-email.spec.ts",
+              "line": 289,
+              "column": 3
+            },
+            {
+              "title": "navigation should be properly implemented",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1419,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-13T17:04:48.213Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-aa2b5eb03d0459893966",
+              "file": "pdf-and-email.spec.ts",
+              "line": 301,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-11-13T17:04:38.568Z",
+    "duration": 11361.153,
+    "expected": 12,
+    "skipped": 21,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

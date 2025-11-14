@@ -17,6 +17,7 @@ import Quotes from "@/pages/quotes";
 import QuoteCreate from "@/pages/quote-create";
 import QuoteDetail from "@/pages/quote-detail";
 import Invoices from "@/pages/invoices";
+import InvoiceDetail from "@/pages/invoice-detail";
 import Analytics from "@/pages/analytics";
 import AdminUsers from "@/pages/admin-users";
 import AdminSettings from "@/pages/admin-settings";
@@ -81,6 +82,7 @@ function AuthenticatedLayout() {
               <Route path="/quotes/create" component={() => <ProtectedRoute component={QuoteCreate} />} />
               <Route path="/quotes/:id" component={() => <ProtectedRoute component={QuoteDetail} />} />
               <Route path="/invoices" component={() => <ProtectedRoute component={Invoices} />} />
+              <Route path="/invoices/:id" component={() => <ProtectedRoute component={InvoiceDetail} />} />
               <Route path="/analytics" component={() => <ProtectedRoute component={Analytics} />} />
               <Route path="/admin/users" component={() => <ProtectedRoute component={AdminUsers} />} />
               <Route path="/admin/settings" component={() => <ProtectedRoute component={AdminSettings} />} />

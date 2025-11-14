@@ -1,20 +1,79 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search, FileText, Eye, Download, Loader2 } from "lucide-react";
+import { Plus, Search, FileText, Eye, Download, Send, Loader2 } from "lucide-react";
 import { useLocation } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Quote } from "@shared/schema";
 import { Badge } from "@/components/ui/badge";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Quotes() {
   const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+  const [emailingQuoteId, setEmailingQuoteId] = useState<string | null>(null);
+  const [downloadingQuoteId, setDownloadingQuoteId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const { data: quotes, isLoading } = useQuery<Array<Quote & { clientName: string }>>({
     queryKey: ["/api/quotes"],
+  });
+
+  const downloadPdfMutation = useMutation({
+    mutationFn: async (quoteId: string) => {
+      const response = await fetch(`/api/quotes/${quoteId}/pdf`, {
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to download PDF");
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Quote-${quoteId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Quote PDF downloaded successfully.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to download quote PDF.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const emailQuoteMutation = useMutation({
+    mutationFn: async ({ quoteId, email, message }: { quoteId: string; email: string; message?: string }) => {
+      return await apiRequest("POST", `/api/quotes/${quoteId}/email`, {
+        recipientEmail: email,
+        message: message || "",
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Quote sent via email successfully.",
+      });
+      setEmailingQuoteId(null);
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to send quote via email.",
+        variant: "destructive",
+      });
+    },
   });
 
   const filteredQuotes = quotes?.filter(quote =>
@@ -119,6 +178,31 @@ export default function Quotes() {
                       data-testid={`button-view-quote-${quote.id}`}
                     >
                       <Eye className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setDownloadingQuoteId(quote.id);
+                        downloadPdfMutation.mutate(quote.id);
+                        setTimeout(() => setDownloadingQuoteId(null), 2000);
+                      }}
+                      disabled={downloadingQuoteId === quote.id}
+                      data-testid={`button-download-quote-${quote.id}`}
+                    >
+                      {downloadingQuoteId === quote.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Download className="h-4 w-4" />
+                      )}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setEmailingQuoteId(quote.id)}
+                      data-testid={`button-email-quote-${quote.id}`}
+                    >
+                      <Send className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>

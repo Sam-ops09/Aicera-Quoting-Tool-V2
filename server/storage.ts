@@ -9,6 +9,11 @@ import {
   templates,
   activityLogs,
   settings,
+  clientTags,
+  clientCommunications,
+  taxRates,
+  pricingTiers,
+  currencySettings,
   type User,
   type InsertUser,
   type Client,
@@ -25,6 +30,16 @@ import {
   type InsertActivityLog,
   type Setting,
   type InsertSetting,
+  type ClientTag,
+  type InsertClientTag,
+  type ClientCommunication,
+  type InsertClientCommunication,
+  type TaxRate,
+  type InsertTaxRate,
+  type PricingTier,
+  type InsertPricingTier,
+  type CurrencySetting,
+  type InsertCurrencySetting,
 } from "@shared/schema";
 
 export interface IStorage {
@@ -68,7 +83,11 @@ export interface IStorage {
   // Templates
   getTemplate(id: string): Promise<Template | undefined>;
   getAllTemplates(): Promise<Template[]>;
+  getTemplatesByType(type: string): Promise<Template[]>;
+  getTemplatesByStyle(style: string): Promise<Template[]>;
+  getDefaultTemplate(type: string): Promise<Template | undefined>;
   createTemplate(template: InsertTemplate & { createdBy: string }): Promise<Template>;
+  updateTemplate(id: string, data: Partial<Template>): Promise<Template | undefined>;
   deleteTemplate(id: string): Promise<void>;
 
   // Activity Logs
@@ -79,6 +98,36 @@ export interface IStorage {
   getSetting(key: string): Promise<Setting | undefined>;
   getAllSettings(): Promise<Setting[]>;
   upsertSetting(setting: InsertSetting): Promise<Setting>;
+
+  // PHASE 3 - Client Tags
+  getClientTags(clientId: string): Promise<ClientTag[]>;
+  addClientTag(tag: InsertClientTag): Promise<ClientTag>;
+  removeClientTag(tagId: string): Promise<void>;
+
+  // PHASE 3 - Client Communications
+  getClientCommunications(clientId: string): Promise<ClientCommunication[]>;
+  createClientCommunication(communication: InsertClientCommunication): Promise<ClientCommunication>;
+  deleteClientCommunication(id: string): Promise<void>;
+
+  // PHASE 3 - Tax Rates
+  getTaxRate(id: string): Promise<TaxRate | undefined>;
+  getTaxRateByRegion(region: string): Promise<TaxRate | undefined>;
+  getAllTaxRates(): Promise<TaxRate[]>;
+  createTaxRate(rate: InsertTaxRate): Promise<TaxRate>;
+  updateTaxRate(id: string, data: Partial<TaxRate>): Promise<TaxRate | undefined>;
+  deleteTaxRate(id: string): Promise<void>;
+
+  // PHASE 3 - Pricing Tiers
+  getPricingTier(id: string): Promise<PricingTier | undefined>;
+  getAllPricingTiers(): Promise<PricingTier[]>;
+  getPricingTierByAmount(amount: number): Promise<PricingTier | undefined>;
+  createPricingTier(tier: InsertPricingTier): Promise<PricingTier>;
+  updatePricingTier(id: string, data: Partial<PricingTier>): Promise<PricingTier | undefined>;
+  deletePricingTier(id: string): Promise<void>;
+
+  // PHASE 3 - Currency Settings
+  getCurrencySettings(): Promise<CurrencySetting | undefined>;
+  upsertCurrencySettings(settings: InsertCurrencySetting): Promise<CurrencySetting>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -111,6 +160,20 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteUser(id: string): Promise<void> {
+    // Delete in order of dependencies to avoid foreign key constraint violations
+    // 1. Delete activity logs for this user
+    await db.delete(activityLogs).where(eq(activityLogs.userId, id));
+    
+    // 2. Delete templates created by this user
+    await db.delete(templates).where(eq(templates.createdBy, id));
+    
+    // 3. Delete quotes created by this user (this will cascade to quote items due to onDelete: "cascade")
+    await db.delete(quotes).where(eq(quotes.createdBy, id));
+    
+    // 4. Delete clients created by this user
+    await db.delete(clients).where(eq(clients.createdBy, id));
+    
+    // 5. Finally, delete the user
     await db.delete(users).where(eq(users.id, id));
   }
 
@@ -236,9 +299,40 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(templates).where(eq(templates.isActive, true));
   }
 
+  async getTemplatesByType(type: string): Promise<Template[]> {
+    return await db
+      .select()
+      .from(templates)
+      .where(eq(templates.type, type) && eq(templates.isActive, true));
+  }
+
+  async getTemplatesByStyle(style: string): Promise<Template[]> {
+    return await db
+      .select()
+      .from(templates)
+      .where(eq(templates.style, style) && eq(templates.isActive, true));
+  }
+
+  async getDefaultTemplate(type: string): Promise<Template | undefined> {
+    const [template] = await db
+      .select()
+      .from(templates)
+      .where(eq(templates.type, type) && eq(templates.isDefault, true));
+    return template || undefined;
+  }
+
   async createTemplate(template: InsertTemplate & { createdBy: string }): Promise<Template> {
     const [newTemplate] = await db.insert(templates).values(template).returning();
     return newTemplate;
+  }
+
+  async updateTemplate(id: string, data: Partial<Template>): Promise<Template | undefined> {
+    const [updated] = await db
+      .update(templates)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(templates.id, id))
+      .returning();
+    return updated || undefined;
   }
 
   async deleteTemplate(id: string): Promise<void> {
@@ -282,6 +376,126 @@ export class DatabaseStorage implements IStorage {
     } else {
       const [newSetting] = await db.insert(settings).values(setting).returning();
       return newSetting;
+    }
+  }
+
+  // PHASE 3 - Client Tags
+  async getClientTags(clientId: string): Promise<ClientTag[]> {
+    return await db.select().from(clientTags).where(eq(clientTags.clientId, clientId));
+  }
+
+  async addClientTag(tag: InsertClientTag): Promise<ClientTag> {
+    const [newTag] = await db.insert(clientTags).values(tag).returning();
+    return newTag;
+  }
+
+  async removeClientTag(tagId: string): Promise<void> {
+    await db.delete(clientTags).where(eq(clientTags.id, tagId));
+  }
+
+  // PHASE 3 - Client Communications
+  async getClientCommunications(clientId: string): Promise<ClientCommunication[]> {
+    return await db
+      .select()
+      .from(clientCommunications)
+      .where(eq(clientCommunications.clientId, clientId))
+      .orderBy(desc(clientCommunications.date));
+  }
+
+  async createClientCommunication(communication: InsertClientCommunication): Promise<ClientCommunication> {
+    const [newComm] = await db.insert(clientCommunications).values(communication).returning();
+    return newComm;
+  }
+
+  async deleteClientCommunication(id: string): Promise<void> {
+    await db.delete(clientCommunications).where(eq(clientCommunications.id, id));
+  }
+
+  // PHASE 3 - Tax Rates
+  async getTaxRate(id: string): Promise<TaxRate | undefined> {
+    const [rate] = await db.select().from(taxRates).where(eq(taxRates.id, id));
+    return rate || undefined;
+  }
+
+  async getTaxRateByRegion(region: string): Promise<TaxRate | undefined> {
+    const [rate] = await db.select().from(taxRates).where(eq(taxRates.region, region));
+    return rate || undefined;
+  }
+
+  async getAllTaxRates(): Promise<TaxRate[]> {
+    return await db.select().from(taxRates);
+  }
+
+  async createTaxRate(rate: InsertTaxRate): Promise<TaxRate> {
+    const [newRate] = await db.insert(taxRates).values(rate).returning();
+    return newRate;
+  }
+
+  async updateTaxRate(id: string, data: Partial<TaxRate>): Promise<TaxRate | undefined> {
+    const [updated] = await db.update(taxRates).set(data).where(eq(taxRates.id, id)).returning();
+    return updated || undefined;
+  }
+
+  async deleteTaxRate(id: string): Promise<void> {
+    await db.delete(taxRates).where(eq(taxRates.id, id));
+  }
+
+  // PHASE 3 - Pricing Tiers
+  async getPricingTier(id: string): Promise<PricingTier | undefined> {
+    const [tier] = await db.select().from(pricingTiers).where(eq(pricingTiers.id, id));
+    return tier || undefined;
+  }
+
+  async getAllPricingTiers(): Promise<PricingTier[]> {
+    return await db.select().from(pricingTiers);
+  }
+
+  async getPricingTierByAmount(amount: number): Promise<PricingTier | undefined> {
+    const [tier] = await db
+      .select()
+      .from(pricingTiers)
+      .where(eq(pricingTiers.isActive, true));
+    // Find tier where amount is between min and max
+    const tiers = await db.select().from(pricingTiers).where(eq(pricingTiers.isActive, true));
+    return tiers.find(t => {
+      const min = parseFloat(t.minAmount.toString());
+      const max = t.maxAmount ? parseFloat(t.maxAmount.toString()) : Infinity;
+      return amount >= min && amount <= max;
+    });
+  }
+
+  async createPricingTier(tier: InsertPricingTier): Promise<PricingTier> {
+    const [newTier] = await db.insert(pricingTiers).values(tier).returning();
+    return newTier;
+  }
+
+  async updatePricingTier(id: string, data: Partial<PricingTier>): Promise<PricingTier | undefined> {
+    const [updated] = await db.update(pricingTiers).set(data).where(eq(pricingTiers.id, id)).returning();
+    return updated || undefined;
+  }
+
+  async deletePricingTier(id: string): Promise<void> {
+    await db.delete(pricingTiers).where(eq(pricingTiers.id, id));
+  }
+
+  // PHASE 3 - Currency Settings
+  async getCurrencySettings(): Promise<CurrencySetting | undefined> {
+    const [settings] = await db.select().from(currencySettings).limit(1);
+    return settings || undefined;
+  }
+
+  async upsertCurrencySettings(settings: InsertCurrencySetting): Promise<CurrencySetting> {
+    const existing = await this.getCurrencySettings();
+    if (existing) {
+      const [updated] = await db
+        .update(currencySettings)
+        .set({ ...settings, updatedAt: new Date() })
+        .where(eq(currencySettings.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      const [newSettings] = await db.insert(currencySettings).values(settings).returning();
+      return newSettings;
     }
   }
 }

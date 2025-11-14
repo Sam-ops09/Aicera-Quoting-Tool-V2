@@ -1,0 +1,263 @@
+<testsuites id="" name="" tests="33" failures="0" skipped="21" errors="0" time="11.361153">
+<testsuite name="pdf-and-email.spec.ts" timestamp="2025-11-13T17:04:38.945Z" hostname="chromium" tests="11" failures="0" skipped="7" time="6.342" errors="0">
+<testcase name="PDF Download and Email API Features › quote PDF endpoint should be accessible and return PDF" classname="pdf-and-email.spec.ts" time="0.362">
+<properties>
+<property name="skip" value="Quote not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PDF Download and Email API Features › quote email endpoint should accept valid recipient" classname="pdf-and-email.spec.ts" time="0.358">
+<properties>
+<property name="skip" value="Quote not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PDF Download and Email API Features › quote email endpoint should handle empty message" classname="pdf-and-email.spec.ts" time="0.357">
+<properties>
+<property name="skip" value="Quote not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PDF Download and Email API Features › quote PDF should return 404 for non-existent quote" classname="pdf-and-email.spec.ts" time="0.354">
+<properties>
+<property name="skip" value="User not created">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PDF Download and Email API Features › unauthenticated request should not access PDF" classname="pdf-and-email.spec.ts" time="0.011">
+<system-err>
+<![CDATA[Setup error: SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at APIResponse.json [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright-core@1.56.1/node_modules/[4mplaywright-core[24m/lib/client/fetch.js:301:17[90m)[39m
+    at createTestUser [90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/[39mtests/e2e/setup.ts:97:19[90m)[39m
+    at [90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/[39mtests/e2e/pdf-and-email.spec.ts:20:26
+    at [90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/testInfo.js:305:11
+    at TimeoutManager.withRunnable [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/timeoutManager.js:67:14[90m)[39m
+    at TestInfoImpl._runWithTimeout [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/testInfo.js:303:7[90m)[39m
+    at FixtureRunner.resolveParametersAndRunFunction [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/fixtureRunner.js:228:5[90m)[39m
+    at [90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:469:11
+    at TestInfoImpl._runAsStep [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/testInfo.js:294:7[90m)[39m
+    at WorkerMain._runEachHooksForSuites [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:468:9[90m)[39m
+    at [90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:302:9
+    at TestInfoImpl._runAsStep [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/testInfo.js:294:7[90m)[39m
+    at [90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:298:7
+    at WorkerMain._runTest [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:283:5[90m)[39m
+    at WorkerMain.runTestGroup [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:198:11[90m)[39m
+    at process.<anonymous> [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/common/process.js:65:22[90m)[39m
+]]>
+</system-err>
+</testcase>
+<testcase name="Invoice PDF and Email Features › invoice PDF endpoint should be accessible" classname="pdf-and-email.spec.ts" time="0.011">
+<properties>
+<property name="skip" value="Invoice not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Invoice PDF and Email Features › invoice email endpoint should accept valid recipient" classname="pdf-and-email.spec.ts" time="0.01">
+<properties>
+<property name="skip" value="Invoice not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Invoice PDF and Email Features › invoice PDF should return 404 for non-existent invoice" classname="pdf-and-email.spec.ts" time="0.006">
+<properties>
+<property name="skip" value="User not created">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="UI Components Verification › quotes page should load without critical errors" classname="pdf-and-email.spec.ts" time="1.586">
+</testcase>
+<testcase name="UI Components Verification › app should have proper component structure" classname="pdf-and-email.spec.ts" time="1.648">
+</testcase>
+<testcase name="UI Components Verification › navigation should be properly implemented" classname="pdf-and-email.spec.ts" time="1.639">
+</testcase>
+</testsuite>
+<testsuite name="pdf-and-email.spec.ts" timestamp="2025-11-13T17:04:38.945Z" hostname="firefox" tests="11" failures="0" skipped="7" time="11.59" errors="0">
+<testcase name="PDF Download and Email API Features › quote PDF endpoint should be accessible and return PDF" classname="pdf-and-email.spec.ts" time="0.369">
+<properties>
+<property name="skip" value="Quote not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PDF Download and Email API Features › quote email endpoint should accept valid recipient" classname="pdf-and-email.spec.ts" time="0.008">
+<properties>
+<property name="skip" value="Quote not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PDF Download and Email API Features › quote email endpoint should handle empty message" classname="pdf-and-email.spec.ts" time="0.008">
+<properties>
+<property name="skip" value="Quote not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PDF Download and Email API Features › quote PDF should return 404 for non-existent quote" classname="pdf-and-email.spec.ts" time="0.007">
+<properties>
+<property name="skip" value="User not created">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PDF Download and Email API Features › unauthenticated request should not access PDF" classname="pdf-and-email.spec.ts" time="0.011">
+<system-err>
+<![CDATA[Setup error: SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at APIResponse.json [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright-core@1.56.1/node_modules/[4mplaywright-core[24m/lib/client/fetch.js:301:17[90m)[39m
+    at createTestUser [90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/[39mtests/e2e/setup.ts:97:19[90m)[39m
+    at [90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/[39mtests/e2e/pdf-and-email.spec.ts:20:26
+    at [90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/testInfo.js:305:11
+    at TimeoutManager.withRunnable [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/timeoutManager.js:67:14[90m)[39m
+    at TestInfoImpl._runWithTimeout [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/testInfo.js:303:7[90m)[39m
+    at FixtureRunner.resolveParametersAndRunFunction [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/fixtureRunner.js:228:5[90m)[39m
+    at [90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:469:11
+    at TestInfoImpl._runAsStep [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/testInfo.js:294:7[90m)[39m
+    at WorkerMain._runEachHooksForSuites [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:468:9[90m)[39m
+    at [90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:302:9
+    at TestInfoImpl._runAsStep [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/testInfo.js:294:7[90m)[39m
+    at [90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:298:7
+    at WorkerMain._runTest [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:283:5[90m)[39m
+    at WorkerMain.runTestGroup [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:198:11[90m)[39m
+    at process.<anonymous> [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/common/process.js:65:22[90m)[39m
+]]>
+</system-err>
+</testcase>
+<testcase name="Invoice PDF and Email Features › invoice PDF endpoint should be accessible" classname="pdf-and-email.spec.ts" time="0.004">
+<properties>
+<property name="skip" value="Invoice not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Invoice PDF and Email Features › invoice email endpoint should accept valid recipient" classname="pdf-and-email.spec.ts" time="0.005">
+<properties>
+<property name="skip" value="Invoice not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Invoice PDF and Email Features › invoice PDF should return 404 for non-existent invoice" classname="pdf-and-email.spec.ts" time="0.01">
+<properties>
+<property name="skip" value="User not created">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="UI Components Verification › quotes page should load without critical errors" classname="pdf-and-email.spec.ts" time="3.75">
+</testcase>
+<testcase name="UI Components Verification › app should have proper component structure" classname="pdf-and-email.spec.ts" time="4.054">
+</testcase>
+<testcase name="UI Components Verification › navigation should be properly implemented" classname="pdf-and-email.spec.ts" time="3.364">
+</testcase>
+</testsuite>
+<testsuite name="pdf-and-email.spec.ts" timestamp="2025-11-13T17:04:38.945Z" hostname="webkit" tests="11" failures="0" skipped="7" time="5.546" errors="0">
+<testcase name="PDF Download and Email API Features › quote PDF endpoint should be accessible and return PDF" classname="pdf-and-email.spec.ts" time="0.337">
+<properties>
+<property name="skip" value="Quote not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PDF Download and Email API Features › quote email endpoint should accept valid recipient" classname="pdf-and-email.spec.ts" time="0.009">
+<properties>
+<property name="skip" value="Quote not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PDF Download and Email API Features › quote email endpoint should handle empty message" classname="pdf-and-email.spec.ts" time="0.013">
+<properties>
+<property name="skip" value="Quote not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PDF Download and Email API Features › quote PDF should return 404 for non-existent quote" classname="pdf-and-email.spec.ts" time="0.007">
+<properties>
+<property name="skip" value="User not created">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PDF Download and Email API Features › unauthenticated request should not access PDF" classname="pdf-and-email.spec.ts" time="0.013">
+<system-err>
+<![CDATA[Setup error: SyntaxError: Unexpected token 'T', "Too many r"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at APIResponse.json [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright-core@1.56.1/node_modules/[4mplaywright-core[24m/lib/client/fetch.js:301:17[90m)[39m
+    at createTestUser [90m(file:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/[39mtests/e2e/setup.ts:97:19[90m)[39m
+    at [90mfile:///Users/samanyu/Desktop/AICERA%20websites%20and%20tools/QuoteProGen/[39mtests/e2e/pdf-and-email.spec.ts:20:26
+    at [90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/testInfo.js:305:11
+    at TimeoutManager.withRunnable [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/timeoutManager.js:67:14[90m)[39m
+    at TestInfoImpl._runWithTimeout [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/testInfo.js:303:7[90m)[39m
+    at FixtureRunner.resolveParametersAndRunFunction [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/fixtureRunner.js:228:5[90m)[39m
+    at [90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:469:11
+    at TestInfoImpl._runAsStep [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/testInfo.js:294:7[90m)[39m
+    at WorkerMain._runEachHooksForSuites [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:468:9[90m)[39m
+    at [90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:302:9
+    at TestInfoImpl._runAsStep [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/testInfo.js:294:7[90m)[39m
+    at [90m/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:298:7
+    at WorkerMain._runTest [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:283:5[90m)[39m
+    at WorkerMain.runTestGroup [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/worker/workerMain.js:198:11[90m)[39m
+    at process.<anonymous> [90m(/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/[39mnode_modules/[4m.pnpm[24m/playwright@1.56.1/node_modules/[4mplaywright[24m/lib/common/process.js:65:22[90m)[39m
+]]>
+</system-err>
+</testcase>
+<testcase name="Invoice PDF and Email Features › invoice PDF endpoint should be accessible" classname="pdf-and-email.spec.ts" time="0.006">
+<properties>
+<property name="skip" value="Invoice not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Invoice PDF and Email Features › invoice email endpoint should accept valid recipient" classname="pdf-and-email.spec.ts" time="0.008">
+<properties>
+<property name="skip" value="Invoice not created in setup">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Invoice PDF and Email Features › invoice PDF should return 404 for non-existent invoice" classname="pdf-and-email.spec.ts" time="0.009">
+<properties>
+<property name="skip" value="User not created">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="UI Components Verification › quotes page should load without critical errors" classname="pdf-and-email.spec.ts" time="2.261">
+</testcase>
+<testcase name="UI Components Verification › app should have proper component structure" classname="pdf-and-email.spec.ts" time="1.464">
+</testcase>
+<testcase name="UI Components Verification › navigation should be properly implemented" classname="pdf-and-email.spec.ts" time="1.419">
+</testcase>
+</testsuite>
+</testsuites>
