@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useLocation, useRoute } from "wouter";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -14,6 +14,21 @@ import { Plus, Trash2, Loader2, ArrowLeft } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { Client } from "@shared/schema";
+import { BOMSection, type BOMItem } from "@/components/quote/bom-section";
+import { SLASection, type SLAData } from "@/components/quote/sla-section";
+import { TimelineSection, type TimelineData } from "@/components/quote/timeline-section";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+type TaxRate = {
+  id: string;
+  region: string;
+  taxType: string;
+  sgstRate: string;
+  cgstRate: string;
+  igstRate: string;
+  isActive: boolean;
+  effectiveFrom: string;
+};
 
 interface QuoteCreatePayload {
   clientId: string;
@@ -32,6 +47,9 @@ interface QuoteCreatePayload {
   status: "draft" | "sent" | "approved" | "rejected" | "invoiced";
   quoteDate: string;
   items: { description: string; quantity: number; unitPrice: number }[];
+  bomSection?: string; // JSON string
+  slaSection?: string; // JSON string
+  timelineSection?: string; // JSON string
 }
 
 interface QuoteDetail {
@@ -59,6 +77,9 @@ interface QuoteDetail {
   igst: string;
   shippingCharges: string;
   total: string;
+  bomSection?: string; // JSON string
+  slaSection?: string; // JSON string
+  timelineSection?: string; // JSON string
 }
 
 const quoteFormSchema = z.object({
@@ -90,6 +111,13 @@ export default function QuoteCreate() {
     queryKey: ["/api/clients"],
   });
 
+  const { data: taxRates } = useQuery<TaxRate[]>({
+    queryKey: ["/api/tax-rates"],
+  });
+
+  // Filter to only active tax rates
+  const activeTaxRates = taxRates?.filter(rate => rate.isActive) || [];
+
   const { data: existingQuote, isLoading: isLoadingQuote } = useQuery<QuoteDetail>({
     queryKey: ["/api/quotes", params?.id],
     enabled: isEditMode,
@@ -111,6 +139,24 @@ export default function QuoteCreate() {
       termsAndConditions: "Payment Terms: Net 30 days\nDelivery: 7-10 business days\nWarranty: 1 year manufacturer warranty",
       items: [{ description: "", quantity: 1, unitPrice: 0 }],
     },
+  });
+
+  // Advanced Sections State
+  const [bomItems, setBomItems] = useState<BOMItem[]>([]);
+  const [slaData, setSlaData] = useState<SLAData>({
+    overview: "",
+    responseTime: "",
+    resolutionTime: "",
+    availability: "",
+    supportHours: "",
+    escalationProcess: "",
+    metrics: [],
+  });
+  const [timelineData, setTimelineData] = useState<TimelineData>({
+    projectOverview: "",
+    startDate: "",
+    endDate: "",
+    milestones: [],
   });
 
   // Load existing quote data when in edit mode
@@ -149,6 +195,34 @@ export default function QuoteCreate() {
           unitPrice: Number(item.unitPrice),
         })),
       });
+
+      // Load advanced sections
+      if (existingQuote.bomSection) {
+        try {
+          const parsedBOM = JSON.parse(existingQuote.bomSection);
+          setBomItems(parsedBOM);
+        } catch (e) {
+          console.error("Failed to parse BOM section:", e);
+        }
+      }
+
+      if (existingQuote.slaSection) {
+        try {
+          const parsedSLA = JSON.parse(existingQuote.slaSection);
+          setSlaData(parsedSLA);
+        } catch (e) {
+          console.error("Failed to parse SLA section:", e);
+        }
+      }
+
+      if (existingQuote.timelineSection) {
+        try {
+          const parsedTimeline = JSON.parse(existingQuote.timelineSection);
+          setTimelineData(parsedTimeline);
+        } catch (e) {
+          console.error("Failed to parse Timeline section:", e);
+        }
+      }
     }
   }, [existingQuote, isEditMode, form]);
 
@@ -207,6 +281,20 @@ export default function QuoteCreate() {
   const igst = form.watch("igst");
   const shippingCharges = form.watch("shippingCharges");
 
+  // Function to apply a selected tax rate
+  const applyTaxRate = (taxRateId: string) => {
+    const selectedRate = activeTaxRates.find(rate => rate.id === taxRateId);
+    if (selectedRate) {
+      form.setValue("cgst", parseFloat(selectedRate.cgstRate));
+      form.setValue("sgst", parseFloat(selectedRate.sgstRate));
+      form.setValue("igst", parseFloat(selectedRate.igstRate));
+      toast({
+        title: "Tax rate applied",
+        description: `Applied ${selectedRate.taxType} rates for ${selectedRate.region}`,
+      });
+    }
+  };
+
   const subtotal = items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
   const discountAmount = (subtotal * discount) / 100;
   const taxableAmount = subtotal - discountAmount;
@@ -233,6 +321,10 @@ export default function QuoteCreate() {
       status: isEditMode ? (existingQuote?.status as any) : "draft",
       quoteDate: isEditMode ? (existingQuote?.quoteDate || new Date().toISOString()) : new Date().toISOString(),
       items: values.items.map(i => ({ description: i.description, quantity: i.quantity, unitPrice: i.unitPrice })),
+      // Include advanced sections
+      bomSection: bomItems.length > 0 ? JSON.stringify(bomItems) : undefined,
+      slaSection: (slaData.overview || slaData.metrics.length > 0) ? JSON.stringify(slaData) : undefined,
+      timelineSection: (timelineData.projectOverview || timelineData.milestones.length > 0) ? JSON.stringify(timelineData) : undefined,
     };
 
     if (isEditMode) {
@@ -494,6 +586,32 @@ export default function QuoteCreate() {
                   />
                 </CardContent>
               </Card>
+
+              {/* Advanced Sections */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Advanced Sections (Optional)</CardTitle>
+                  <p className="text-sm text-muted-foreground">Add detailed technical and project information to your quote</p>
+                </CardHeader>
+                <CardContent>
+                  <Tabs defaultValue="bom" className="w-full">
+                    <TabsList className="grid w-full grid-cols-3">
+                      <TabsTrigger value="bom">Bill of Materials</TabsTrigger>
+                      <TabsTrigger value="sla">SLA</TabsTrigger>
+                      <TabsTrigger value="timeline">Timeline</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="bom" className="mt-4">
+                      <BOMSection items={bomItems} onChange={setBomItems} />
+                    </TabsContent>
+                    <TabsContent value="sla" className="mt-4">
+                      <SLASection data={slaData} onChange={setSlaData} />
+                    </TabsContent>
+                    <TabsContent value="timeline" className="mt-4">
+                      <TimelineSection data={timelineData} onChange={setTimelineData} />
+                    </TabsContent>
+                  </Tabs>
+                </CardContent>
+              </Card>
             </div>
 
             <div className="space-y-6">
@@ -502,6 +620,28 @@ export default function QuoteCreate() {
                   <CardTitle>Pricing & Taxes</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {/* Tax Rate Selector */}
+                  {activeTaxRates.length > 0 && (
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Quick Apply Tax Rate</label>
+                      <Select onValueChange={applyTaxRate}>
+                        <SelectTrigger data-testid="select-tax-rate">
+                          <SelectValue placeholder="Select a tax rate..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {activeTaxRates.map((rate) => (
+                            <SelectItem key={rate.id} value={rate.id}>
+                              {rate.region} - {rate.taxType} (CGST: {rate.cgstRate}%, SGST: {rate.sgstRate}%, IGST: {rate.igstRate}%)
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <p className="text-xs text-muted-foreground">
+                        Select a pre-configured tax rate or enter manually below
+                      </p>
+                    </div>
+                  )}
+
                   <FormField
                     control={form.control}
                     name="discount"
@@ -521,6 +661,19 @@ export default function QuoteCreate() {
                       </FormItem>
                     )}
                   />
+
+                  {/* Divider */}
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-background px-2 text-muted-foreground">
+                        Or enter manually
+                      </span>
+                    </div>
+                  </div>
+
                   <div className="grid gap-4 grid-cols-2">
                     <FormField
                       control={form.control}

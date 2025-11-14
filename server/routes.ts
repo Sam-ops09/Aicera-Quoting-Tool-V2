@@ -1005,10 +1005,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Record Invoice Payment (incremental)
   app.post("/api/invoices/:id/payment", authMiddleware, async (req: AuthRequest, res: Response) => {
     try {
-      const { amount, method, notes } = req.body;
+      const { amount, paymentMethod, transactionId, notes, paymentDate } = req.body;
 
       if (!amount || amount <= 0) {
         return res.status(400).json({ error: "Valid payment amount is required" });
+      }
+
+      if (!paymentMethod) {
+        return res.status(400).json({ error: "Payment method is required" });
       }
 
       const invoice = await storage.getInvoice(req.params.id);
@@ -1021,7 +1025,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Related quote not found" });
       }
 
-      const newPaidAmount = Number(invoice.paidAmount) + amount;
+      // Create payment history record
+      await storage.createPaymentHistory({
+        invoiceId: req.params.id,
+        amount: String(amount),
+        paymentMethod,
+        transactionId: transactionId || undefined,
+        notes: notes || undefined,
+        paymentDate: paymentDate ? new Date(paymentDate) : new Date(),
+        recordedBy: req.user!.id,
+      });
+
+      // Update invoice totals
+      const newPaidAmount = Number(invoice.paidAmount) + Number(amount);
       const totalAmount = Number(quote.total);
       
       let newPaymentStatus = invoice.paymentStatus;
@@ -1035,8 +1051,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         paidAmount: String(newPaidAmount),
         paymentStatus: newPaymentStatus,
         lastPaymentDate: new Date(),
-        paymentMethod: method || invoice.paymentMethod,
-        paymentNotes: (invoice.paymentNotes || "") + (notes ? `\n${new Date().toISOString()}: ${notes}` : ""),
+        paymentMethod: paymentMethod,
       });
 
       await storage.createActivityLog({
@@ -1053,7 +1068,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get Invoice Payment History
+  // Get Invoice Payment History (Detailed with actual payment records)
+  app.get("/api/invoices/:id/payment-history-detailed", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const invoice = await storage.getInvoice(req.params.id);
+      if (!invoice) {
+        return res.status(404).json({ error: "Invoice not found" });
+      }
+
+      // Get payment history records
+      const payments = await storage.getPaymentHistory(req.params.id);
+
+      // Enrich with user names
+      const enrichedPayments = await Promise.all(
+        payments.map(async (payment) => {
+          const user = await storage.getUser(payment.recordedBy);
+          return {
+            ...payment,
+            recordedByName: user?.name || "Unknown",
+          };
+        })
+      );
+
+      return res.json(enrichedPayments);
+    } catch (error) {
+      console.error("Fetch payment history error:", error);
+      return res.status(500).json({ error: "Failed to fetch payment history" });
+    }
+  });
+
+  // Get Invoice Payment History (Legacy - for backward compatibility)
   app.get("/api/invoices/:id/payment-history", authMiddleware, async (req: AuthRequest, res: Response) => {
     try {
       const invoice = await storage.getInvoice(req.params.id);
@@ -1061,7 +1105,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Invoice not found" });
       }
 
-      // Parse payment notes to create history
+      // Parse payment notes to create history (legacy)
       const history = [];
       if (invoice.paymentNotes) {
         const entries = invoice.paymentNotes.split("\n").filter(e => e.trim());
@@ -1085,6 +1129,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       return res.status(500).json({ error: "Failed to fetch payment history" });
+    }
+  });
+
+  // Delete Payment History Record
+  app.delete("/api/payment-history/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      // First get the payment record to get invoice details
+      const payments = await storage.getPaymentHistory("");
+      const payment = payments.find(p => p.id === req.params.id);
+
+      if (!payment) {
+        return res.status(404).json({ error: "Payment record not found" });
+      }
+
+      const invoice = await storage.getInvoice(payment.invoiceId);
+      if (!invoice) {
+        return res.status(404).json({ error: "Invoice not found" });
+      }
+
+      const quote = await storage.getQuote(invoice.quoteId);
+      if (!quote) {
+        return res.status(404).json({ error: "Related quote not found" });
+      }
+
+      // Delete payment record
+      await storage.deletePaymentHistory(req.params.id);
+
+      // Recalculate invoice totals
+      const allPayments = await storage.getPaymentHistory(payment.invoiceId);
+      const newPaidAmount = allPayments.reduce((sum, p) => sum + Number(p.amount), 0);
+      const totalAmount = Number(quote.total);
+
+      let newPaymentStatus: "pending" | "partial" | "paid" | "overdue" = "pending";
+      if (newPaidAmount >= totalAmount) {
+        newPaymentStatus = "paid";
+      } else if (newPaidAmount > 0) {
+        newPaymentStatus = "partial";
+      }
+
+      const lastPayment = allPayments[0]; // Already sorted by date desc
+      await storage.updateInvoice(payment.invoiceId, {
+        paidAmount: String(newPaidAmount),
+        paymentStatus: newPaymentStatus,
+        lastPaymentDate: lastPayment?.paymentDate || null,
+        paymentMethod: lastPayment?.paymentMethod || null,
+      });
+
+      await storage.createActivityLog({
+        userId: req.user!.id,
+        action: "delete_payment",
+        entityType: "invoice",
+        entityId: invoice.id,
+      });
+
+      return res.json({ success: true });
+    } catch (error: any) {
+      console.error("Delete payment error:", error);
+      return res.status(500).json({ error: error.message || "Failed to delete payment" });
     }
   });
 

@@ -1,11 +1,12 @@
 import { db } from "./db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 import {
   users,
   clients,
   quotes,
   quoteItems,
   invoices,
+  paymentHistory,
   templates,
   activityLogs,
   settings,
@@ -24,6 +25,8 @@ import {
   type InsertQuoteItem,
   type Invoice,
   type InsertInvoice,
+  type PaymentHistory,
+  type InsertPaymentHistory,
   type Template,
   type InsertTemplate,
   type ActivityLog,
@@ -81,6 +84,11 @@ export interface IStorage {
   updateInvoice(id: string, data: Partial<Invoice>): Promise<Invoice | undefined>;
   getLastInvoiceNumber(): Promise<string | undefined>;
 
+  // Payment History
+  getPaymentHistory(invoiceId: string): Promise<PaymentHistory[]>;
+  createPaymentHistory(payment: InsertPaymentHistory): Promise<PaymentHistory>;
+  deletePaymentHistory(id: string): Promise<void>;
+
   // Templates
   getTemplate(id: string): Promise<Template | undefined>;
   getAllTemplates(): Promise<Template[]>;
@@ -114,6 +122,7 @@ export interface IStorage {
   getTaxRate(id: string): Promise<TaxRate | undefined>;
   getTaxRateByRegion(region: string): Promise<TaxRate | undefined>;
   getAllTaxRates(): Promise<TaxRate[]>;
+  getActiveTaxRates(): Promise<TaxRate[]>;
   createTaxRate(rate: InsertTaxRate): Promise<TaxRate>;
   updateTaxRate(id: string, data: Partial<TaxRate>): Promise<TaxRate | undefined>;
   deleteTaxRate(id: string): Promise<void>;
@@ -299,6 +308,24 @@ export class DatabaseStorage implements IStorage {
     return lastInvoice?.invoiceNumber;
   }
 
+  // Payment History
+  async getPaymentHistory(invoiceId: string): Promise<PaymentHistory[]> {
+    return await db
+      .select()
+      .from(paymentHistory)
+      .where(eq(paymentHistory.invoiceId, invoiceId))
+      .orderBy(desc(paymentHistory.paymentDate));
+  }
+
+  async createPaymentHistory(payment: InsertPaymentHistory): Promise<PaymentHistory> {
+    const [newPayment] = await db.insert(paymentHistory).values(payment).returning();
+    return newPayment;
+  }
+
+  async deletePaymentHistory(id: string): Promise<void> {
+    await db.delete(paymentHistory).where(eq(paymentHistory.id, id));
+  }
+
   // Templates
   async getTemplate(id: string): Promise<Template | undefined> {
     const [template] = await db.select().from(templates).where(eq(templates.id, id));
@@ -428,12 +455,25 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getTaxRateByRegion(region: string): Promise<TaxRate | undefined> {
-    const [rate] = await db.select().from(taxRates).where(eq(taxRates.region, region));
+    const [rate] = await db
+      .select()
+      .from(taxRates)
+      .where(and(eq(taxRates.region, region), eq(taxRates.isActive, true)))
+      .orderBy(desc(taxRates.effectiveFrom))
+      .limit(1);
     return rate || undefined;
   }
 
   async getAllTaxRates(): Promise<TaxRate[]> {
-    return await db.select().from(taxRates);
+    return await db.select().from(taxRates).orderBy(desc(taxRates.effectiveFrom));
+  }
+
+  async getActiveTaxRates(): Promise<TaxRate[]> {
+    return await db
+      .select()
+      .from(taxRates)
+      .where(eq(taxRates.isActive, true))
+      .orderBy(desc(taxRates.effectiveFrom));
   }
 
   async createTaxRate(rate: InsertTaxRate): Promise<TaxRate> {

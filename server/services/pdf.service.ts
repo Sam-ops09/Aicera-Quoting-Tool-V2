@@ -98,6 +98,9 @@ export class PDFService {
 
     doc.moveDown(1);
 
+    // Advanced Sections
+    this.drawAdvancedSections(doc, data.quote);
+
     // Footer
     doc.fontSize(9).font("Helvetica").text("─".repeat(80), { align: "center" });
     doc.text("Thank you for your business!", { align: "center" });
@@ -182,6 +185,135 @@ export class PDFService {
     doc.fontSize(12).font("Helvetica-Bold");
     doc.text("TOTAL:", rightX, doc.y + 5);
     doc.text(`₹${Number(quote.total).toFixed(2)}`, rightX + 100);
+  }
+
+  private static drawAdvancedSections(doc: InstanceType<typeof PDFDocument>, quote: Quote) {
+    // Check if we need a new page for advanced sections
+    if (doc.y > 650) {
+      doc.addPage();
+    }
+
+    // Bill of Materials
+    if (quote.bomSection) {
+      try {
+        const bomData = JSON.parse(quote.bomSection);
+        if (bomData && bomData.length > 0) {
+          doc.moveDown(1);
+          doc.fontSize(14).font("Helvetica-Bold").text("BILL OF MATERIALS (BOM)");
+          doc.moveDown(0.5);
+
+          bomData.forEach((item: any, index: number) => {
+            if (doc.y > 700) doc.addPage();
+
+            doc.fontSize(11).font("Helvetica-Bold").text(`Item ${index + 1}: ${item.partNumber}`);
+            doc.fontSize(9).font("Helvetica");
+            doc.text(`Description: ${item.description}`);
+            if (item.manufacturer) doc.text(`Manufacturer: ${item.manufacturer}`);
+            doc.text(`Quantity: ${item.quantity} ${item.unitOfMeasure}`);
+            if (item.specifications) doc.text(`Specifications: ${item.specifications}`);
+            if (item.notes) doc.text(`Notes: ${item.notes}`);
+            doc.moveDown(0.5);
+          });
+        }
+      } catch (e) {
+        console.error("Failed to parse BOM section:", e);
+      }
+    }
+
+    // Service Level Agreement
+    if (quote.slaSection) {
+      try {
+        const slaData = JSON.parse(quote.slaSection);
+        if (slaData && (slaData.overview || slaData.metrics?.length > 0)) {
+          if (doc.y > 650) doc.addPage();
+
+          doc.moveDown(1);
+          doc.fontSize(14).font("Helvetica-Bold").text("SERVICE LEVEL AGREEMENT (SLA)");
+          doc.moveDown(0.5);
+
+          if (slaData.overview) {
+            doc.fontSize(11).font("Helvetica-Bold").text("Overview");
+            doc.fontSize(9).font("Helvetica").text(slaData.overview, { width: 500 });
+            doc.moveDown(0.5);
+          }
+
+          if (slaData.responseTime || slaData.resolutionTime || slaData.availability || slaData.supportHours) {
+            doc.fontSize(11).font("Helvetica-Bold").text("Service Commitments");
+            doc.fontSize(9).font("Helvetica");
+            if (slaData.responseTime) doc.text(`Response Time: ${slaData.responseTime}`);
+            if (slaData.resolutionTime) doc.text(`Resolution Time: ${slaData.resolutionTime}`);
+            if (slaData.availability) doc.text(`System Availability: ${slaData.availability}`);
+            if (slaData.supportHours) doc.text(`Support Hours: ${slaData.supportHours}`);
+            doc.moveDown(0.5);
+          }
+
+          if (slaData.metrics && slaData.metrics.length > 0) {
+            doc.fontSize(11).font("Helvetica-Bold").text("Performance Metrics");
+            doc.fontSize(9).font("Helvetica");
+            slaData.metrics.forEach((metric: any) => {
+              if (doc.y > 700) doc.addPage();
+              doc.font("Helvetica-Bold").text(`• ${metric.name} - Target: ${metric.target}`);
+              doc.font("Helvetica").text(`  ${metric.description}`, { indent: 10 });
+              if (metric.penalty) doc.text(`  Penalty: ${metric.penalty}`, { indent: 10 });
+            });
+            doc.moveDown(0.5);
+          }
+        }
+      } catch (e) {
+        console.error("Failed to parse SLA section:", e);
+      }
+    }
+
+    // Project Timeline
+    if (quote.timelineSection) {
+      try {
+        const timelineData = JSON.parse(quote.timelineSection);
+        if (timelineData && (timelineData.projectOverview || timelineData.milestones?.length > 0)) {
+          if (doc.y > 650) doc.addPage();
+
+          doc.moveDown(1);
+          doc.fontSize(14).font("Helvetica-Bold").text("PROJECT TIMELINE");
+          doc.moveDown(0.5);
+
+          if (timelineData.projectOverview) {
+            doc.fontSize(11).font("Helvetica-Bold").text("Project Overview");
+            doc.fontSize(9).font("Helvetica").text(timelineData.projectOverview, { width: 500 });
+            doc.moveDown(0.5);
+          }
+
+          if (timelineData.startDate || timelineData.endDate) {
+            doc.fontSize(9).font("Helvetica");
+            if (timelineData.startDate) doc.text(`Project Start: ${new Date(timelineData.startDate).toLocaleDateString()}`);
+            if (timelineData.endDate) doc.text(`Project End: ${new Date(timelineData.endDate).toLocaleDateString()}`);
+            doc.moveDown(0.5);
+          }
+
+          if (timelineData.milestones && timelineData.milestones.length > 0) {
+            doc.fontSize(11).font("Helvetica-Bold").text("Milestones & Phases");
+            doc.moveDown(0.3);
+
+            timelineData.milestones.forEach((milestone: any, index: number) => {
+              if (doc.y > 700) doc.addPage();
+
+              doc.fontSize(10).font("Helvetica-Bold").text(`${index + 1}. ${milestone.name} (${milestone.status})`);
+              doc.fontSize(9).font("Helvetica");
+              if (milestone.description) doc.text(milestone.description);
+              if (milestone.startDate || milestone.endDate || milestone.duration) {
+                let dateStr = "";
+                if (milestone.startDate) dateStr += `Start: ${new Date(milestone.startDate).toLocaleDateString()}`;
+                if (milestone.endDate) dateStr += ` | End: ${new Date(milestone.endDate).toLocaleDateString()}`;
+                if (milestone.duration) dateStr += ` | Duration: ${milestone.duration}`;
+                doc.text(dateStr);
+              }
+              if (milestone.deliverables) doc.text(`Deliverables: ${milestone.deliverables}`);
+              doc.moveDown(0.5);
+            });
+          }
+        }
+      } catch (e) {
+        console.error("Failed to parse Timeline section:", e);
+      }
+    }
   }
 
   static generateInvoicePDF(

@@ -142,10 +142,35 @@ export const invoices = pgTable("invoices", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const invoicesRelations = relations(invoices, ({ one }) => ({
+export const invoicesRelations = relations(invoices, ({ one, many }) => ({
   quote: one(quotes, {
     fields: [invoices.quoteId],
     references: [quotes.id],
+  }),
+  payments: many(paymentHistory),
+}));
+
+// Payment History table
+export const paymentHistory = pgTable("payment_history", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  invoiceId: varchar("invoice_id").notNull().references(() => invoices.id, { onDelete: "cascade" }),
+  amount: decimal("amount", { precision: 12, scale: 2 }).notNull(),
+  paymentMethod: text("payment_method").notNull(), // bank_transfer, credit_card, check, cash, upi, etc.
+  transactionId: text("transaction_id"), // Reference number from payment gateway or bank
+  notes: text("notes"),
+  paymentDate: timestamp("payment_date").notNull().defaultNow(),
+  recordedBy: varchar("recorded_by").notNull().references(() => users.id),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const paymentHistoryRelations = relations(paymentHistory, ({ one }) => ({
+  invoice: one(invoices, {
+    fields: [paymentHistory.invoiceId],
+    references: [invoices.id],
+  }),
+  recordedBy: one(users, {
+    fields: [paymentHistory.recordedBy],
+    references: [users.id],
   }),
 }));
 
@@ -249,6 +274,7 @@ export const taxRates = pgTable("tax_rates", {
   igstRate: decimal("igst_rate", { precision: 5, scale: 2 }).notNull().default("0"), // Integrated GST
   effectiveFrom: timestamp("effective_from").notNull().defaultNow(),
   effectiveTo: timestamp("effective_to"),
+  isActive: boolean("is_active").notNull().default(true),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -314,6 +340,11 @@ export const insertInvoiceSchema = createInsertSchema(invoices).omit({
   updatedAt: true,
 });
 
+export const insertPaymentHistorySchema = createInsertSchema(paymentHistory).omit({
+  id: true,
+  createdAt: true,
+});
+
 export const insertTemplateSchema = createInsertSchema(templates).omit({
   id: true,
   createdAt: true,
@@ -373,6 +404,9 @@ export type InsertQuoteItem = z.infer<typeof insertQuoteItemSchema>;
 
 export type Invoice = typeof invoices.$inferSelect;
 export type InsertInvoice = z.infer<typeof insertInvoiceSchema>;
+
+export type PaymentHistory = typeof paymentHistory.$inferSelect;
+export type InsertPaymentHistory = z.infer<typeof insertPaymentHistorySchema>;
 
 export type Template = typeof templates.$inferSelect;
 export type InsertTemplate = z.infer<typeof insertTemplateSchema>;

@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { PaymentTracker } from "@/components/invoice/payment-tracker";
 
 interface InvoiceDetail {
   id: string;
@@ -401,6 +402,16 @@ export default function InvoiceDetail() {
               </div>
             </CardContent>
           </Card>
+
+          <PaymentTracker
+            invoiceId={invoice.id}
+            total={Number(invoice.total)}
+            paidAmount={Number(invoice.paidAmount)}
+            paymentStatus={invoice.paymentStatus}
+            onUpdate={() => {
+              queryClient.invalidateQueries({ queryKey: ["/api/invoices", params?.id] });
+            }}
+          />
         </div>
       </div>
 

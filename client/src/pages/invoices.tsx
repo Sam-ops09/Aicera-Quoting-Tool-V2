@@ -3,12 +3,13 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Receipt, Eye, Download, Send, Loader2 } from "lucide-react";
+import { Search, Receipt, Eye, Download, Send, Loader2, Filter } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { useLocation } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Invoice {
   id: string;
@@ -26,6 +27,7 @@ interface Invoice {
 export default function Invoices() {
   const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [downloadingInvoiceId, setDownloadingInvoiceId] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -64,10 +66,23 @@ export default function Invoices() {
     },
   });
 
-  const filteredInvoices = invoices?.filter(invoice =>
-    invoice.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    invoice.clientName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredInvoices = invoices?.filter(invoice => {
+    const matchesSearch = invoice.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      invoice.clientName.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === "all" || invoice.paymentStatus === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
+  // Calculate summary stats
+  const stats = {
+    total: invoices?.length || 0,
+    pending: invoices?.filter(i => i.paymentStatus === "pending").length || 0,
+    partial: invoices?.filter(i => i.paymentStatus === "partial").length || 0,
+    paid: invoices?.filter(i => i.paymentStatus === "paid").length || 0,
+    overdue: invoices?.filter(i => i.paymentStatus === "overdue").length || 0,
+    totalRevenue: invoices?.reduce((sum, i) => sum + Number(i.total), 0) || 0,
+    totalPaid: invoices?.reduce((sum, i) => sum + Number(i.paidAmount), 0) || 0,
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -107,15 +122,64 @@ export default function Invoices() {
         </p>
       </div>
 
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search invoices..."
-          className="pl-10 max-w-sm"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          data-testid="input-search-invoices"
-        />
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="text-sm text-muted-foreground">Total Revenue</div>
+            <div className="text-2xl font-bold text-primary">₹{stats.totalRevenue.toLocaleString()}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="text-sm text-muted-foreground">Collected</div>
+            <div className="text-2xl font-bold text-green-600">₹{stats.totalPaid.toLocaleString()}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="text-sm text-muted-foreground">Outstanding</div>
+            <div className="text-2xl font-bold text-orange-600">₹{(stats.totalRevenue - stats.totalPaid).toLocaleString()}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="text-sm text-muted-foreground">Total Invoices</div>
+            <div className="text-2xl font-bold">{stats.total}</div>
+            <div className="text-xs text-muted-foreground mt-1">
+              {stats.paid} paid • {stats.partial} partial • {stats.pending} pending
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Search and Filter */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search invoices..."
+            className="pl-10"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            data-testid="input-search-invoices"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <Filter className="h-4 w-4 text-muted-foreground" />
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[180px]" data-testid="select-status-filter">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Statuses</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="partial">Partial</SelectItem>
+              <SelectItem value="paid">Paid</SelectItem>
+              <SelectItem value="overdue">Overdue</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {filteredInvoices && filteredInvoices.length > 0 ? (

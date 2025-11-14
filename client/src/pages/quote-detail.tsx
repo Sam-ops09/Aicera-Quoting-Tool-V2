@@ -11,6 +11,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { AdvancedSectionsDisplay } from "@/components/quote/advanced-sections-display";
+import type { BOMItem } from "@/components/quote/bom-section";
+import type { SLAData } from "@/components/quote/sla-section";
+import type { TimelineData } from "@/components/quote/timeline-section";
 
 interface QuoteDetail {
   id: string;
@@ -43,6 +47,9 @@ interface QuoteDetail {
   attentionTo: string;
   notes: string;
   termsAndConditions: string;
+  bomSection?: string; // JSON string
+  slaSection?: string; // JSON string
+  timelineSection?: string; // JSON string
 }
 
 export default function QuoteDetail() {
@@ -367,6 +374,13 @@ export default function QuoteDetail() {
               </CardContent>
             </Card>
           )}
+
+          {/* Advanced Sections Display */}
+          <AdvancedSectionsDisplay
+            bomData={quote.bomSection ? JSON.parse(quote.bomSection) : undefined}
+            slaData={quote.slaSection ? JSON.parse(quote.slaSection) : undefined}
+            timelineData={quote.timelineSection ? JSON.parse(quote.timelineSection) : undefined}
+          />
         </div>
 
         <div>
