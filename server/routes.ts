@@ -659,7 +659,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Cannot edit an invoiced quote" });
       }
 
-      const quote = await storage.updateQuote(req.params.id, req.body);
+      // Normalize date fields
+      const toDate = (v: any) => {
+        if (!v) return undefined;
+        if (v instanceof Date) return v;
+        if (typeof v === 'string') {
+          const d = new Date(v);
+          return isNaN(d.getTime()) ? undefined : d;
+        }
+        return undefined;
+      };
+
+      const updateData = { ...req.body };
+      if (updateData.quoteDate) updateData.quoteDate = toDate(updateData.quoteDate);
+      if (updateData.validUntil) updateData.validUntil = toDate(updateData.validUntil);
+
+      const quote = await storage.updateQuote(req.params.id, updateData);
       if (!quote) {
         return res.status(404).json({ error: "Quote not found" });
       }
@@ -672,8 +687,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       return res.json(quote);
-    } catch (error) {
-      return res.status(500).json({ error: "Failed to update quote" });
+    } catch (error: any) {
+      console.error("Update quote error:", error);
+      return res.status(500).json({ error: error.message || "Failed to update quote" });
     }
   });
 
@@ -691,6 +707,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const { items, ...quoteData } = req.body;
+
+      // Convert date strings to Date objects if present
+      if (quoteData.quoteDate && typeof quoteData.quoteDate === 'string') {
+        quoteData.quoteDate = new Date(quoteData.quoteDate);
+      }
+      if (quoteData.validUntil && typeof quoteData.validUntil === 'string') {
+        quoteData.validUntil = new Date(quoteData.validUntil);
+      }
 
       // Update quote
       const quote = await storage.updateQuote(req.params.id, quoteData);

@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2, Package } from "lucide-react";
@@ -49,28 +48,26 @@ export function BOMSection({ items, onChange, readonly = false }: BOMSectionProp
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Package className="h-5 w-5 text-primary" />
-            <CardTitle>Bill of Materials (BOM)</CardTitle>
-          </div>
-          {!readonly && (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={addItem}
-              data-testid="button-add-bom-item"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Item
-            </Button>
-          )}
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Package className="h-5 w-5 text-primary" />
+          <h3 className="text-lg font-semibold">Bill of Materials (BOM)</h3>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
+        {!readonly && (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={addItem}
+            data-testid="button-add-bom-item"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Item
+          </Button>
+        )}
+      </div>
+      <div className="space-y-6">
         {items.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <Package className="h-12 w-12 mx-auto mb-3 opacity-30" />
@@ -180,8 +177,8 @@ export function BOMSection({ items, onChange, readonly = false }: BOMSectionProp
             </div>
           ))
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
