@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2, Calendar, CheckCircle2 } from "lucide-react";
@@ -85,14 +84,12 @@ export function TimelineSection({ data, onChange, readonly = false }: TimelineSe
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-primary" />
-          <CardTitle>Project Timeline</CardTitle>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <div className="space-y-6">
+      <div className="flex items-center gap-2 mb-4">
+        <Calendar className="h-5 w-5 text-primary" />
+        <h3 className="text-lg font-semibold">Project Timeline</h3>
+      </div>
+      <div className="space-y-6">
         <div className="space-y-2">
           <label className="text-sm font-medium">Project Overview</label>
           <Textarea
@@ -279,8 +276,8 @@ export function TimelineSection({ data, onChange, readonly = false }: TimelineSe
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 

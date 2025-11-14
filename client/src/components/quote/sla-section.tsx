@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2, Shield, Clock } from "lucide-react";
@@ -67,14 +66,12 @@ export function SLASection({ data, onChange, readonly = false }: SLASectionProps
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <Shield className="h-5 w-5 text-primary" />
-          <CardTitle>Service Level Agreement (SLA)</CardTitle>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <div className="space-y-6">
+      <div className="flex items-center gap-2 mb-4">
+        <Shield className="h-5 w-5 text-primary" />
+        <h3 className="text-lg font-semibold">Service Level Agreement (SLA)</h3>
+      </div>
+      <div className="space-y-6">
         <div className="space-y-2">
           <label className="text-sm font-medium">Overview</label>
           <Textarea
@@ -261,8 +258,8 @@ export function SLASection({ data, onChange, readonly = false }: SLASectionProps
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
