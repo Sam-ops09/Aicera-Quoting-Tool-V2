@@ -816,12 +816,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       const items = await storage.getQuoteItems(quote.id);
 
+      // Fetch company settings
+      const settings = await storage.getAllSettings();
+      const companyName = settings.find((s) => s.key === "company_name")?.value || "OPTIVALUE TEK";
+      const companyAddress = settings.find((s) => s.key === "company_address")?.value || "";
+      const companyPhone = settings.find((s) => s.key === "company_phone")?.value || "";
+      const companyEmail = settings.find((s) => s.key === "company_email")?.value || "";
+      const companyWebsite = settings.find((s) => s.key === "company_website")?.value || "";
+      const companyGSTIN = settings.find((s) => s.key === "company_gstin")?.value || "";
+
       const pdfStream = PDFService.generateQuotePDF({
         quote,
         client,
         items,
-        companyName: "Your Company",
-        companyAddress: "Company Address",
+        companyName,
+        companyAddress,
+        companyPhone,
+        companyEmail,
+        companyWebsite,
+        companyGSTIN,
       });
 
       res.setHeader("Content-Type", "application/pdf");
@@ -860,13 +873,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       const items = await storage.getQuoteItems(quote.id);
 
+      // Fetch company settings
+      const settings = await storage.getAllSettings();
+      const companyName = settings.find((s) => s.key === "company_name")?.value || "OPTIVALUE TEK";
+      const companyAddress = settings.find((s) => s.key === "company_address")?.value || "";
+      const companyPhone = settings.find((s) => s.key === "company_phone")?.value || "";
+      const companyEmail = settings.find((s) => s.key === "company_email")?.value || "";
+      const companyWebsite = settings.find((s) => s.key === "company_website")?.value || "";
+      const companyGSTIN = settings.find((s) => s.key === "company_gstin")?.value || "";
+
       // Generate PDF for attachment
       const pdfStream = PDFService.generateQuotePDF({
         quote,
         client,
         items,
-        companyName: "Your Company",
-        companyAddress: "Company Address",
+        companyName,
+        companyAddress,
+        companyPhone,
+        companyEmail,
+        companyWebsite,
+        companyGSTIN,
       });
 
       // Convert stream to buffer
@@ -1245,12 +1271,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       const items = await storage.getQuoteItems(quote.id);
 
+      // Fetch company settings
+      const settings = await storage.getAllSettings();
+      const companyName = settings.find((s) => s.key === "company_name")?.value || "OPTIVALUE TEK";
+      const companyAddress = settings.find((s) => s.key === "company_address")?.value || "";
+      const companyPhone = settings.find((s) => s.key === "company_phone")?.value || "";
+      const companyEmail = settings.find((s) => s.key === "company_email")?.value || "";
+      const companyWebsite = settings.find((s) => s.key === "company_website")?.value || "";
+      const companyGSTIN = settings.find((s) => s.key === "company_gstin")?.value || "";
+
       const pdfStream = PDFService.generateInvoicePDF({
         quote,
         client,
         items,
-        companyName: "Your Company",
-        companyAddress: "Company Address",
+        companyName,
+        companyAddress,
+        companyPhone,
+        companyEmail,
+        companyWebsite,
+        companyGSTIN,
         invoiceNumber: invoice.invoiceNumber,
         dueDate: new Date(invoice.dueDate),
       });
@@ -1296,13 +1335,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       const items = await storage.getQuoteItems(quote.id);
 
+      // Fetch company settings
+      const settings = await storage.getAllSettings();
+      const companyName = settings.find((s) => s.key === "company_name")?.value || "OPTIVALUE TEK";
+      const companyAddress = settings.find((s) => s.key === "company_address")?.value || "";
+      const companyPhone = settings.find((s) => s.key === "company_phone")?.value || "";
+      const companyEmail = settings.find((s) => s.key === "company_email")?.value || "";
+      const companyWebsite = settings.find((s) => s.key === "company_website")?.value || "";
+      const companyGSTIN = settings.find((s) => s.key === "company_gstin")?.value || "";
+
       // Generate PDF for attachment
       const pdfStream = PDFService.generateInvoicePDF({
         quote,
         client,
         items,
-        companyName: "Your Company",
-        companyAddress: "Company Address",
+        companyName,
+        companyAddress,
+        companyPhone,
+        companyEmail,
+        companyWebsite,
+        companyGSTIN,
         invoiceNumber: invoice.invoiceNumber,
         dueDate: new Date(invoice.dueDate),
       });
@@ -1458,8 +1510,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (req.user!.role !== "admin") {
         return res.status(403).json({ error: "Only admins can access settings" });
       }
-      const settings = await storage.getAllSettings();
-      return res.json(settings);
+      const settingsArray = await storage.getAllSettings();
+      // Convert array to key-value object for easier frontend consumption
+      const settingsObject = settingsArray.reduce((acc, setting) => {
+        acc[setting.key] = setting.value;
+        return acc;
+      }, {} as Record<string, string>);
+      return res.json(settingsObject);
     } catch (error) {
       return res.status(500).json({ error: "Failed to fetch settings" });
     }
@@ -1470,22 +1527,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (req.user!.role !== "admin") {
         return res.status(403).json({ error: "Only admins can update settings" });
       }
-      const { key, value } = req.body;
-      if (!key || value === undefined) {
-        return res.status(400).json({ error: "Key and value are required" });
+
+      const body = req.body;
+
+      // Check if it's a single key-value pair or bulk update
+      if (body.key && body.value !== undefined) {
+        // Single setting update
+        const setting = await storage.upsertSetting({
+          key: body.key,
+          value: body.value,
+          updatedBy: req.user!.id,
+        });
+        await storage.createActivityLog({
+          userId: req.user!.id,
+          action: "update_setting",
+          entityType: "setting",
+          entityId: body.key,
+        });
+        return res.json(setting);
+      } else {
+        // Bulk settings update
+        const results = [];
+        for (const [key, value] of Object.entries(body)) {
+          if (value !== undefined && value !== null) {
+            const setting = await storage.upsertSetting({
+              key,
+              value: String(value),
+              updatedBy: req.user!.id,
+            });
+            results.push(setting);
+          }
+        }
+
+        await storage.createActivityLog({
+          userId: req.user!.id,
+          action: "update_settings",
+          entityType: "settings",
+          entityId: "bulk",
+        });
+
+        return res.json(results);
       }
-      const setting = await storage.upsertSetting({
-        key,
-        value,
-        updatedBy: req.user!.id,
-      });
-      await storage.createActivityLog({
-        userId: req.user!.id,
-        action: "update_setting",
-        entityType: "setting",
-        entityId: key,
-      });
-      return res.json(setting);
     } catch (error: any) {
       return res.status(500).json({ error: error.message || "Failed to update setting" });
     }

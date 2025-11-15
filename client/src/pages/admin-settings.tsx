@@ -22,6 +22,7 @@ const companyFormSchema = z.object({
   taxId: z.string().min(1, "Tax ID is required"),
   phone: z.string(),
   email: z.string().email("Invalid email address"),
+  website: z.string().optional(),
 });
 
 const quoteSettingsSchema = z.object({
@@ -105,11 +106,12 @@ export default function AdminSettings() {
   const companyForm = useForm<z.infer<typeof companyFormSchema>>({
     resolver: zodResolver(companyFormSchema),
     values: {
-      companyName: settings?.companyName || "",
-      address: settings?.address || "",
-      taxId: settings?.taxId || "",
-      phone: settings?.phone || "",
-      email: settings?.email || "",
+      companyName: settings?.companyName || settings?.company_name || "",
+      address: settings?.address || settings?.company_address || "",
+      taxId: settings?.taxId || settings?.company_gstin || "",
+      phone: settings?.phone || settings?.company_phone || "",
+      email: settings?.email || settings?.company_email || "",
+      website: settings?.website || settings?.company_website || "",
     },
   });
 
@@ -175,12 +177,21 @@ export default function AdminSettings() {
   });
 
   const onCompanySubmit = async (values: z.infer<typeof companyFormSchema>) => {
+    // Save with both old keys (for backward compatibility) and new keys (for PDF generation)
     await updateSettingsMutation.mutateAsync({
+      // Old keys
       companyName: values.companyName,
       address: values.address,
       taxId: values.taxId,
       phone: values.phone,
       email: values.email,
+      // New keys for PDF generation
+      company_name: values.companyName,
+      company_address: values.address,
+      company_gstin: values.taxId,
+      company_phone: values.phone,
+      company_email: values.email,
+      company_website: values.website || "",
     });
   };
 
@@ -436,6 +447,22 @@ export default function AdminSettings() {
                         <FormControl>
                           <Input {...field} type="email" data-testid="input-company-email" />
                         </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={companyForm.control}
+                    name="website"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Website</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="www.company.com" data-testid="input-company-website" />
+                        </FormControl>
+                        <FormDescription>
+                          Your company website (will appear on PDF documents)
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
