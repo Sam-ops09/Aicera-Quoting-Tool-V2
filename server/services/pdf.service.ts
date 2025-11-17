@@ -176,9 +176,7 @@ export class PDFService {
             
             if (fs.existsSync(logoPath)) {
                 doc.image(logoPath, this.MARGIN_LEFT, row1Y, {
-                    fit: [60, 60],
-                    align: 'left',
-                    valign: 'top'
+                    fit: [60, 60]
                 });
             } else {
                 doc
@@ -412,8 +410,8 @@ export class PDFService {
         data: QuoteWithDetails
     ) {
         const startY = doc.y;
-        const labelWidth = 110;
-        const valueX = this.MARGIN_LEFT + labelWidth;
+        const labelWidth = 120;
+        const valueX = this.MARGIN_LEFT + labelWidth + 5;
 
         let y = startY;
 
@@ -422,20 +420,20 @@ export class PDFService {
             .fontSize(10)
             .font("Helvetica-Bold")
             .fillColor(this.SECONDARY_COLOR)
-            .text("Quote No.:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+            .text("Quote No.:", this.MARGIN_LEFT, y, { continued: false, lineBreak: false });
         doc
             .font("Helvetica")
             .fillColor("#000000")
-            .text(data.quote.quoteNumber, valueX, y, { continued: false });
+            .text(data.quote.quoteNumber, valueX, y, { continued: false, lineBreak: false });
 
-        y += 15;
+        y += 18;
 
         // Date
         doc
             .fontSize(10)
             .font("Helvetica-Bold")
             .fillColor(this.SECONDARY_COLOR)
-            .text("Date:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+            .text("Date:", this.MARGIN_LEFT, y, { continued: false, lineBreak: false });
         doc
             .font("Helvetica")
             .fillColor("#000000")
@@ -446,47 +444,42 @@ export class PDFService {
                     day: "numeric",
                 }),
                 valueX,
-                y
+                y,
+                { continued: false, lineBreak: false }
             );
 
-        y += 15;
+        y += 18;
 
         // Payment Terms
         doc
             .fontSize(10)
             .font("Helvetica-Bold")
             .fillColor(this.SECONDARY_COLOR)
-            .text("Payment Terms:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+            .text("Payment Terms:", this.MARGIN_LEFT, y, { continued: false, lineBreak: false });
         doc
             .font("Helvetica")
             .fillColor("#000000")
-            .text("30 days from the date of Invoice", valueX, y);
+            .text("30 days from the date of Invoice", valueX, y, { continued: false, lineBreak: false });
 
-        y += 15;
+        y += 18;
 
         // Quote Validity
-        const validUntil =
-            data.quote.validUntil ||
-            new Date(
-                new Date(data.quote.quoteDate).getTime() +
-                (data.quote.validityDays || 30) * 24 * 60 * 60 * 1000
-            );
-
         doc
             .fontSize(10)
             .font("Helvetica-Bold")
             .fillColor(this.SECONDARY_COLOR)
-            .text("Quote Validity:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+            .text("Quote Validity:", this.MARGIN_LEFT, y, { continued: false, lineBreak: false });
         doc
             .font("Helvetica")
             .fillColor("#000000")
             .text(
                 `${data.quote.validityDays || 30} days from the quote date`,
                 valueX,
-                y
+                y,
+                { continued: false, lineBreak: false }
             );
 
-        doc.y = y + 20;
+        doc.y = y + 25;
     }
 
     private static drawClientSection(
@@ -494,45 +487,51 @@ export class PDFService {
         data: QuoteWithDetails
     ) {
         const startY = doc.y;
-        const labelWidth = 110;
-        const valueX = this.MARGIN_LEFT + labelWidth;
+        const labelWidth = 120;
+        const valueX = this.MARGIN_LEFT + labelWidth + 5;
 
         // Bill To section
         doc
             .fontSize(12)
             .font("Helvetica-Bold")
             .fillColor(this.PRIMARY_COLOR)
-            .text("Bill To:", this.MARGIN_LEFT, startY);
+            .text("Bill To:", this.MARGIN_LEFT, startY, { continued: false, lineBreak: false });
 
-        let y = startY + 20;
+        let leftY = startY + 22;
 
         doc
             .fontSize(10)
             .font("Helvetica-Bold")
             .fillColor(this.ACCENT_COLOR)
-            .text("Name:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+            .text("Name:", this.MARGIN_LEFT, leftY, { continued: false, lineBreak: false });
         doc
             .font("Helvetica")
             .fillColor("#000000")
-            .text(data.client.name, valueX, y);
+            .text(data.client.name, valueX, leftY, { continued: false, lineBreak: false });
 
-        y += 15;
+        leftY += 18;
 
         if (data.client.billingAddress) {
             doc
                 .fontSize(10)
                 .font("Helvetica-Bold")
                 .fillColor(this.ACCENT_COLOR)
-                .text("Address:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+                .text("Address:", this.MARGIN_LEFT, leftY, { continued: false, lineBreak: false });
+
+            const addressHeight = doc.heightOfString(data.client.billingAddress, {
+                width: this.CONTENT_WIDTH * 0.46 - labelWidth,
+                lineGap: 2,
+            });
+
             doc
                 .fontSize(10)
                 .font("Helvetica")
                 .fillColor("#000000")
-                .text(data.client.billingAddress, valueX, y, {
-                    width: this.CONTENT_WIDTH - labelWidth - 10,
+                .text(data.client.billingAddress, valueX, leftY, {
+                    width: this.CONTENT_WIDTH * 0.46 - labelWidth,
                     lineGap: 2,
                 });
-            y = doc.y + 10;
+            leftY += addressHeight + 12;
         }
 
         if (data.client.phone) {
@@ -540,12 +539,12 @@ export class PDFService {
                 .fontSize(10)
                 .font("Helvetica-Bold")
                 .fillColor(this.ACCENT_COLOR)
-                .text("Phone No.:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+                .text("Phone No.:", this.MARGIN_LEFT, leftY, { continued: false, lineBreak: false });
             doc
                 .font("Helvetica")
                 .fillColor("#000000")
-                .text(data.client.phone, valueX, y);
-            y += 15;
+                .text(data.client.phone, valueX, leftY, { continued: false, lineBreak: false });
+            leftY += 18;
         }
 
         if (data.client.email) {
@@ -553,12 +552,12 @@ export class PDFService {
                 .fontSize(10)
                 .font("Helvetica-Bold")
                 .fillColor(this.ACCENT_COLOR)
-                .text("Email ID:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+                .text("Email ID:", this.MARGIN_LEFT, leftY, { continued: false, lineBreak: false });
             doc
                 .font("Helvetica")
                 .fillColor("#1e40af")
-                .text(data.client.email, valueX, y);
-            y += 15;
+                .text(data.client.email, valueX, leftY, { continued: false, lineBreak: false });
+            leftY += 18;
         }
 
         if (data.client.gstin) {
@@ -566,12 +565,12 @@ export class PDFService {
                 .fontSize(10)
                 .font("Helvetica-Bold")
                 .fillColor(this.ACCENT_COLOR)
-                .text("GSTIN:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+                .text("GSTIN:", this.MARGIN_LEFT, leftY, { continued: false, lineBreak: false });
             doc
                 .font("Helvetica")
                 .fillColor("#000000")
-                .text(data.client.gstin, valueX, y);
-            y += 15;
+                .text(data.client.gstin, valueX, leftY, { continued: false, lineBreak: false });
+            leftY += 18;
         }
 
         // Attention person
@@ -581,55 +580,62 @@ export class PDFService {
                 .fontSize(10)
                 .font("Helvetica-Bold")
                 .fillColor(this.ACCENT_COLOR)
-                .text("Attn to:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+                .text("Attn to:", this.MARGIN_LEFT, leftY, { continued: false, lineBreak: false });
             doc
                 .font("Helvetica")
                 .fillColor("#000000")
-                .text(attentionPerson, valueX, y);
-            y += 20;
+                .text(attentionPerson, valueX, leftY, { continued: false, lineBreak: false });
+            leftY += 22;
         }
 
-        // Ship To section (same as Bill To for this template)
-        const shipToX = this.MARGIN_LEFT + this.CONTENT_WIDTH * 0.5;
-        const shipToValueX = shipToX + labelWidth;
+        // Ship To section (right side)
+        const shipToX = this.MARGIN_LEFT + this.CONTENT_WIDTH * 0.52;
+        const shipToValueX = shipToX + labelWidth + 5;
 
         doc
             .fontSize(12)
             .font("Helvetica-Bold")
             .fillColor(this.PRIMARY_COLOR)
-            .text("Ship To:", shipToX, startY);
+            .text("Ship To:", shipToX, startY, { continued: false, lineBreak: false });
 
-        y = startY + 20;
+        let rightY = startY + 22;
 
         doc
             .fontSize(10)
             .font("Helvetica-Bold")
             .fillColor(this.ACCENT_COLOR)
-            .text("Name:", shipToX, y, { width: labelWidth, align: "left" });
+            .text("Name:", shipToX, rightY, { continued: false, lineBreak: false });
         doc
             .font("Helvetica")
             .fillColor("#000000")
-            .text(data.client.name, shipToValueX, y);
+            .text(data.client.name, shipToValueX, rightY, { continued: false, lineBreak: false });
 
-        y += 15;
+        rightY += 18;
 
         if (data.client.billingAddress) {
             doc
                 .fontSize(10)
                 .font("Helvetica-Bold")
                 .fillColor(this.ACCENT_COLOR)
-                .text("Address:", shipToX, y, { width: labelWidth, align: "left" });
+                .text("Address:", shipToX, rightY, { continued: false, lineBreak: false });
+
+            const addressHeight = doc.heightOfString(data.client.billingAddress, {
+                width: this.CONTENT_WIDTH * 0.46 - labelWidth,
+                lineGap: 2,
+            });
+
             doc
                 .fontSize(10)
                 .font("Helvetica")
                 .fillColor("#000000")
-                .text(data.client.billingAddress, shipToValueX, y, {
-                    width: this.CONTENT_WIDTH * 0.5 - labelWidth - 10,
+                .text(data.client.billingAddress, shipToValueX, rightY, {
+                    width: this.CONTENT_WIDTH * 0.46 - labelWidth,
                     lineGap: 2,
                 });
+            rightY += addressHeight + 12;
         }
 
-        doc.y = Math.max(doc.y, y) + 30;
+        doc.y = Math.max(leftY, rightY) + 10;
     }
 
     private static drawInvoiceInfo(
@@ -637,64 +643,66 @@ export class PDFService {
         data: InvoicePdfData
     ) {
         const startY = doc.y;
-        const boxHeight = 85;
-        const labelWidth = 110;
+        const boxHeight = 90;
+        const labelWidth = 120;
 
         doc
             .rect(this.MARGIN_LEFT, startY, this.CONTENT_WIDTH, boxHeight)
             .fillAndStroke("#f8fafc", "#cbd5e1");
 
         doc
-            .rect(this.MARGIN_LEFT, startY, this.CONTENT_WIDTH, 28)
+            .rect(this.MARGIN_LEFT, startY, this.CONTENT_WIDTH, 30)
             .fill("#dbeafe");
 
         doc
             .fontSize(11)
             .font("Helvetica-Bold")
             .fillColor(this.PRIMARY_COLOR)
-            .text("INVOICE DETAILS", this.MARGIN_LEFT + 15, startY + 9);
+            .text("INVOICE DETAILS", this.MARGIN_LEFT + 15, startY + 10, { continued: false, lineBreak: false });
 
         const leftColX = this.MARGIN_LEFT + 15;
-        const leftValueX = leftColX + labelWidth;
+        const leftValueX = leftColX + labelWidth + 5;
         const rightColX = this.MARGIN_LEFT + this.CONTENT_WIDTH * 0.52;
-        const rightValueX = rightColX + labelWidth;
+        const rightValueX = rightColX + labelWidth + 5;
 
-        let y = startY + 40;
+        let y = startY + 45;
 
         doc.fontSize(9).font("Helvetica-Bold").fillColor(this.SECONDARY_COLOR);
-        doc.text("Invoice Number:", leftColX, y, { width: labelWidth, align: "left" });
+        doc.text("Invoice Number:", leftColX, y, { continued: false, lineBreak: false });
         doc.font("Helvetica").fillColor("#000000");
-        doc.text(data.invoiceNumber, leftValueX, y);
+        doc.text(data.invoiceNumber, leftValueX, y, { continued: false, lineBreak: false });
 
-        y += 17;
+        y += 20;
 
         doc.fontSize(9).font("Helvetica-Bold").fillColor(this.SECONDARY_COLOR);
-        doc.text("Invoice Date:", leftColX, y, { width: labelWidth, align: "left" });
+        doc.text("Invoice Date:", leftColX, y, { continued: false, lineBreak: false });
         doc.font("Helvetica").fillColor("#000000");
         doc.text(
             new Date(data.quote.quoteDate).toLocaleDateString(),
             leftValueX,
-            y
+            y,
+            { continued: false, lineBreak: false }
         );
 
         // Right column
-        y = startY + 40;
+        y = startY + 45;
         doc.fontSize(9).font("Helvetica-Bold").fillColor(this.SECONDARY_COLOR);
-        doc.text("Due Date:", rightColX, y, { width: labelWidth, align: "left" });
+        doc.text("Due Date:", rightColX, y, { continued: false, lineBreak: false });
         doc.font("Helvetica").fillColor("#000000");
         doc.text(
             data.dueDate.toLocaleDateString(),
             rightValueX,
-            y
+            y,
+            { continued: false, lineBreak: false }
         );
 
-        y += 17;
+        y += 20;
         doc.fontSize(9).font("Helvetica-Bold").fillColor(this.SECONDARY_COLOR);
-        doc.text("Quote Number:", rightColX, y, { width: labelWidth, align: "left" });
+        doc.text("Quote Number:", rightColX, y, { continued: false, lineBreak: false });
         doc.font("Helvetica").fillColor("#000000");
-        doc.text(data.quote.quoteNumber, rightValueX, y);
+        doc.text(data.quote.quoteNumber, rightValueX, y, { continued: false, lineBreak: false });
 
-        doc.y = startY + boxHeight + 20;
+        doc.y = startY + boxHeight + 25;
     }
 
     // ---------------------------------------------------------------------------
@@ -705,20 +713,20 @@ export class PDFService {
         doc: InstanceType<typeof PDFDocument>
     ) {
         const tableTop = doc.y;
-        const headerHeight = 28;
+        const headerHeight = 30;
 
         // Header background
         doc
             .rect(this.MARGIN_LEFT, tableTop, this.CONTENT_WIDTH, headerHeight)
             .fill(this.PRIMARY_COLOR);
 
-        // Column positions
-        const col1X = this.MARGIN_LEFT + 10; // S.No
-        const col1W = 35;
+        // Column positions - better alignment
+        const col1X = this.MARGIN_LEFT + 8; // S.No
+        const col1W = 40;
         const col2X = col1X + col1W; // Description
-        const col2W = this.CONTENT_WIDTH - 235;
+        const col2W = this.CONTENT_WIDTH - 245;
         const col3X = col2X + col2W; // Qty
-        const col3W = 50;
+        const col3W = 55;
         const col4X = col3X + col3W; // Unit Price
         const col4W = 75;
         const col5X = col4X + col4W; // Amount
@@ -726,22 +734,22 @@ export class PDFService {
 
         // Header text
         doc
-            .fontSize(9.5)
+            .fontSize(10)
             .font("Helvetica-Bold")
             .fillColor("#FFFFFF");
 
-        doc.text("S.No", col1X, tableTop + 9, { width: col1W, align: "center" });
-        doc.text("Description", col2X + 5, tableTop + 9, {
-            width: col2W - 10,
+        doc.text("S.No", col1X, tableTop + 10, { width: col1W, align: "center" });
+        doc.text("Description", col2X + 8, tableTop + 10, {
+            width: col2W - 16,
             align: "left",
         });
-        doc.text("Qty", col3X, tableTop + 9, { width: col3W, align: "center" });
-        doc.text("Unit Price", col4X, tableTop + 9, {
+        doc.text("Qty", col3X, tableTop + 10, { width: col3W, align: "center" });
+        doc.text("Unit Price", col4X, tableTop + 10, {
             width: col4W,
             align: "right",
         });
-        doc.text("Subtotal", col5X, tableTop + 9, {
-            width: col5W,
+        doc.text("Subtotal", col5X, tableTop + 10, {
+            width: col5W - 8,
             align: "right",
         });
 
@@ -802,11 +810,11 @@ export class PDFService {
                 doc.fillColor("#000000").font("Helvetica");
             }
 
-            const minRowHeight = 22;
+            const minRowHeight = 24;
             const descHeight = doc.heightOfString(item.description, {
-                width: headerInfo.col2W - 15,
+                width: headerInfo.col2W - 20,
             });
-            const actualRowHeight = Math.max(minRowHeight, descHeight + 10);
+            const actualRowHeight = Math.max(minRowHeight, descHeight + 12);
 
             // Alternating row background
             if (index % 2 === 0) {
@@ -838,8 +846,8 @@ export class PDFService {
             });
 
             // Description
-            doc.text(item.description, headerInfo.col2X + 5, y + 6, {
-                width: headerInfo.col2W - 15,
+            doc.text(item.description, headerInfo.col2X + 8, y + 8, {
+                width: headerInfo.col2W - 20,
                 align: "left",
             });
 
@@ -868,7 +876,7 @@ export class PDFService {
                 })}`,
                 headerInfo.col5X,
                 textY,
-                { width: headerInfo.col5W, align: "right" }
+                { width: headerInfo.col5W - 8, align: "right" }
             );
 
             y += actualRowHeight;
@@ -895,7 +903,7 @@ export class PDFService {
         doc.moveDown(0.5);
         const startY = doc.y;
 
-        const boxWidth = 270;
+        const boxWidth = 280;
         const boxX = this.PAGE_WIDTH - this.MARGIN_RIGHT - boxWidth;
 
         let lineCount = 2; // subtotal + total
@@ -905,7 +913,7 @@ export class PDFService {
         if (Number(quote.sgst) > 0) lineCount++;
         if (Number(quote.igst) > 0) lineCount++;
 
-        const boxHeight = lineCount * 19 + 58;
+        const boxHeight = lineCount * 20 + 60;
 
         // Shadow
         doc.rect(boxX + 2, startY + 2, boxWidth, boxHeight).fill("#d1d5db");
@@ -914,19 +922,20 @@ export class PDFService {
         doc.rect(boxX, startY, boxWidth, boxHeight).fillAndStroke("#ffffff", "#cbd5e1");
 
         // Title bar
-        doc.rect(boxX, startY, boxWidth, 26).fill("#dbeafe");
+        doc.rect(boxX, startY, boxWidth, 28).fill("#dbeafe");
 
         doc
             .fontSize(10)
             .font("Helvetica-Bold")
             .fillColor(this.PRIMARY_COLOR)
-            .text("FINANCIAL SUMMARY", boxX + 15, startY + 8);
+            .text("FINANCIAL SUMMARY", boxX + 15, startY + 9);
 
         doc.fillColor("#000000");
 
-        let y = startY + 38;
+        let y = startY + 40;
         const labelX = boxX + 15;
-        const valueX = boxX + boxWidth - 20;
+        const valueX = boxX + boxWidth - 15;
+        const valueWidth = 120;
 
         const formatCurrency = (v: number) =>
             `₹${Number(v).toLocaleString("en-IN", {
@@ -935,78 +944,79 @@ export class PDFService {
             })}`;
 
         doc.fontSize(9.5).font("Helvetica");
-        doc.fillColor(this.SECONDARY_COLOR).text("Subtotal:", labelX, y);
+        doc.fillColor(this.SECONDARY_COLOR).text("Subtotal:", labelX, y, { continued: false, lineBreak: false });
         doc.fillColor("#000000");
-        doc.text(formatCurrency(Number(quote.subtotal)), valueX - 100, y, {
-            width: 100,
+        doc.text(formatCurrency(Number(quote.subtotal)), valueX - valueWidth, y, {
+            width: valueWidth,
             align: "right",
         });
-        y += 19;
+        y += 20;
 
         if (Number(quote.discount) > 0) {
-            doc.fillColor(this.SECONDARY_COLOR).text("Discount:", labelX, y);
+            doc.fillColor(this.SECONDARY_COLOR).text("Discount:", labelX, y, { continued: false, lineBreak: false });
             doc.fillColor("#dc2626");
-            doc.text(`-${formatCurrency(Number(quote.discount))}`, valueX - 100, y, {
-                width: 100,
+            doc.text(`-${formatCurrency(Number(quote.discount))}`, valueX - valueWidth, y, {
+                width: valueWidth,
                 align: "right",
             });
-            y += 19;
+            doc.fillColor("#000000");
+            y += 20;
         }
 
         if (Number(quote.shippingCharges) > 0) {
-            doc.fillColor(this.SECONDARY_COLOR).text("Shipping & Handling:", labelX, y);
+            doc.fillColor(this.SECONDARY_COLOR).text("Shipping & Handling:", labelX, y, { continued: false, lineBreak: false });
             doc.fillColor("#000000");
-            doc.text(formatCurrency(Number(quote.shippingCharges)), valueX - 100, y, {
-                width: 100,
+            doc.text(formatCurrency(Number(quote.shippingCharges)), valueX - valueWidth, y, {
+                width: valueWidth,
                 align: "right",
             });
-            y += 19;
+            y += 20;
         }
 
-        doc.fontSize(8.5);
+        doc.fontSize(9);
 
         if (Number(quote.cgst) > 0) {
-            doc.fillColor(this.SECONDARY_COLOR).text("CGST (9%):", labelX + 10, y);
+            doc.fillColor(this.SECONDARY_COLOR).text("CGST (9%):", labelX + 10, y, { continued: false, lineBreak: false });
             doc.fillColor("#000000");
-            doc.text(formatCurrency(Number(quote.cgst)), valueX - 100, y, {
-                width: 100,
+            doc.text(formatCurrency(Number(quote.cgst)), valueX - valueWidth, y, {
+                width: valueWidth,
                 align: "right",
             });
-            y += 17;
+            y += 18;
         }
 
         if (Number(quote.sgst) > 0) {
-            doc.fillColor(this.SECONDARY_COLOR).text("SGST (9%):", labelX + 10, y);
+            doc.fillColor(this.SECONDARY_COLOR).text("SGST (9%):", labelX + 10, y, { continued: false, lineBreak: false });
             doc.fillColor("#000000");
-            doc.text(formatCurrency(Number(quote.sgst)), valueX - 100, y, {
-                width: 100,
+            doc.text(formatCurrency(Number(quote.sgst)), valueX - valueWidth, y, {
+                width: valueWidth,
                 align: "right",
             });
-            y += 17;
+            y += 18;
         }
 
         if (Number(quote.igst) > 0) {
-            doc.fillColor(this.SECONDARY_COLOR).text("IGST (18%):", labelX + 10, y);
+            doc.fillColor(this.SECONDARY_COLOR).text("IGST (18%):", labelX + 10, y, { continued: false, lineBreak: false });
             doc.fillColor("#000000");
-            doc.text(formatCurrency(Number(quote.igst)), valueX - 100, y, {
-                width: 100,
+            doc.text(formatCurrency(Number(quote.igst)), valueX - valueWidth, y, {
+                width: valueWidth,
                 align: "right",
             });
-            y += 17;
+            y += 18;
         }
 
         y += 5;
-        doc.rect(boxX, y - 4, boxWidth, 30).fill(this.PRIMARY_COLOR);
+        doc.rect(boxX, y - 4, boxWidth, 32).fill(this.PRIMARY_COLOR);
 
         doc
             .fontSize(11)
             .font("Helvetica-Bold")
             .fillColor("#FFFFFF")
-            .text("TOTAL AMOUNT:", labelX, y + 8);
+            .text("TOTAL AMOUNT:", labelX, y + 9);
 
         doc.fontSize(12);
-        doc.text(formatCurrency(Number(quote.total)), valueX - 120, y + 7, {
-            width: 120,
+        doc.text(formatCurrency(Number(quote.total)), valueX - valueWidth - 10, y + 8, {
+            width: valueWidth + 10,
             align: "right",
         });
 
@@ -1158,7 +1168,7 @@ export class PDFService {
                         }
 
                         const itemStartY = doc.y;
-                        const itemHeight = 80;
+                        const itemHeight = 90;
 
                         doc
                             .rect(this.MARGIN_LEFT, itemStartY, this.CONTENT_WIDTH, itemHeight)
@@ -1170,27 +1180,27 @@ export class PDFService {
                             .fillColor(this.ACCENT_COLOR)
                             .text(
                                 `Item ${index + 1}: ${item.partNumber || ""}`,
-                                this.MARGIN_LEFT + 10,
-                                itemStartY + 8
+                                this.MARGIN_LEFT + 12,
+                                itemStartY + 10
                             );
 
-                        let y = itemStartY + 25;
+                        let y = itemStartY + 28;
                         doc.fontSize(9).font("Helvetica").fillColor("#000000");
 
                         if (item.description) {
-                            doc.text(`Description: ${item.description}`, this.MARGIN_LEFT + 10, y, {
-                                width: this.CONTENT_WIDTH - 20,
+                            doc.text(`Description: ${item.description}`, this.MARGIN_LEFT + 12, y, {
+                                width: this.CONTENT_WIDTH - 24,
                             });
-                            y = doc.y + 3;
+                            y = doc.y + 5;
                         }
 
                         if (item.manufacturer) {
                             doc.text(
                                 `Manufacturer: ${item.manufacturer}`,
-                                this.MARGIN_LEFT + 10,
+                                this.MARGIN_LEFT + 12,
                                 y
                             );
-                            y += 12;
+                            y += 14;
                         }
 
                         if (item.quantity) {
@@ -1198,24 +1208,24 @@ export class PDFService {
                                 `Quantity: ${item.quantity} ${
                                     item.unitOfMeasure || "units"
                                 }`,
-                                this.MARGIN_LEFT + 10,
+                                this.MARGIN_LEFT + 12,
                                 y
                             );
-                            y += 12;
+                            y += 14;
                         }
 
                         if (item.specifications) {
                             doc.text(
                                 `Specifications: ${item.specifications}`,
-                                this.MARGIN_LEFT + 10,
+                                this.MARGIN_LEFT + 12,
                                 y,
                                 {
-                                    width: this.CONTENT_WIDTH - 20,
+                                    width: this.CONTENT_WIDTH - 24,
                                 }
                             );
                         }
 
-                        doc.y = itemStartY + itemHeight + 8;
+                        doc.y = itemStartY + itemHeight + 10;
                     });
                 }
             } catch (e) {
@@ -1260,48 +1270,48 @@ export class PDFService {
                         slaData.supportHours
                     ) {
                         const boxStartY = doc.y;
-                        const boxHeight = 70;
+                        const boxHeight = 75;
 
                         doc
                             .rect(this.MARGIN_LEFT, boxStartY, this.CONTENT_WIDTH, boxHeight)
                             .fillAndStroke("#ecfdf5", "#10b981");
 
-                        let y = boxStartY + 10;
+                        let y = boxStartY + 12;
                         doc.fontSize(9).font("Helvetica").fillColor("#065f46");
 
                         if (slaData.responseTime) {
                             doc.text(
                                 `✓ Response Time: ${slaData.responseTime}`,
-                                this.MARGIN_LEFT + 10,
+                                this.MARGIN_LEFT + 12,
                                 y
                             );
-                            y += 15;
+                            y += 16;
                         }
                         if (slaData.resolutionTime) {
                             doc.text(
                                 `✓ Resolution Time: ${slaData.resolutionTime}`,
-                                this.MARGIN_LEFT + 10,
+                                this.MARGIN_LEFT + 12,
                                 y
                             );
-                            y += 15;
+                            y += 16;
                         }
                         if (slaData.availability) {
                             doc.text(
                                 `✓ System Availability: ${slaData.availability}`,
-                                this.MARGIN_LEFT + 10,
+                                this.MARGIN_LEFT + 12,
                                 y
                             );
-                            y += 15;
+                            y += 16;
                         }
                         if (slaData.supportHours) {
                             doc.text(
                                 `✓ Support Hours: ${slaData.supportHours}`,
-                                this.MARGIN_LEFT + 10,
+                                this.MARGIN_LEFT + 12,
                                 y
                             );
                         }
 
-                        doc.y = boxStartY + boxHeight + 10;
+                        doc.y = boxStartY + boxHeight + 12;
                     }
 
                     if (slaData.metrics && slaData.metrics.length > 0) {
@@ -1325,14 +1335,14 @@ export class PDFService {
                                 .fillColor("#000000");
                             doc.text(
                                 `• ${metric.name} - Target: ${metric.target}`,
-                                this.MARGIN_LEFT + 5,
+                                this.MARGIN_LEFT + 8,
                                 doc.y
                             );
 
                             if (metric.description) {
                                 doc.font("Helvetica").fillColor(this.SECONDARY_COLOR);
-                                doc.text(metric.description, this.MARGIN_LEFT + 15, doc.y + 2, {
-                                    width: this.CONTENT_WIDTH - 20,
+                                doc.text(metric.description, this.MARGIN_LEFT + 18, doc.y + 3, {
+                                    width: this.CONTENT_WIDTH - 26,
                                 });
                             }
 
@@ -1381,7 +1391,7 @@ export class PDFService {
                     if (timelineData.startDate || timelineData.endDate) {
                         const dateBoxY = doc.y;
                         doc
-                            .rect(this.MARGIN_LEFT, dateBoxY, this.CONTENT_WIDTH, 35)
+                            .rect(this.MARGIN_LEFT, dateBoxY, this.CONTENT_WIDTH, 38)
                             .fillAndStroke("#dbeafe", "#3b82f6");
 
                         doc
@@ -1389,7 +1399,7 @@ export class PDFService {
                             .font("Helvetica-Bold")
                             .fillColor(this.PRIMARY_COLOR);
 
-                        let y = dateBoxY + 10;
+                        let y = dateBoxY + 11;
 
                         if (timelineData.startDate) {
                             doc.text(
@@ -1400,10 +1410,10 @@ export class PDFService {
                                     month: "short",
                                     day: "numeric",
                                 })}`,
-                                this.MARGIN_LEFT + 10,
+                                this.MARGIN_LEFT + 12,
                                 y
                             );
-                            y += 14;
+                            y += 16;
                         }
 
                         if (timelineData.endDate) {
@@ -1415,12 +1425,12 @@ export class PDFService {
                                     month: "short",
                                     day: "numeric",
                                 })}`,
-                                this.MARGIN_LEFT + 10,
+                                this.MARGIN_LEFT + 12,
                                 y
                             );
                         }
 
-                        doc.y = dateBoxY + 45;
+                        doc.y = dateBoxY + 50;
                     }
 
                     if (timelineData.milestones && timelineData.milestones.length > 0) {
@@ -1432,7 +1442,7 @@ export class PDFService {
                             }
 
                             const milestoneY = doc.y;
-                            const milestoneHeight = 60;
+                            const milestoneHeight = 65;
 
                             let statusColor = "#cbd5e1";
                             let statusBg = "#f8fafc";
@@ -1462,19 +1472,19 @@ export class PDFService {
                                 .fillColor(this.ACCENT_COLOR)
                                 .text(
                                     `${index + 1}. ${milestone.name}`,
-                                    this.MARGIN_LEFT + 10,
-                                    milestoneY + 8
+                                    this.MARGIN_LEFT + 12,
+                                    milestoneY + 10
                                 );
 
                             // Status badge
                             doc.fontSize(8).fillColor(statusColor);
                             doc.text(
                                 `[${milestone.status || "Not Started"}]`,
-                                this.MARGIN_LEFT + 10,
-                                milestoneY + 24
+                                this.MARGIN_LEFT + 12,
+                                milestoneY + 28
                             );
 
-                            let y = milestoneY + 24;
+                            let y = milestoneY + 28;
                             doc.fontSize(8.5).font("Helvetica").fillColor("#000000");
 
                             if (milestone.startDate || milestone.endDate || milestone.duration) {
@@ -1498,21 +1508,21 @@ export class PDFService {
                                 if (milestone.duration) {
                                     dateStr += ` | Duration: ${milestone.duration}`;
                                 }
-                                doc.text(dateStr, this.MARGIN_LEFT + 80, y);
+                                doc.text(dateStr, this.MARGIN_LEFT + 90, y);
                             }
 
                             if (milestone.description) {
                                 doc.text(
                                     milestone.description,
-                                    this.MARGIN_LEFT + 10,
-                                    y + 12,
+                                    this.MARGIN_LEFT + 12,
+                                    y + 14,
                                     {
-                                        width: this.CONTENT_WIDTH - 20,
+                                        width: this.CONTENT_WIDTH - 24,
                                     }
                                 );
                             }
 
-                            doc.y = milestoneY + milestoneHeight + 8;
+                            doc.y = milestoneY + milestoneHeight + 10;
                         });
                     }
                 }
