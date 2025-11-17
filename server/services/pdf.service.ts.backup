@@ -1,0 +1,1266 @@
+import PDFDocument from "pdfkit";
+import { Readable } from "stream";
+import type { Quote, QuoteItem, Client } from "@shared/schema";
+
+interface QuoteWithDetails {
+  quote: Quote;
+  client: Client;
+  items: QuoteItem[];
+  companyName?: string;
+  companyAddress?: string;
+  companyPhone?: string;
+  companyEmail?: string;
+  companyWebsite?: string;
+  companyGSTIN?: string;
+}
+
+export class PDFService {
+  // Page dimensions and margins - A4 standard
+  private static readonly PAGE_WIDTH = 595.28; // A4 width in points
+  private static readonly PAGE_HEIGHT = 841.89; // A4 height in points
+  private static readonly MARGIN_LEFT = 60;
+  private static readonly MARGIN_RIGHT = 60;
+  private static readonly MARGIN_TOP = 140; // Space for header
+  private static readonly MARGIN_BOTTOM = 90; // Space for footer
+  private static readonly CONTENT_WIDTH = this.PAGE_WIDTH - this.MARGIN_LEFT - this.MARGIN_RIGHT;
+
+  // Professional color scheme matching Optivalue Tek template
+  private static readonly PRIMARY_COLOR = "#1a4d8f"; // Professional blue
+  private static readonly SECONDARY_COLOR = "#666666"; // Medium gray
+  private static readonly ACCENT_COLOR = "#000000"; // Black for text
+  private static readonly LIGHT_GRAY = "#f8f9fa"; // Light background
+  private static readonly BORDER_COLOR = "#d0d0d0"; // Light border
+  private static readonly TABLE_HEADER_BG = "#1a4d8f"; // Blue table header
+  private static readonly HEADER_TEXT = "#ffffff"; // White text on header
+
+  static generateQuotePDF(data: QuoteWithDetails): Readable {
+    const doc = new PDFDocument({
+      size: "A4",
+      margins: {
+        top: this.MARGIN_TOP,
+        bottom: this.MARGIN_BOTTOM,
+        left: this.MARGIN_LEFT,
+        right: this.MARGIN_RIGHT,
+      },
+      bufferPages: true,
+    });
+
+    const buffers: Buffer[] = [];
+    doc.on("data", (buffer: Buffer) => buffers.push(buffer));
+
+    // Draw header on first page
+    this.drawHeader(doc, data, "COMMERCIAL PROPOSAL");
+
+    // Draw document info section
+    this.drawDocumentInfo(doc, data);
+
+    // Draw client section
+    this.drawClientSection(doc, data);
+
+    // Draw line items table
+    this.drawLineItemsTable(doc, data.items);
+
+    // Draw totals section
+    this.drawTotalsSection(doc, data.quote);
+
+    // Draw notes if present
+    if (data.quote.notes) {
+      this.drawNotesSection(doc, data.quote.notes);
+    }
+
+    // Draw terms and conditions
+    if (data.quote.termsAndConditions) {
+      this.drawTermsAndConditions(doc, data.quote.termsAndConditions);
+    }
+
+    // Draw advanced sections
+    this.drawAdvancedSections(doc, data.quote);
+
+    // Add page numbers and footers to all pages
+    const pageCount = doc.bufferedPageRange().count;
+    for (let i = 0; i < pageCount; i++) {
+      doc.switchToPage(i);
+      this.drawFooter(doc, data, i + 1, pageCount);
+    }
+
+    doc.end();
+    return Readable.from(buffers);
+  }
+
+  private static drawHeader(
+    doc: InstanceType<typeof PDFDocument>,
+    data: QuoteWithDetails,
+    title: string
+  ) {
+    const headerHeight = 110;
+    const companyName = data.companyName || "OptiValue Tek";
+
+    // Professional header background
+    doc
+      .rect(0, 0, this.PAGE_WIDTH, headerHeight)
+      .fill(this.PRIMARY_COLOR);
+
+    // Company name - Large and prominent at top
+    doc
+      .fontSize(28)
+      .font("Helvetica-Bold")
+      .fillColor("#FFFFFF")
+      .text(companyName, this.MARGIN_LEFT, 20, {
+        width: this.CONTENT_WIDTH,
+        align: "center",
+      });
+
+    // Document title - centered below company name
+    doc
+      .fontSize(16)
+      .font("Helvetica-Bold")
+      .fillColor("#FFFFFF")
+      .text(title, this.MARGIN_LEFT, 55, {
+        width: this.CONTENT_WIDTH,
+        align: "center",
+      });
+
+    // Subtitle or tagline
+    doc
+      .fontSize(10)
+      .font("Helvetica")
+      .fillColor("#E8F0FF")
+      .text("For", this.MARGIN_LEFT, 82, {
+        width: this.CONTENT_WIDTH,
+        align: "center",
+      });
+
+    // Client name in header
+    doc
+      .fontSize(12)
+      .font("Helvetica-Bold")
+      .fillColor("#FFFFFF")
+      .text(data.client.name, this.MARGIN_LEFT, 95, {
+        width: this.CONTENT_WIDTH,
+        align: "center",
+      });
+
+    // Bottom border
+    doc
+      .strokeColor("#FFFFFF")
+      .lineWidth(1)
+      .moveTo(0, headerHeight)
+      .lineTo(this.PAGE_WIDTH, headerHeight)
+      .stroke();
+
+    // Reset position after header
+    doc.y = this.MARGIN_TOP;
+  }
+
+  private static drawFooter(
+    doc: InstanceType<typeof PDFDocument>,
+    data: QuoteWithDetails,
+    pageNumber: number,
+    totalPages: number
+  ) {
+    const footerY = this.PAGE_HEIGHT - 75;
+
+    // Footer top border
+    doc
+      .strokeColor(this.BORDER_COLOR)
+      .lineWidth(1)
+      .moveTo(this.MARGIN_LEFT, footerY)
+      .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, footerY)
+      .stroke();
+
+    // Footer content starts
+    let y = footerY + 10;
+
+    // Company name in footer
+    doc
+      .fontSize(9)
+      .font("Helvetica-Bold")
+      .fillColor(this.ACCENT_COLOR)
+      .text(
+        data.companyName || "OptiValue Tek",
+        this.MARGIN_LEFT,
+        y
+      );
+
+    y += 12;
+
+    // Contact information in a single line format
+    doc
+      .fontSize(7.5)
+      .font("Helvetica")
+      .fillColor(this.SECONDARY_COLOR);
+
+    let contactInfo = [];
+    if (data.companyAddress) {
+      const address = data.companyAddress.replace(/\n/g, ", ");
+      contactInfo.push(address);
+    }
+
+    if (contactInfo.length > 0) {
+      doc.text(contactInfo.join(" | "), this.MARGIN_LEFT, y, {
+        width: this.CONTENT_WIDTH,
+        align: "left",
+        lineGap: 2,
+      });
+      y = doc.y + 2;
+    }
+
+    // Contact details line
+    let contactLine = [];
+    if (data.companyPhone) contactLine.push(`Phone: ${data.companyPhone}`);
+    if (data.companyEmail) contactLine.push(`Email: ${data.companyEmail}`);
+    if (data.companyWebsite) contactLine.push(`Web: ${data.companyWebsite}`);
+
+    if (contactLine.length > 0) {
+      doc.text(contactLine.join(" | "), this.MARGIN_LEFT, y, {
+        width: this.CONTENT_WIDTH,
+        align: "left",
+      });
+      y += 10;
+    }
+
+    // GSTIN on separate line if available
+    if (data.companyGSTIN) {
+      doc
+        .fontSize(7.5)
+        .font("Helvetica")
+        .fillColor(this.SECONDARY_COLOR)
+        .text(`GSTIN: ${data.companyGSTIN}`, this.MARGIN_LEFT, y);
+    }
+
+    // Page number - centered at very bottom
+    doc
+      .fontSize(8)
+      .fillColor(this.SECONDARY_COLOR)
+      .text(
+        `Page ${pageNumber} of ${totalPages}`,
+        this.MARGIN_LEFT,
+        this.PAGE_HEIGHT - 20,
+        {
+          width: this.CONTENT_WIDTH,
+          align: "center",
+        }
+      );
+  }
+
+  private static drawDocumentInfo(
+    doc: InstanceType<typeof PDFDocument>,
+    data: QuoteWithDetails
+  ) {
+    const startY = doc.y;
+
+    // Quote details in a simple table format
+    doc
+      .fontSize(10)
+      .font("Helvetica")
+      .fillColor(this.ACCENT_COLOR);
+
+    // Left column - labels
+    const labelX = this.MARGIN_LEFT;
+    const valueX = this.MARGIN_LEFT + 150;
+    const rightLabelX = this.MARGIN_LEFT + this.CONTENT_WIDTH / 2 + 20;
+    const rightValueX = rightLabelX + 150;
+
+    let y = startY;
+
+    // Row 1: Company Name and Quote Number
+    doc.font("Helvetica-Bold").text("Company Name:", labelX, y);
+    doc.font("Helvetica").text(data.companyName || "OptiValue Tek", valueX, y);
+
+    doc.font("Helvetica-Bold").text("Quote No.:", rightLabelX, y);
+    doc.font("Helvetica").text(data.quote.quoteNumber, rightValueX, y);
+    y += 16;
+
+    // Row 2: Date and Payment Terms (if reference number exists)
+    doc.font("Helvetica-Bold").text("Date:", labelX, y);
+    doc.font("Helvetica").text(
+      new Date(data.quote.quoteDate).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }),
+      valueX,
+      y
+    );
+
+    doc.font("Helvetica-Bold").text("Payment Terms:", rightLabelX, y);
+    doc.font("Helvetica").text("30 days from the date of Invoice", rightValueX, y, {
+      width: 120,
+    });
+    y += 16;
+
+    // Row 3: Quote Validity
+    const validUntil = new Date(
+      new Date(data.quote.quoteDate).getTime() +
+        data.quote.validityDays * 24 * 60 * 60 * 1000
+    );
+
+    doc.font("Helvetica-Bold").text("Quote Validity:", labelX, y);
+    doc.font("Helvetica").text(
+      `${data.quote.validityDays} days from the quote date`,
+      valueX,
+      y
+    );
+
+    if (data.quote.referenceNumber) {
+      doc.font("Helvetica-Bold").text("Reference:", rightLabelX, y);
+      doc.font("Helvetica").text(data.quote.referenceNumber, rightValueX, y);
+    }
+
+    doc.y = y + 20;
+  }
+
+  private static drawClientSection(
+    doc: InstanceType<typeof PDFDocument>,
+    data: QuoteWithDetails
+  ) {
+    doc.moveDown(0.5);
+    const startY = doc.y;
+
+    // Bill To and Ship To sections side by side
+    const leftColX = this.MARGIN_LEFT;
+    const rightColX = this.MARGIN_LEFT + this.CONTENT_WIDTH / 2 + 10;
+    const colWidth = this.CONTENT_WIDTH / 2 - 10;
+
+    // Bill To section
+    doc
+      .fontSize(11)
+      .font("Helvetica-Bold")
+      .fillColor(this.ACCENT_COLOR)
+      .text("Bill To:", leftColX, startY);
+
+    let y = startY + 18;
+
+    // Client details box
+    const boxHeight = 100;
+    doc
+      .rect(leftColX, y, colWidth, boxHeight)
+      .stroke(this.BORDER_COLOR);
+
+    y += 8;
+
+    // Company name
+    doc
+      .fontSize(10)
+      .font("Helvetica-Bold")
+      .fillColor(this.ACCENT_COLOR)
+      .text(data.client.name, leftColX + 10, y, { width: colWidth - 20 });
+
+    y += 16;
+
+    // Contact details
+    doc
+      .fontSize(9)
+      .font("Helvetica")
+      .fillColor(this.ACCENT_COLOR);
+
+    if (data.client.billingAddress) {
+      doc.text("Address:", leftColX + 10, y);
+      y += 12;
+      doc.text(data.client.billingAddress, leftColX + 10, y, {
+        width: colWidth - 20,
+      });
+      y = doc.y + 4;
+    }
+
+    if (data.client.phone) {
+      doc.text(`Phone No.: ${data.client.phone}`, leftColX + 10, y);
+      y += 12;
+    }
+
+    if (data.client.email) {
+      doc.text(`Email ID: ${data.client.email}`, leftColX + 10, y);
+      y += 12;
+    }
+
+    if (data.client.gstin) {
+      doc.text(`GSTIN: ${data.client.gstin}`, leftColX + 10, y);
+    }
+
+    // Ship To section (right side)
+    doc
+      .fontSize(11)
+      .font("Helvetica-Bold")
+      .fillColor(this.ACCENT_COLOR)
+      .text("Ship To:", rightColX, startY);
+
+    y = startY + 18;
+
+    // Ship To box (same as Bill To for now)
+    doc
+      .rect(rightColX, y, colWidth, boxHeight)
+      .stroke(this.BORDER_COLOR);
+
+    y += 8;
+
+    // Name
+    doc
+      .fontSize(10)
+      .font("Helvetica-Bold")
+      .fillColor(this.ACCENT_COLOR)
+      .text(data.client.name, rightColX + 10, y, { width: colWidth - 20 });
+
+    y += 16;
+
+    // Shipping address (use billing address if shipping not available)
+    doc
+      .fontSize(9)
+      .font("Helvetica")
+      .fillColor(this.ACCENT_COLOR);
+
+    if (data.client.shippingAddress || data.client.billingAddress) {
+      doc.text("Address:", rightColX + 10, y);
+      y += 12;
+      doc.text(
+        data.client.shippingAddress || data.client.billingAddress || "",
+        rightColX + 10,
+        y,
+        { width: colWidth - 20 }
+      );
+      y = doc.y + 4;
+    }
+
+    // Attention to
+    if (data.client.contactPerson) {
+      doc.text(`Attn to: ${data.client.contactPerson}`, rightColX + 10, y);
+    }
+
+    doc.y = startY + boxHeight + 30;
+  }
+
+  private static drawLineItemsTable(
+    doc: InstanceType<typeof PDFDocument>,
+    items: QuoteItem[]
+  ) {
+    doc.moveDown(0.5);
+    const startY = doc.y;
+    const tableTop = startY;
+    const headerHeight = 25;
+
+    // Professional table header
+    doc
+      .rect(this.MARGIN_LEFT, tableTop, this.CONTENT_WIDTH, headerHeight)
+      .fill(this.TABLE_HEADER_BG);
+
+    // Column positions - matching template
+    const col1X = this.MARGIN_LEFT + 5; // S.No
+    const col1W = 30;
+    const col2X = col1X + col1W; // Product Description
+    const col2W = this.CONTENT_WIDTH - 200;
+    const col3X = col2X + col2W; // Qty
+    const col3W = 40;
+    const col4X = col3X + col3W; // Unit Price
+    const col4W = 70;
+    const col5X = col4X + col4W; // Subtotal
+    const col5W = 60;
+
+    // Table headers
+    doc
+      .fontSize(9)
+      .font("Helvetica-Bold")
+      .fillColor("#FFFFFF");
+
+    doc.text("SN", col1X, tableTop + 8, { width: col1W, align: "center" });
+    doc.text("Product Description", col2X + 5, tableTop + 8, { width: col2W - 10, align: "left" });
+    doc.text("Qty", col3X, tableTop + 8, { width: col3W, align: "center" });
+    doc.text("Unit Price", col4X, tableTop + 8, { width: col4W, align: "right" });
+    doc.text("Subtotal", col5X, tableTop + 8, { width: col5W, align: "right" });
+
+    // Border around header
+    doc
+      .strokeColor(this.BORDER_COLOR)
+      .lineWidth(0.5)
+      .rect(this.MARGIN_LEFT, tableTop, this.CONTENT_WIDTH, headerHeight)
+      .stroke();
+
+    // Table rows
+    let y = tableTop + headerHeight;
+    doc.fillColor(this.ACCENT_COLOR).font("Helvetica");
+
+    items.forEach((item, index) => {
+      // Check if we need a new page
+      if (y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 100) {
+        doc.addPage();
+        y = this.MARGIN_TOP;
+
+        // Redraw header on new page
+        doc
+          .rect(this.MARGIN_LEFT, y, this.CONTENT_WIDTH, headerHeight)
+          .fill(this.TABLE_HEADER_BG);
+
+        doc
+          .fontSize(9)
+          .font("Helvetica-Bold")
+          .fillColor("#FFFFFF");
+
+        doc.text("SN", col1X, y + 8, { width: col1W, align: "center" });
+        doc.text("Product Description", col2X + 5, y + 8, { width: col2W - 10, align: "left" });
+        doc.text("Qty", col3X, y + 8, { width: col3W, align: "center" });
+        doc.text("Unit Price", col4X, y + 8, { width: col4W, align: "right" });
+        doc.text("Subtotal", col5X, y + 8, { width: col5W, align: "right" });
+
+        doc
+          .strokeColor(this.BORDER_COLOR)
+          .lineWidth(0.5)
+          .rect(this.MARGIN_LEFT, y, this.CONTENT_WIDTH, headerHeight)
+          .stroke();
+
+        y += headerHeight;
+        doc.fillColor(this.ACCENT_COLOR).font("Helvetica");
+      }
+
+      const descHeight = doc.heightOfString(item.description, {
+        width: col2W - 15,
+        fontSize: 9,
+      });
+      const rowHeight = Math.max(20, descHeight + 10);
+
+      // Row border
+      doc
+        .strokeColor(this.BORDER_COLOR)
+        .lineWidth(0.3)
+        .moveTo(this.MARGIN_LEFT, y)
+        .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, y)
+        .stroke();
+
+      // Row data
+      doc.fillColor(this.ACCENT_COLOR).fontSize(9).font("Helvetica");
+
+      // Serial number
+      doc.text(String(index + 1), col1X, y + 5, { width: col1W, align: "center" });
+
+      // Description
+      doc.text(item.description, col2X + 5, y + 5, {
+        width: col2W - 15,
+        align: "left",
+      });
+
+      // Quantity
+      doc.text(String(item.quantity), col3X, y + 5, { width: col3W, align: "center" });
+
+      // Unit Price
+      doc.text(
+        `₹ ${Number(item.unitPrice).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        col4X - 5,
+        y + 5,
+        { width: col4W, align: "right" }
+      );
+
+      // Subtotal
+      doc.text(
+        `₹ ${Number(item.subtotal).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        col5X - 5,
+        y + 5,
+        { width: col5W, align: "right" }
+      );
+
+      y += rowHeight;
+    });
+
+    // Final table bottom border
+    doc
+      .strokeColor(this.BORDER_COLOR)
+      .lineWidth(0.5)
+      .moveTo(this.MARGIN_LEFT, y)
+      .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, y)
+      .stroke();
+
+    doc.y = y + 15;
+  }
+
+  private static drawTotalsSection(
+    doc: InstanceType<typeof PDFDocument>,
+    quote: Quote
+  ) {
+    doc.moveDown(0.5);
+    const startY = doc.y;
+
+    // Professional summary box on the right side
+    const boxWidth = 280;
+    const boxX = this.PAGE_WIDTH - this.MARGIN_RIGHT - boxWidth;
+    let boxHeight = 140;
+
+    // Calculate box height based on what we need to show
+    let lineCount = 2; // subtotal and total
+    if (Number(quote.discount) > 0) lineCount++;
+    if (Number(quote.shippingCharges) > 0) lineCount++;
+    if (Number(quote.cgst) > 0) lineCount++;
+    if (Number(quote.sgst) > 0) lineCount++;
+    if (Number(quote.igst) > 0) lineCount++;
+
+    boxHeight = lineCount * 20 + 50;
+
+    // Professional box with shadow effect
+    doc
+      .rect(boxX + 2, startY + 2, boxWidth, boxHeight)
+      .fill("#e2e8f0");
+
+    doc
+      .rect(boxX, startY, boxWidth, boxHeight)
+      .fillAndStroke("#ffffff", this.BORDER_COLOR);
+
+    // Title
+    doc
+      .fontSize(11)
+      .font("Helvetica-Bold")
+      .fillColor(this.PRIMARY_COLOR)
+      .text("SUMMARY", boxX + 15, startY + 12);
+
+    // Separator line
+    doc
+      .strokeColor(this.BORDER_COLOR)
+      .lineWidth(0.5)
+      .moveTo(boxX + 15, startY + 30)
+      .lineTo(boxX + boxWidth - 15, startY + 30)
+      .stroke();
+
+    doc.fillColor("#000000");
+
+    let y = startY + 40;
+    const labelX = boxX + 15;
+    const valueX = boxX + boxWidth - 20;
+
+    // Subtotal
+    doc.fontSize(10).font("Helvetica");
+    doc.text("Subtotal:", labelX, y);
+    doc.text(`₹${Number(quote.subtotal).toFixed(2)}`, valueX - 90, y, {
+      width: 90,
+      align: "right",
+    });
+    y += 20;
+
+    // Discount
+    if (Number(quote.discount) > 0) {
+      doc.text("Discount:", labelX, y);
+      doc.text(`-₹${Number(quote.discount).toFixed(2)}`, valueX - 90, y, {
+        width: 90,
+        align: "right",
+      });
+      y += 20;
+    }
+
+    // Shipping
+    if (Number(quote.shippingCharges) > 0) {
+      doc.fontSize(9);
+      doc.text("Shipping & Handling:", labelX, y);
+      doc.text(`₹${Number(quote.shippingCharges).toFixed(2)}`, valueX - 90, y, {
+        width: 90,
+        align: "right",
+      });
+      y += 20;
+    }
+
+    // Taxes
+    if (Number(quote.cgst) > 0) {
+      doc.fontSize(9);
+      doc.text("CGST (9%):", labelX + 10, y);
+      doc.text(`₹${Number(quote.cgst).toFixed(2)}`, valueX - 90, y, {
+        width: 90,
+        align: "right",
+      });
+      y += 18;
+    }
+
+    if (Number(quote.sgst) > 0) {
+      doc.text("SGST (9%):", labelX + 10, y);
+      doc.text(`₹${Number(quote.sgst).toFixed(2)}`, valueX - 90, y, {
+        width: 90,
+        align: "right",
+      });
+      y += 18;
+    }
+
+    if (Number(quote.igst) > 0) {
+      doc.text("IGST (18%):", labelX + 10, y);
+      doc.text(`₹${Number(quote.igst).toFixed(2)}`, valueX - 90, y, {
+        width: 90,
+        align: "right",
+      });
+      y += 18;
+    }
+
+    // Total with professional highlight
+    y += 8;
+    doc
+      .rect(boxX + 10, y - 3, boxWidth - 20, 28)
+      .fill(this.PRIMARY_COLOR);
+
+    doc
+      .fontSize(12)
+      .font("Helvetica-Bold")
+      .fillColor("#FFFFFF");
+    doc.text("TOTAL AMOUNT:", labelX + 5, y + 6);
+    doc.text(`₹${Number(quote.total).toFixed(2)}`, valueX - 110, y + 6, {
+      width: 110,
+      align: "right",
+    });
+
+    doc.y = startY + boxHeight + 15;
+  }
+
+  private static drawNotesSection(
+    doc: InstanceType<typeof PDFDocument>,
+    notes: string
+  ) {
+    // Check if we need a new page
+    if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 120) {
+      doc.addPage();
+    }
+
+    doc.moveDown(1);
+
+    // Professional section header
+    doc
+      .fontSize(10)
+      .font("Helvetica-Bold")
+      .fillColor(this.ACCENT_COLOR)
+      .text("Special notes and instructions", this.MARGIN_LEFT, doc.y);
+
+    doc.moveDown(0.3);
+    const notesY = doc.y;
+
+    // Notes content
+    doc
+      .fontSize(9)
+      .font("Helvetica")
+      .fillColor(this.ACCENT_COLOR)
+      .text(notes, this.MARGIN_LEFT, notesY, {
+        width: this.CONTENT_WIDTH * 0.6,
+        align: "left",
+      });
+
+    // Signature area on the right
+    const signatureX = this.MARGIN_LEFT + this.CONTENT_WIDTH * 0.65;
+    const signatureY = notesY;
+
+    doc
+      .fontSize(9)
+      .font("Helvetica")
+      .fillColor(this.ACCENT_COLOR)
+      .text(`For ${doc.page.dictionary.data.companyName || "Aicera Systems Private Limited"},`, signatureX, signatureY);
+
+    doc.moveDown(3);
+
+    // Signature line
+    doc
+      .strokeColor(this.BORDER_COLOR)
+      .lineWidth(0.5)
+      .moveTo(signatureX, doc.y)
+      .lineTo(signatureX + 150, doc.y)
+      .stroke();
+
+    doc.moveDown(0.3);
+    doc
+      .fontSize(9)
+      .font("Helvetica")
+      .fillColor(this.ACCENT_COLOR)
+      .text("Authorized Signatory", signatureX, doc.y);
+
+    doc.y = Math.max(doc.y, notesY + 80) + 15;
+  }
+
+  private static drawTermsAndConditions(
+    doc: InstanceType<typeof PDFDocument>,
+    terms: string
+  ) {
+    // Check if we need a new page
+    if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 180) {
+      doc.addPage();
+    }
+
+    doc.moveDown(1);
+
+    // Professional section header
+    doc
+      .fontSize(11)
+      .font("Helvetica-Bold")
+      .fillColor(this.ACCENT_COLOR)
+      .text("Terms & Conditions", this.MARGIN_LEFT, doc.y);
+
+    doc.moveDown(0.5);
+    const tableTop = doc.y;
+
+    // Parse terms - expecting format like "1. Taxes - Details\n2. Delivery - Details"
+    const termLines = terms.split("\n").filter((line) => line.trim());
+
+    // Create a simple table format
+    const col1X = this.MARGIN_LEFT;
+    const col1W = 30; // SN
+    const col2X = col1X + col1W;
+    const col2W = 140; // Parameters
+    const col3X = col2X + col2W;
+    const col3W = this.CONTENT_WIDTH - col1W - col2W; // Details
+
+    // Table header
+    const headerHeight = 22;
+    doc
+      .rect(col1X, tableTop, this.CONTENT_WIDTH, headerHeight)
+      .fill(this.TABLE_HEADER_BG);
+
+    doc
+      .fontSize(9)
+      .font("Helvetica-Bold")
+      .fillColor("#FFFFFF");
+
+    doc.text("SN", col1X + 5, tableTop + 7, { width: col1W - 10, align: "left" });
+    doc.text("Parameters", col2X + 5, tableTop + 7, { width: col2W - 10, align: "left" });
+    doc.text("Details", col3X + 5, tableTop + 7, { width: col3W - 10, align: "left" });
+
+    let y = tableTop + headerHeight;
+
+    // Parse and display terms
+    let termIndex = 1;
+    termLines.forEach((line) => {
+      const trimmedLine = line.trim();
+      if (!trimmedLine) return;
+
+      // Try to parse as "number. parameter - details" or similar
+      const match = trimmedLine.match(/^(\d+)[\.\)]\s*([^-:]+)[-:]\s*(.+)$/);
+
+      let sn = String(termIndex);
+      let parameter = "";
+      let details = "";
+
+      if (match) {
+        sn = match[1];
+        parameter = match[2].trim();
+        details = match[3].trim();
+      } else {
+        // Fallback: treat whole line as details
+        parameter = "Note";
+        details = trimmedLine.replace(/^[\d\.\)•\-\*]\s*/, "");
+      }
+
+      // Calculate row height based on details text
+      const detailsHeight = doc.heightOfString(details, {
+        width: col3W - 15,
+        fontSize: 8,
+      });
+      const rowHeight = Math.max(20, detailsHeight + 10);
+
+      // Check if we need a new page
+      if (y + rowHeight > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 20) {
+        doc.addPage();
+        y = this.MARGIN_TOP;
+      }
+
+      // Draw row borders
+      doc
+        .strokeColor(this.BORDER_COLOR)
+        .lineWidth(0.3);
+
+      // Vertical lines
+      doc.moveTo(col1X, y).lineTo(col1X, y + rowHeight).stroke();
+      doc.moveTo(col2X, y).lineTo(col2X, y + rowHeight).stroke();
+      doc.moveTo(col3X, y).lineTo(col3X, y + rowHeight).stroke();
+      doc.moveTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, y)
+         .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, y + rowHeight)
+         .stroke();
+
+      // Horizontal line at bottom
+      doc.moveTo(col1X, y + rowHeight)
+         .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, y + rowHeight)
+         .stroke();
+
+      // Row content
+      doc.fillColor(this.ACCENT_COLOR).fontSize(8).font("Helvetica");
+
+      doc.text(sn, col1X + 5, y + 6, { width: col1W - 10, align: "left" });
+      doc.text(parameter, col2X + 5, y + 6, { width: col2W - 10, align: "left" });
+      doc.text(details, col3X + 5, y + 6, { width: col3W - 15, align: "left" });
+
+      y += rowHeight;
+      termIndex++;
+    });
+
+    // If no terms were parsed, show a simple message
+    if (termIndex === 1) {
+      const rowHeight = 40;
+      doc
+        .strokeColor(this.BORDER_COLOR)
+        .rect(col1X, y, this.CONTENT_WIDTH, rowHeight)
+        .stroke();
+
+      doc
+        .fontSize(8)
+        .font("Helvetica")
+        .fillColor(this.ACCENT_COLOR)
+        .text(terms, col1X + 10, y + 10, {
+          width: this.CONTENT_WIDTH - 20,
+          align: "left",
+        });
+
+      y += rowHeight;
+    }
+
+    doc.y = y + 15;
+  }
+
+  private static drawAdvancedSections(doc: InstanceType<typeof PDFDocument>, quote: Quote) {
+    // Bill of Materials - Annexure format
+    if (quote.bomSection) {
+      try {
+        const bomData = JSON.parse(quote.bomSection);
+        if (bomData && bomData.length > 0) {
+          doc.addPage();
+
+          // Annexure title
+          doc
+            .fontSize(12)
+            .font("Helvetica-Bold")
+            .fillColor(this.ACCENT_COLOR)
+            .text("Annexure 1", this.MARGIN_LEFT, doc.y);
+
+          doc.moveDown(0.5);
+
+          // Process each BOM item
+          bomData.forEach((item: any, index: number) => {
+            if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 200) {
+              doc.addPage();
+            }
+
+            // Item title
+            doc
+              .fontSize(11)
+              .font("Helvetica-Bold")
+              .fillColor(this.ACCENT_COLOR)
+              .text(item.partNumber || `Item ${index + 1}`, this.MARGIN_LEFT, doc.y);
+
+            doc.moveDown(0.3);
+            const tableTop = doc.y;
+
+            // BOM details table with 4 columns: Module, Description, Qty, Components (if available)
+            const col1X = this.MARGIN_LEFT;
+            const col1W = 100; // Module
+            const col2X = col1X + col1W;
+            const col2W = 250; // Description
+            const col3X = col2X + col2W;
+            const col3W = this.CONTENT_WIDTH - col1W - col2W; // Qty
+
+            // Table header
+            const headerHeight = 20;
+            doc
+              .rect(col1X, tableTop, this.CONTENT_WIDTH, headerHeight)
+              .fill(this.TABLE_HEADER_BG);
+
+            doc
+              .fontSize(8)
+              .font("Helvetica-Bold")
+              .fillColor("#FFFFFF");
+
+            doc.text("Module", col1X + 5, tableTop + 6, { width: col1W - 10, align: "left" });
+            doc.text("Description", col2X + 5, tableTop + 6, { width: col2W - 10, align: "left" });
+            doc.text("Qty", col3X + 5, tableTop + 6, { width: col3W - 10, align: "left" });
+
+            let y = tableTop + headerHeight;
+
+            // Process specifications or components if available
+            const specs = item.specifications ?
+              (typeof item.specifications === 'string' ?
+                item.specifications.split('\n') :
+                [item.specifications]) :
+              [];
+
+            // Add base item row
+            const rows = [
+              { module: "Base", description: item.description, qty: item.quantity }
+            ];
+
+            // Add specification rows if available
+            if (specs.length > 0 && item.components) {
+              try {
+                const components = typeof item.components === 'string' ?
+                  JSON.parse(item.components) : item.components;
+
+                if (Array.isArray(components)) {
+                  components.forEach((comp: any) => {
+                    rows.push({
+                      module: comp.module || comp.type || "Component",
+                      description: comp.description || comp.name || "",
+                      qty: comp.quantity || item.quantity || 1
+                    });
+                  });
+                }
+              } catch (e) {
+                // If parsing fails, just show the specs
+                specs.forEach((spec: string) => {
+                  if (spec.trim()) {
+                    rows.push({
+                      module: "Specification",
+                      description: spec.trim(),
+                      qty: ""
+                    });
+                  }
+                });
+              }
+            }
+
+            // Draw rows
+            rows.forEach((row) => {
+              // Calculate row height
+              const descHeight = doc.heightOfString(row.description, {
+                width: col2W - 15,
+                fontSize: 7.5,
+              });
+              const rowHeight = Math.max(18, descHeight + 8);
+
+              // Check page break
+              if (y + rowHeight > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 20) {
+                doc.addPage();
+                y = this.MARGIN_TOP;
+              }
+
+              // Draw borders
+              doc
+                .strokeColor(this.BORDER_COLOR)
+                .lineWidth(0.3);
+
+              // Vertical lines
+              doc.moveTo(col1X, y).lineTo(col1X, y + rowHeight).stroke();
+              doc.moveTo(col2X, y).lineTo(col2X, y + rowHeight).stroke();
+              doc.moveTo(col3X, y).lineTo(col3X, y + rowHeight).stroke();
+              doc.moveTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, y)
+                 .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, y + rowHeight)
+                 .stroke();
+
+              // Bottom horizontal line
+              doc.moveTo(col1X, y + rowHeight)
+                 .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, y + rowHeight)
+                 .stroke();
+
+              // Content
+              doc.fillColor(this.ACCENT_COLOR).fontSize(7.5).font("Helvetica");
+
+              doc.text(row.module, col1X + 5, y + 5, { width: col1W - 10, align: "left" });
+              doc.text(row.description, col2X + 5, y + 5, { width: col2W - 15, align: "left" });
+              doc.text(String(row.qty), col3X + 5, y + 5, { width: col3W - 10, align: "left" });
+
+              y += rowHeight;
+            });
+
+            doc.y = y + 15;
+          });
+        }
+      } catch (e) {
+        console.error("Failed to parse BOM section:", e);
+      }
+    }
+
+    // Service Level Agreement - keep existing format
+    if (quote.slaSection) {
+      try {
+        const slaData = JSON.parse(quote.slaSection);
+        if (slaData && (slaData.overview || slaData.metrics?.length > 0)) {
+          if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 100 || !quote.bomSection) {
+            doc.addPage();
+          }
+
+          doc.moveDown(1);
+          doc
+            .fontSize(12)
+            .font("Helvetica-Bold")
+            .fillColor(this.ACCENT_COLOR)
+            .text("SERVICE LEVEL AGREEMENT (SLA)", this.MARGIN_LEFT, doc.y);
+
+          doc.moveDown(0.5);
+
+          if (slaData.overview) {
+            doc.fontSize(10).font("Helvetica-Bold").text("Overview");
+            doc.fontSize(9).font("Helvetica").fillColor(this.ACCENT_COLOR)
+               .text(slaData.overview, { width: this.CONTENT_WIDTH });
+            doc.moveDown(0.5);
+          }
+
+          if (slaData.responseTime || slaData.resolutionTime || slaData.availability || slaData.supportHours) {
+            doc.fontSize(10).font("Helvetica-Bold").fillColor(this.ACCENT_COLOR).text("Service Commitments");
+            doc.fontSize(9).font("Helvetica");
+            if (slaData.responseTime) doc.text(`Response Time: ${slaData.responseTime}`);
+            if (slaData.resolutionTime) doc.text(`Resolution Time: ${slaData.resolutionTime}`);
+            if (slaData.availability) doc.text(`System Availability: ${slaData.availability}`);
+            if (slaData.supportHours) doc.text(`Support Hours: ${slaData.supportHours}`);
+            doc.moveDown(0.5);
+          }
+
+          if (slaData.metrics && slaData.metrics.length > 0) {
+            doc.fontSize(10).font("Helvetica-Bold").fillColor(this.ACCENT_COLOR).text("Performance Metrics");
+            doc.fontSize(9).font("Helvetica").fillColor(this.ACCENT_COLOR);
+            slaData.metrics.forEach((metric: any) => {
+              if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 50) doc.addPage();
+              doc.font("Helvetica-Bold").text(`• ${metric.name} - Target: ${metric.target}`);
+              doc.font("Helvetica").text(`  ${metric.description}`, { indent: 10 });
+              if (metric.penalty) doc.text(`  Penalty: ${metric.penalty}`, { indent: 10 });
+            });
+            doc.moveDown(0.5);
+          }
+        }
+      } catch (e) {
+        console.error("Failed to parse SLA section:", e);
+      }
+    }
+
+    // Project Timeline
+    if (quote.timelineSection) {
+      try {
+        const timelineData = JSON.parse(quote.timelineSection);
+        if (timelineData && (timelineData.projectOverview || timelineData.milestones?.length > 0)) {
+          if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 100) {
+            doc.addPage();
+          }
+
+          doc.moveDown(1);
+          doc
+            .fontSize(12)
+            .font("Helvetica-Bold")
+            .fillColor(this.ACCENT_COLOR)
+            .text("PROJECT TIMELINE", this.MARGIN_LEFT, doc.y);
+
+          doc.moveDown(0.5);
+
+          if (timelineData.projectOverview) {
+            doc.fontSize(10).font("Helvetica-Bold").text("Project Overview");
+            doc.fontSize(9).font("Helvetica").fillColor(this.ACCENT_COLOR)
+               .text(timelineData.projectOverview, { width: this.CONTENT_WIDTH });
+            doc.moveDown(0.5);
+          }
+
+          if (timelineData.startDate || timelineData.endDate) {
+            doc.fontSize(9).font("Helvetica").fillColor(this.ACCENT_COLOR);
+            if (timelineData.startDate) doc.text(`Project Start: ${new Date(timelineData.startDate).toLocaleDateString()}`);
+            if (timelineData.endDate) doc.text(`Project End: ${new Date(timelineData.endDate).toLocaleDateString()}`);
+            doc.moveDown(0.5);
+          }
+
+          if (timelineData.milestones && timelineData.milestones.length > 0) {
+            doc.fontSize(10).font("Helvetica-Bold").fillColor(this.ACCENT_COLOR).text("Milestones & Phases");
+            doc.moveDown(0.3);
+
+            timelineData.milestones.forEach((milestone: any, index: number) => {
+              if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 50) doc.addPage();
+
+              doc.fontSize(9).font("Helvetica-Bold").fillColor(this.ACCENT_COLOR)
+                 .text(`${index + 1}. ${milestone.name} (${milestone.status})`);
+              doc.fontSize(8).font("Helvetica");
+              if (milestone.description) doc.text(milestone.description);
+              if (milestone.startDate || milestone.endDate || milestone.duration) {
+                let dateStr = "";
+                if (milestone.startDate) dateStr += `Start: ${new Date(milestone.startDate).toLocaleDateString()}`;
+                if (milestone.endDate) dateStr += ` | End: ${new Date(milestone.endDate).toLocaleDateString()}`;
+                if (milestone.duration) dateStr += ` | Duration: ${milestone.duration}`;
+                doc.text(dateStr);
+              }
+              if (milestone.deliverables) doc.text(`Deliverables: ${milestone.deliverables}`);
+              doc.moveDown(0.5);
+            });
+          }
+        }
+      } catch (e) {
+        console.error("Failed to parse Timeline section:", e);
+      }
+    }
+  }
+            doc.fontSize(11).font("Helvetica-Bold").text("Milestones & Phases");
+            doc.moveDown(0.3);
+
+            timelineData.milestones.forEach((milestone: any, index: number) => {
+              if (doc.y > 700) doc.addPage();
+
+              doc.fontSize(10).font("Helvetica-Bold").text(`${index + 1}. ${milestone.name} (${milestone.status})`);
+              doc.fontSize(9).font("Helvetica");
+              if (milestone.description) doc.text(milestone.description);
+              if (milestone.startDate || milestone.endDate || milestone.duration) {
+                let dateStr = "";
+                if (milestone.startDate) dateStr += `Start: ${new Date(milestone.startDate).toLocaleDateString()}`;
+                if (milestone.endDate) dateStr += ` | End: ${new Date(milestone.endDate).toLocaleDateString()}`;
+                if (milestone.duration) dateStr += ` | Duration: ${milestone.duration}`;
+                doc.text(dateStr);
+              }
+              if (milestone.deliverables) doc.text(`Deliverables: ${milestone.deliverables}`);
+              doc.moveDown(0.5);
+            });
+          }
+        }
+      } catch (e) {
+        console.error("Failed to parse Timeline section:", e);
+      }
+    }
+  }
+
+  static generateInvoicePDF(
+    data: QuoteWithDetails & {
+      invoiceNumber: string;
+      dueDate: Date;
+    }
+  ): Readable {
+    const doc = new PDFDocument({
+      size: "A4",
+      margin: 50,
+    });
+
+    const buffers: Buffer[] = [];
+    doc.on("data", (buffer: Buffer) => buffers.push(buffer));
+
+    // Header
+    doc.fontSize(20).font("Helvetica-Bold").text("INVOICE", { align: "center" });
+    doc.moveDown(0.5);
+    doc.fontSize(10).font("Helvetica").text("─".repeat(80), { align: "center" });
+    doc.moveDown(0.5);
+
+    // Company Info (left)
+    doc
+      .fontSize(12)
+      .font("Helvetica-Bold")
+      .text(data.companyName || "Your Company");
+    doc
+      .fontSize(10)
+      .font("Helvetica")
+      .text(data.companyAddress || "Company Address")
+      .moveDown(0.5);
+
+    // Invoice Details (right side)
+    const rightX = 400;
+    doc.fontSize(10).font("Helvetica");
+    doc.text(`Invoice #: ${data.invoiceNumber}`, rightX, doc.y);
+    doc.text(`Quote #: ${data.quote.quoteNumber}`, rightX);
+    doc.text(`Date: ${new Date(data.quote.quoteDate).toLocaleDateString()}`, rightX);
+    doc.text(`Due Date: ${data.dueDate.toLocaleDateString()}`, rightX);
+
+    doc.moveDown(1);
+
+    // Bill To Section
+    doc.fontSize(11).font("Helvetica-Bold").text("BILL TO:");
+    doc.fontSize(10).font("Helvetica");
+    doc.text(data.client.name);
+    if (data.client.contactPerson) {
+      doc.text(`Attn: ${data.client.contactPerson}`);
+    }
+    if (data.client.email) {
+      doc.text(`Email: ${data.client.email}`);
+    }
+    if (data.client.phone) {
+      doc.text(`Phone: ${data.client.phone}`);
+    }
+    if (data.client.billingAddress) {
+      doc.text(data.client.billingAddress);
+    }
+
+    doc.moveDown(0.5);
+
+    // Line Items Table
+    this.drawLineItemsTable(doc, data.items);
+
+    doc.moveDown(0.5);
+
+    // Totals Section
+    this.drawTotalsSection(doc, data.quote);
+
+    doc.moveDown(1);
+
+    // Footer
+    doc.fontSize(9).font("Helvetica").text("─".repeat(80), { align: "center" });
+    doc.text("Thank you for your business!", { align: "center" });
+
+    doc.end();
+
+    return Readable.from(buffers);
+  }
+}

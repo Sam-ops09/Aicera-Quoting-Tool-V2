@@ -803,55 +803,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // PDF Export for Quotes
-  app.get("/api/quotes/:id/pdf", authMiddleware, async (req: AuthRequest, res: Response) => {
-    try {
-      const quote = await storage.getQuote(req.params.id);
-      if (!quote) {
-        return res.status(404).json({ error: "Quote not found" });
-      }
+    app.get("/api/quotes/:id/pdf", authMiddleware, async (req: AuthRequest, res: Response) => {
+        try {
+            const quote = await storage.getQuote(req.params.id);
+            if (!quote) {
+                return res.status(404).json({ error: "Quote not found" });
+            }
 
-      const client = await storage.getClient(quote.clientId);
-      if (!client) {
-        return res.status(404).json({ error: "Client not found" });
-      }
-      const items = await storage.getQuoteItems(quote.id);
+            const client = await storage.getClient(quote.clientId);
+            if (!client) {
+                return res.status(404).json({ error: "Client not found" });
+            }
+            const items = await storage.getQuoteItems(quote.id);
 
-      // Fetch company settings
-      const settings = await storage.getAllSettings();
-      const companyName = settings.find((s) => s.key === "company_name")?.value || "OPTIVALUE TEK";
-      const companyAddress = settings.find((s) => s.key === "company_address")?.value || "";
-      const companyPhone = settings.find((s) => s.key === "company_phone")?.value || "";
-      const companyEmail = settings.find((s) => s.key === "company_email")?.value || "";
-      const companyWebsite = settings.find((s) => s.key === "company_website")?.value || "";
-      const companyGSTIN = settings.find((s) => s.key === "company_gstin")?.value || "";
+            // Fetch company settings
+            const settings = await storage.getAllSettings();
+            const companyName = settings.find((s) => s.key === "company_name")?.value || "OPTIVALUE TEK";
+            const companyAddress = settings.find((s) => s.key === "company_address")?.value || "";
+            const companyPhone = settings.find((s) => s.key === "company_phone")?.value || "";
+            const companyEmail = settings.find((s) => s.key === "company_email")?.value || "";
+            const companyWebsite = settings.find((s) => s.key === "company_website")?.value || "";
+            const companyGSTIN = settings.find((s) => s.key === "company_gstin")?.value || "";
 
-      const pdfStream = PDFService.generateQuotePDF({
-        quote,
-        client,
-        items,
-        companyName,
-        companyAddress,
-        companyPhone,
-        companyEmail,
-        companyWebsite,
-        companyGSTIN,
-      });
+            const pdfStream = PDFService.generateQuotePDF({
+                quote,
+                client,
+                items,
+                companyName,
+                companyAddress,
+                companyPhone,
+                companyEmail,
+                companyWebsite,
+                companyGSTIN,
+            });
 
-      res.setHeader("Content-Type", "application/pdf");
-      res.setHeader("Content-Disposition", `attachment; filename="Quote-${quote.quoteNumber}.pdf"`);
-      pdfStream.pipe(res);
+            res.setHeader("Content-Type", "application/pdf");
+            res.setHeader("Content-Disposition", `attachment; filename="Quote-${quote.quoteNumber}.pdf"`);
 
-      await storage.createActivityLog({
-        userId: req.user!.id,
-        action: "export_pdf",
-        entityType: "quote",
-        entityId: quote.id,
-      });
-    } catch (error: any) {
-      console.error("PDF export error:", error);
-      return res.status(500).json({ error: error.message || "Failed to generate PDF" });
-    }
-  });
+            pdfStream.on("error", (err) => {
+                console.error("PDF stream error:", err);
+                if (!res.headersSent) {
+                    res.status(500).end("Failed to generate PDF");
+                }
+            });
+
+            pdfStream.pipe(res);
+
+            await storage.createActivityLog({
+                userId: req.user!.id,
+                action: "export_pdf",
+                entityType: "quote",
+                entityId: quote.id,
+            });
+        } catch (error: any) {
+            console.error("PDF export error:", error);
+            return res.status(500).json({ error: error.message || "Failed to generate PDF" });
+        }
+    });
 
   // Email Quote
   app.post("/api/quotes/:id/email", authMiddleware, async (req: AuthRequest, res: Response) => {

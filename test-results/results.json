@@ -10,7 +10,9 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {},
+    "metadata": {
+      "actualWorkers": 4
+    },
     "preserveOutput": "always",
     "reporter": [
       [
@@ -46,7 +48,9 @@
         "outputDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e",
@@ -60,7 +64,9 @@
         "outputDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "firefox",
         "name": "firefox",
         "testDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e",
@@ -74,7 +80,9 @@
         "outputDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "webkit",
         "name": "webkit",
         "testDir": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e",
@@ -99,20 +107,20 @@
   },
   "suites": [
     {
-      "title": "client-management-improvements.spec.ts",
-      "file": "client-management-improvements.spec.ts",
+      "title": "pdf-and-email.spec.ts",
+      "file": "pdf-and-email.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Client Management UI Improvements",
-          "file": "client-management-improvements.spec.ts",
-          "line": 23,
+          "title": "PDF Download and Email API Features",
+          "file": "pdf-and-email.spec.ts",
+          "line": 9,
           "column": 6,
           "specs": [
             {
-              "title": "should display clients list with enhanced UI",
+              "title": "quote PDF endpoint should be accessible and return PDF",
               "ok": true,
               "tags": [],
               "tests": [
@@ -122,17 +130,139 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3673,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:40.658Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-4f5d6cb00af1c5f8609c",
-              "file": "client-management-improvements.spec.ts",
-              "line": 28,
+              "id": "08b653a4c850302e038b-b7e5e51bb4dec32e98da",
+              "file": "pdf-and-email.spec.ts",
+              "line": 77,
               "column": 3
             },
             {
-              "title": "should navigate to client detail page",
+              "title": "quote email endpoint should accept valid recipient",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Quote not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 92,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "skipped",
+                      "duration": 3351,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:40.640Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Quote not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 92,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-fb9e2f6de4929329ac71",
+              "file": "pdf-and-email.spec.ts",
+              "line": 91,
+              "column": 3
+            },
+            {
+              "title": "quote email endpoint should handle empty message",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Quote not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 110,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 3340,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:40.655Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Quote not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 110,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-08f2f3963ac784614ee0",
+              "file": "pdf-and-email.spec.ts",
+              "line": 109,
+              "column": 3
+            },
+            {
+              "title": "quote PDF should return 404 for non-existent quote",
               "ok": true,
               "tags": [],
               "tests": [
@@ -142,17 +272,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4317,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:40.650Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-24a24c5eb23b808a104b",
-              "file": "client-management-improvements.spec.ts",
-              "line": 43,
+              "id": "08b653a4c850302e038b-ac1d308fd9ec647a4550",
+              "file": "pdf-and-email.spec.ts",
+              "line": 127,
               "column": 3
             },
             {
-              "title": "should display client information on detail page",
+              "title": "unauthenticated request should not access PDF",
               "ok": true,
               "tags": [],
               "tests": [
@@ -162,17 +306,523 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 8,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:44.018Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-f1bd7348eefc3ddddacf",
-              "file": "client-management-improvements.spec.ts",
-              "line": 61,
+              "id": "08b653a4c850302e038b-ef33c09bb724c1e64242",
+              "file": "pdf-and-email.spec.ts",
+              "line": 139,
               "column": 3
             },
             {
-              "title": "should display analytics for client",
+              "title": "quote PDF endpoint should be accessible and return PDF",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2072,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:48.184Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-2a7b437dea306a7e1d14",
+              "file": "pdf-and-email.spec.ts",
+              "line": 77,
+              "column": 3
+            },
+            {
+              "title": "quote email endpoint should accept valid recipient",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 2545,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m500\u001b[39m\nReceived array: \u001b[31m[200, 201]\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m500\u001b[39m\nReceived array: \u001b[31m[200, 201]\u001b[39m\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:106:24",
+                        "location": {
+                          "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                          "column": 24,
+                          "line": 106
+                        },
+                        "snippet": "  104 |\n  105 |     // Should return success (200 or 201)\n> 106 |     expect([200, 201]).toContain(emailRes.status());\n      |                        ^\n  107 |   });\n  108 |\n  109 |   test('quote email endpoint should handle empty message', async () => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "column": 24,
+                            "line": 106
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m500\u001b[39m\nReceived array: \u001b[31m[200, 201]\u001b[39m\n\n  104 |\n  105 |     // Should return success (200 or 201)\n> 106 |     expect([200, 201]).toContain(emailRes.status());\n      |                        ^\n  107 |   });\n  108 |\n  109 |   test('quote email endpoint should handle empty message', async () => {\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:106:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:48.697Z",
+                      "annotations": [],
+                      "attachments": [],
+                      "errorLocation": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "column": 24,
+                        "line": 106
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-dd993f41bde11716dc84",
+              "file": "pdf-and-email.spec.ts",
+              "line": 91,
+              "column": 3
+            },
+            {
+              "title": "quote email endpoint should handle empty message",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 2612,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m500\u001b[39m\nReceived array: \u001b[31m[200, 201, 400, 422]\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m500\u001b[39m\nReceived array: \u001b[31m[200, 201, 400, 422]\u001b[39m\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:124:34",
+                        "location": {
+                          "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                          "column": 34,
+                          "line": 124
+                        },
+                        "snippet": "  122 |\n  123 |     // Should handle gracefully\n> 124 |     expect([200, 201, 400, 422]).toContain(emailRes.status());\n      |                                  ^\n  125 |   });\n  126 |\n  127 |   test('quote PDF should return 404 for non-existent quote', async () => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "column": 34,
+                            "line": 124
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m500\u001b[39m\nReceived array: \u001b[31m[200, 201, 400, 422]\u001b[39m\n\n  122 |\n  123 |     // Should handle gracefully\n> 124 |     expect([200, 201, 400, 422]).toContain(emailRes.status());\n      |                                  ^\n  125 |   });\n  126 |\n  127 |   test('quote PDF should return 404 for non-existent quote', async () => {\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:124:34"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:48.946Z",
+                      "annotations": [],
+                      "attachments": [],
+                      "errorLocation": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "column": 34,
+                        "line": 124
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-ef3e5b85b7846133e3b0",
+              "file": "pdf-and-email.spec.ts",
+              "line": 109,
+              "column": 3
+            },
+            {
+              "title": "quote PDF should return 404 for non-existent quote",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1854,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:49.321Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-4d35771b4aa75c5b2d9e",
+              "file": "pdf-and-email.spec.ts",
+              "line": 127,
+              "column": 3
+            },
+            {
+              "title": "unauthenticated request should not access PDF",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 8,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:50.286Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-e05e56d094972f9396b2",
+              "file": "pdf-and-email.spec.ts",
+              "line": 139,
+              "column": 3
+            },
+            {
+              "title": "quote PDF endpoint should be accessible and return PDF",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2990,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:55.596Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-c931b8585436c1542b76",
+              "file": "pdf-and-email.spec.ts",
+              "line": 77,
+              "column": 3
+            },
+            {
+              "title": "quote email endpoint should accept valid recipient",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 2567,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m500\u001b[39m\nReceived array: \u001b[31m[200, 201]\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m500\u001b[39m\nReceived array: \u001b[31m[200, 201]\u001b[39m\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:106:24",
+                        "location": {
+                          "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                          "column": 24,
+                          "line": 106
+                        },
+                        "snippet": "  104 |\n  105 |     // Should return success (200 or 201)\n> 106 |     expect([200, 201]).toContain(emailRes.status());\n      |                        ^\n  107 |   });\n  108 |\n  109 |   test('quote email endpoint should handle empty message', async () => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "column": 24,
+                            "line": 106
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m500\u001b[39m\nReceived array: \u001b[31m[200, 201]\u001b[39m\n\n  104 |\n  105 |     // Should return success (200 or 201)\n> 106 |     expect([200, 201]).toContain(emailRes.status());\n      |                        ^\n  107 |   });\n  108 |\n  109 |   test('quote email endpoint should handle empty message', async () => {\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:106:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:59.790Z",
+                      "annotations": [],
+                      "attachments": [],
+                      "errorLocation": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "column": 24,
+                        "line": 106
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-bcf6263502425e57237b",
+              "file": "pdf-and-email.spec.ts",
+              "line": 91,
+              "column": 3
+            },
+            {
+              "title": "quote email endpoint should handle empty message",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 2996,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m500\u001b[39m\nReceived array: \u001b[31m[200, 201, 400, 422]\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m500\u001b[39m\nReceived array: \u001b[31m[200, 201, 400, 422]\u001b[39m\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:124:34",
+                        "location": {
+                          "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                          "column": 34,
+                          "line": 124
+                        },
+                        "snippet": "  122 |\n  123 |     // Should handle gracefully\n> 124 |     expect([200, 201, 400, 422]).toContain(emailRes.status());\n      |                                  ^\n  125 |   });\n  126 |\n  127 |   test('quote PDF should return 404 for non-existent quote', async () => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "column": 34,
+                            "line": 124
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m500\u001b[39m\nReceived array: \u001b[31m[200, 201, 400, 422]\u001b[39m\n\n  122 |\n  123 |     // Should handle gracefully\n> 124 |     expect([200, 201, 400, 422]).toContain(emailRes.status());\n      |                                  ^\n  125 |   });\n  126 |\n  127 |   test('quote PDF should return 404 for non-existent quote', async () => {\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:124:34"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:16:00.204Z",
+                      "annotations": [],
+                      "attachments": [],
+                      "errorLocation": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "column": 34,
+                        "line": 124
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-63ef88b1711455500bd5",
+              "file": "pdf-and-email.spec.ts",
+              "line": 109,
+              "column": 3
+            },
+            {
+              "title": "quote PDF should return 404 for non-existent quote",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 6,
+                      "error": {
+                        "message": "Error: apiRequestContext.get: Target page, context or browser has been closed",
+                        "stack": "Error: apiRequestContext.get: Target page, context or browser has been closed\n    at makeAuthenticatedRequest (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:65:22)\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:130:31",
+                        "location": {
+                          "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts",
+                          "column": 22,
+                          "line": 65
+                        },
+                        "snippet": "   at setup.ts:65\n\n  63 |   switch (method.toUpperCase()) {\n  64 |     case 'GET':\n> 65 |       return request.get(url, options);\n     |                      ^\n  66 |     case 'POST':\n  67 |       return request.post(url, options);\n  68 |     case 'PATCH':"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts",
+                            "column": 22,
+                            "line": 65
+                          },
+                          "message": "Error: apiRequestContext.get: Target page, context or browser has been closed\n\n   at setup.ts:65\n\n  63 |   switch (method.toUpperCase()) {\n  64 |     case 'GET':\n> 65 |       return request.get(url, options);\n     |                      ^\n  66 |     case 'POST':\n  67 |       return request.post(url, options);\n  68 |     case 'PATCH':\n    at makeAuthenticatedRequest (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:65:22)\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:130:31"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:58.610Z",
+                      "annotations": [],
+                      "attachments": [],
+                      "errorLocation": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts",
+                        "column": 22,
+                        "line": 65
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-18bc3a5f0578baae1aa6",
+              "file": "pdf-and-email.spec.ts",
+              "line": 127,
+              "column": 3
+            },
+            {
+              "title": "unauthenticated request should not access PDF",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 2133,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m404\u001b[39m\nReceived array: \u001b[31m[200, 301, 302, 307, 401, 403, 429]\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m404\u001b[39m\nReceived array: \u001b[31m[200, 301, 302, 307, 401, 403, 429]\u001b[39m\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:144:49",
+                        "location": {
+                          "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                          "column": 49,
+                          "line": 144
+                        },
+                        "snippet": "  142 |     \n  143 |     // Should return unauthorized, redirect, or rate limited\n> 144 |     expect([200, 301, 302, 307, 401, 403, 429]).toContain(response.status());\n      |                                                 ^\n  145 |   });\n  146 | });\n  147 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "column": 49,
+                            "line": 144
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m404\u001b[39m\nReceived array: \u001b[31m[200, 301, 302, 307, 401, 403, 429]\u001b[39m\n\n  142 |     \n  143 |     // Should return unauthorized, redirect, or rate limited\n> 144 |     expect([200, 301, 302, 307, 401, 403, 429]).toContain(response.status());\n      |                                                 ^\n  145 |   });\n  146 | });\n  147 |\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:144:49"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:59.543Z",
+                      "annotations": [],
+                      "attachments": [],
+                      "errorLocation": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "column": 49,
+                        "line": 144
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-e3c976ce92f6920ec1ef",
+              "file": "pdf-and-email.spec.ts",
+              "line": 139,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Invoice PDF and Email Features",
+          "file": "pdf-and-email.spec.ts",
+          "line": 148,
+          "column": 6,
+          "specs": [
+            {
+              "title": "invoice PDF endpoint should be accessible",
               "ok": true,
               "tags": [],
               "tests": [
@@ -182,17 +832,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2792,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:44.020Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-a3f3382a6a912672fb41",
-              "file": "client-management-improvements.spec.ts",
-              "line": 78,
+              "id": "08b653a4c850302e038b-23e9e213fdf8a9beb4e8",
+              "file": "pdf-and-email.spec.ts",
+              "line": 233,
               "column": 3
             },
             {
-              "title": "should add tags to client",
+              "title": "invoice email endpoint should accept valid recipient",
               "ok": true,
               "tags": [],
               "tests": [
@@ -202,17 +866,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 3935,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:44.041Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-3efe879073025d73f803",
-              "file": "client-management-improvements.spec.ts",
-              "line": 95,
+              "id": "08b653a4c850302e038b-b43695e7ac8904cf26b3",
+              "file": "pdf-and-email.spec.ts",
+              "line": 247,
               "column": 3
             },
             {
-              "title": "should remove tags from client",
+              "title": "invoice PDF should return 404 for non-existent invoice",
               "ok": true,
               "tags": [],
               "tests": [
@@ -222,17 +900,287 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2565,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:44.348Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-644b0f818b19cb0c8f33",
-              "file": "client-management-improvements.spec.ts",
-              "line": 122,
+              "id": "08b653a4c850302e038b-9b6bfbf3de45f31ac3a5",
+              "file": "pdf-and-email.spec.ts",
+              "line": 264,
               "column": 3
             },
             {
-              "title": "should display communication tabs",
+              "title": "invoice PDF endpoint should be accessible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2317,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:50.303Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-74099336e29d860bc7b2",
+              "file": "pdf-and-email.spec.ts",
+              "line": 233,
+              "column": 3
+            },
+            {
+              "title": "invoice email endpoint should accept valid recipient",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2458,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:51.189Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-db562b7b85e6d9e2a108",
+              "file": "pdf-and-email.spec.ts",
+              "line": 247,
+              "column": 3
+            },
+            {
+              "title": "invoice PDF should return 404 for non-existent invoice",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2280,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:51.773Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-447a77b97e7041c0a033",
+              "file": "pdf-and-email.spec.ts",
+              "line": 264,
+              "column": 3
+            },
+            {
+              "title": "invoice PDF endpoint should be accessible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2630,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:16:00.960Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-fef9fe7b4f8b6bb4d61a",
+              "file": "pdf-and-email.spec.ts",
+              "line": 233,
+              "column": 3
+            },
+            {
+              "title": "invoice email endpoint should accept valid recipient",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Invoice not created in setup",
+                      "location": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "line": 248,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 1056,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:16:02.209Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Invoice not created in setup",
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "line": 248,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "08b653a4c850302e038b-ef121d7ed79b100e1c7f",
+              "file": "pdf-and-email.spec.ts",
+              "line": 247,
+              "column": 3
+            },
+            {
+              "title": "invoice PDF should return 404 for non-existent invoice",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 1135,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m404\u001b[39m\nReceived: \u001b[31m429\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m404\u001b[39m\nReceived: \u001b[31m429\u001b[39m\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:273:34",
+                        "location": {
+                          "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                          "column": 34,
+                          "line": 273
+                        },
+                        "snippet": "  271 |     );\n  272 |\n> 273 |     expect(pdfResponse.status()).toBe(404);\n      |                                  ^\n  274 |   });\n  275 | });\n  276 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                            "column": 34,
+                            "line": 273
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m404\u001b[39m\nReceived: \u001b[31m429\u001b[39m\n\n  271 |     );\n  272 |\n> 273 |     expect(pdfResponse.status()).toBe(404);\n      |                                  ^\n  274 |   });\n  275 | });\n  276 |\n    at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:273:34"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:16:02.892Z",
+                      "annotations": [],
+                      "attachments": [],
+                      "errorLocation": {
+                        "file": "/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts",
+                        "column": 34,
+                        "line": 273
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "08b653a4c850302e038b-576aaef2bdd63e9516ab",
+              "file": "pdf-and-email.spec.ts",
+              "line": 264,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "UI Components Verification",
+          "file": "pdf-and-email.spec.ts",
+          "line": 277,
+          "column": 6,
+          "specs": [
+            {
+              "title": "quotes page should load without critical errors",
               "ok": true,
               "tags": [],
               "tests": [
@@ -242,17 +1190,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1683,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:44.981Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-97dfb1ee50449fee12a8",
-              "file": "client-management-improvements.spec.ts",
-              "line": 156,
+              "id": "08b653a4c850302e038b-3a77c64755764cd10829",
+              "file": "pdf-and-email.spec.ts",
+              "line": 278,
               "column": 3
             },
             {
-              "title": "should log communication with client",
+              "title": "app should have proper component structure",
               "ok": true,
               "tags": [],
               "tests": [
@@ -262,17 +1224,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1272,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:46.821Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-39ce8223fc59bc21e8b4",
-              "file": "client-management-improvements.spec.ts",
-              "line": 172,
+              "id": "08b653a4c850302e038b-d66d6a6d9864d4f50e38",
+              "file": "pdf-and-email.spec.ts",
+              "line": 289,
               "column": 3
             },
             {
-              "title": "should display quote history in quotes tab",
+              "title": "navigation should be properly implemented",
               "ok": true,
               "tags": [],
               "tests": [
@@ -282,117 +1258,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1460,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:46.921Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-1df5fa7ad140482d0030",
-              "file": "client-management-improvements.spec.ts",
-              "line": 203,
+              "id": "08b653a4c850302e038b-94416efd4eaecba798c5",
+              "file": "pdf-and-email.spec.ts",
+              "line": 301,
               "column": 3
             },
             {
-              "title": "should navigate back to clients list",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-59424c76f0795fa5fc68",
-              "file": "client-management-improvements.spec.ts",
-              "line": 217,
-              "column": 3
-            },
-            {
-              "title": "should filter communication by type",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-c7af40b5d16c0a36265d",
-              "file": "client-management-improvements.spec.ts",
-              "line": 236,
-              "column": 3
-            },
-            {
-              "title": "should delete communication",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-3963deec756c71442dbd",
-              "file": "client-management-improvements.spec.ts",
-              "line": 274,
-              "column": 3
-            },
-            {
-              "title": "should show empty state for quotes when no quotes exist",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-dedd9cd702ce7393bc8e",
-              "file": "client-management-improvements.spec.ts",
-              "line": 308,
-              "column": 3
-            },
-            {
-              "title": "should display client metrics correctly",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-17d62a95dc239b7fc11e",
-              "file": "client-management-improvements.spec.ts",
-              "line": 331,
-              "column": 3
-            },
-            {
-              "title": "should display clients list with enhanced UI",
+              "title": "quotes page should load without critical errors",
               "ok": true,
               "tags": [],
               "tests": [
@@ -402,17 +1292,31 @@
                   "expectedStatus": "passed",
                   "projectId": "firefox",
                   "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4158,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:52.098Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-697bf754a2639a8ef441",
-              "file": "client-management-improvements.spec.ts",
-              "line": 28,
+              "id": "08b653a4c850302e038b-e788d575d70ac87f5703",
+              "file": "pdf-and-email.spec.ts",
+              "line": 278,
               "column": 3
             },
             {
-              "title": "should navigate to client detail page",
+              "title": "app should have proper component structure",
               "ok": true,
               "tags": [],
               "tests": [
@@ -422,17 +1326,31 @@
                   "expectedStatus": "passed",
                   "projectId": "firefox",
                   "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4495,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:52.629Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-061569bd204f05bf9201",
-              "file": "client-management-improvements.spec.ts",
-              "line": 43,
+              "id": "08b653a4c850302e038b-a4245d489de2d60561e1",
+              "file": "pdf-and-email.spec.ts",
+              "line": 289,
               "column": 3
             },
             {
-              "title": "should display client information on detail page",
+              "title": "navigation should be properly implemented",
               "ok": true,
               "tags": [],
               "tests": [
@@ -442,237 +1360,31 @@
                   "expectedStatus": "passed",
                   "projectId": "firefox",
                   "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4339,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:15:53.656Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-6475d3bd486ba8482e68",
-              "file": "client-management-improvements.spec.ts",
-              "line": 61,
+              "id": "08b653a4c850302e038b-61e6aef3df07645e4b73",
+              "file": "pdf-and-email.spec.ts",
+              "line": 301,
               "column": 3
             },
             {
-              "title": "should display analytics for client",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-dfa745c3ced605538045",
-              "file": "client-management-improvements.spec.ts",
-              "line": 78,
-              "column": 3
-            },
-            {
-              "title": "should add tags to client",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-0f2b8a42e313b59bb034",
-              "file": "client-management-improvements.spec.ts",
-              "line": 95,
-              "column": 3
-            },
-            {
-              "title": "should remove tags from client",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-dbfa7326af1955566fde",
-              "file": "client-management-improvements.spec.ts",
-              "line": 122,
-              "column": 3
-            },
-            {
-              "title": "should display communication tabs",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-8306fd2b9a41f5c165ee",
-              "file": "client-management-improvements.spec.ts",
-              "line": 156,
-              "column": 3
-            },
-            {
-              "title": "should log communication with client",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-7dbdfbbf97c48cc2108f",
-              "file": "client-management-improvements.spec.ts",
-              "line": 172,
-              "column": 3
-            },
-            {
-              "title": "should display quote history in quotes tab",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-b766831b5e1eed69d19c",
-              "file": "client-management-improvements.spec.ts",
-              "line": 203,
-              "column": 3
-            },
-            {
-              "title": "should navigate back to clients list",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-41013ddf6099b23c9448",
-              "file": "client-management-improvements.spec.ts",
-              "line": 217,
-              "column": 3
-            },
-            {
-              "title": "should filter communication by type",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-5e21004daa16a1d5e57f",
-              "file": "client-management-improvements.spec.ts",
-              "line": 236,
-              "column": 3
-            },
-            {
-              "title": "should delete communication",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-24fbe05ea40024f2f472",
-              "file": "client-management-improvements.spec.ts",
-              "line": 274,
-              "column": 3
-            },
-            {
-              "title": "should show empty state for quotes when no quotes exist",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-275cd51b6810c28e4368",
-              "file": "client-management-improvements.spec.ts",
-              "line": 308,
-              "column": 3
-            },
-            {
-              "title": "should display client metrics correctly",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-8ab450043081e5897522",
-              "file": "client-management-improvements.spec.ts",
-              "line": 331,
-              "column": 3
-            },
-            {
-              "title": "should display clients list with enhanced UI",
+              "title": "quotes page should load without critical errors",
               "ok": true,
               "tags": [],
               "tests": [
@@ -682,17 +1394,31 @@
                   "expectedStatus": "passed",
                   "projectId": "webkit",
                   "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 17,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2748,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:16:03.787Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-21a2017fcb4d1468ea27",
-              "file": "client-management-improvements.spec.ts",
-              "line": 28,
+              "id": "08b653a4c850302e038b-c69bb94f0eee71cd7a7a",
+              "file": "pdf-and-email.spec.ts",
+              "line": 278,
               "column": 3
             },
             {
-              "title": "should navigate to client detail page",
+              "title": "app should have proper component structure",
               "ok": true,
               "tags": [],
               "tests": [
@@ -702,17 +1428,31 @@
                   "expectedStatus": "passed",
                   "projectId": "webkit",
                   "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2805,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:16:03.279Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-12da0ab7babd16e75760",
-              "file": "client-management-improvements.spec.ts",
-              "line": 43,
+              "id": "08b653a4c850302e038b-166461569cec867947b3",
+              "file": "pdf-and-email.spec.ts",
+              "line": 289,
               "column": 3
             },
             {
-              "title": "should display client information on detail page",
+              "title": "navigation should be properly implemented",
               "ok": true,
               "tags": [],
               "tests": [
@@ -722,233 +1462,27 @@
                   "expectedStatus": "passed",
                   "projectId": "webkit",
                   "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2747,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-17T14:16:03.608Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d3737a1b72436ed0e854-8c26e66b16569cd116a8",
-              "file": "client-management-improvements.spec.ts",
-              "line": 61,
-              "column": 3
-            },
-            {
-              "title": "should display analytics for client",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-47f3e8979241f4378bcd",
-              "file": "client-management-improvements.spec.ts",
-              "line": 78,
-              "column": 3
-            },
-            {
-              "title": "should add tags to client",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-dc852e26ad55473cb4d3",
-              "file": "client-management-improvements.spec.ts",
-              "line": 95,
-              "column": 3
-            },
-            {
-              "title": "should remove tags from client",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-4c909a80f7f96e0ea4f6",
-              "file": "client-management-improvements.spec.ts",
-              "line": 122,
-              "column": 3
-            },
-            {
-              "title": "should display communication tabs",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-31eb043e1a045c393c2b",
-              "file": "client-management-improvements.spec.ts",
-              "line": 156,
-              "column": 3
-            },
-            {
-              "title": "should log communication with client",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-449db8cb2d1ce492761d",
-              "file": "client-management-improvements.spec.ts",
-              "line": 172,
-              "column": 3
-            },
-            {
-              "title": "should display quote history in quotes tab",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-8ecca32a3879a83e4c51",
-              "file": "client-management-improvements.spec.ts",
-              "line": 203,
-              "column": 3
-            },
-            {
-              "title": "should navigate back to clients list",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-61ab28206fe34550c726",
-              "file": "client-management-improvements.spec.ts",
-              "line": 217,
-              "column": 3
-            },
-            {
-              "title": "should filter communication by type",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-e74f3563142818af2a92",
-              "file": "client-management-improvements.spec.ts",
-              "line": 236,
-              "column": 3
-            },
-            {
-              "title": "should delete communication",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-d37c57ffb1d0351f060f",
-              "file": "client-management-improvements.spec.ts",
-              "line": 274,
-              "column": 3
-            },
-            {
-              "title": "should show empty state for quotes when no quotes exist",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-8d6949d40fca73602b53",
-              "file": "client-management-improvements.spec.ts",
-              "line": 308,
-              "column": 3
-            },
-            {
-              "title": "should display client metrics correctly",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d3737a1b72436ed0e854-76589838cc68f1c233fd",
-              "file": "client-management-improvements.spec.ts",
-              "line": 331,
+              "id": "08b653a4c850302e038b-aa2b5eb03d0459893966",
+              "file": "pdf-and-email.spec.ts",
+              "line": 301,
               "column": 3
             }
           ]
@@ -958,11 +1492,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-11-14T14:26:47.003Z",
-    "duration": 194.57799999999997,
-    "expected": 0,
-    "skipped": 42,
-    "unexpected": 0,
+    "startTime": "2025-11-17T14:15:39.617Z",
+    "duration": 27535.539999999997,
+    "expected": 23,
+    "skipped": 3,
+    "unexpected": 7,
     "flaky": 0
   }
 }

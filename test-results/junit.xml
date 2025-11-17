@@ -1,176 +1,218 @@
-<testsuites id="" name="" tests="42" failures="0" skipped="42" errors="0" time="0.19457799999999997">
-<testsuite name="client-management-improvements.spec.ts" timestamp="2025-11-14T14:26:47.196Z" hostname="chromium" tests="14" failures="0" skipped="14" time="0" errors="0">
-<testcase name="Client Management UI Improvements › should display clients list with enhanced UI" classname="client-management-improvements.spec.ts" time="0">
+<testsuites id="" name="" tests="33" failures="7" skipped="3" errors="0" time="27.535539999999997">
+<testsuite name="pdf-and-email.spec.ts" timestamp="2025-11-17T14:15:40.009Z" hostname="chromium" tests="11" failures="0" skipped="2" time="28.396" errors="0">
+<testcase name="PDF Download and Email API Features › quote PDF endpoint should be accessible and return PDF" classname="pdf-and-email.spec.ts" time="3.673">
+</testcase>
+<testcase name="PDF Download and Email API Features › quote email endpoint should accept valid recipient" classname="pdf-and-email.spec.ts" time="3.351">
+<properties>
+<property name="skip" value="Quote not created in setup">
+</property>
+</properties>
 <skipped>
 </skipped>
 </testcase>
-<testcase name="Client Management UI Improvements › should navigate to client detail page" classname="client-management-improvements.spec.ts" time="0">
+<testcase name="PDF Download and Email API Features › quote email endpoint should handle empty message" classname="pdf-and-email.spec.ts" time="3.34">
+<properties>
+<property name="skip" value="Quote not created in setup">
+</property>
+</properties>
 <skipped>
 </skipped>
 </testcase>
-<testcase name="Client Management UI Improvements › should display client information on detail page" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="PDF Download and Email API Features › quote PDF should return 404 for non-existent quote" classname="pdf-and-email.spec.ts" time="4.317">
 </testcase>
-<testcase name="Client Management UI Improvements › should display analytics for client" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="PDF Download and Email API Features › unauthenticated request should not access PDF" classname="pdf-and-email.spec.ts" time="0.008">
 </testcase>
-<testcase name="Client Management UI Improvements › should add tags to client" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Invoice PDF and Email Features › invoice PDF endpoint should be accessible" classname="pdf-and-email.spec.ts" time="2.792">
 </testcase>
-<testcase name="Client Management UI Improvements › should remove tags from client" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Invoice PDF and Email Features › invoice email endpoint should accept valid recipient" classname="pdf-and-email.spec.ts" time="3.935">
 </testcase>
-<testcase name="Client Management UI Improvements › should display communication tabs" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Invoice PDF and Email Features › invoice PDF should return 404 for non-existent invoice" classname="pdf-and-email.spec.ts" time="2.565">
 </testcase>
-<testcase name="Client Management UI Improvements › should log communication with client" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="UI Components Verification › quotes page should load without critical errors" classname="pdf-and-email.spec.ts" time="1.683">
 </testcase>
-<testcase name="Client Management UI Improvements › should display quote history in quotes tab" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="UI Components Verification › app should have proper component structure" classname="pdf-and-email.spec.ts" time="1.272">
 </testcase>
-<testcase name="Client Management UI Improvements › should navigate back to clients list" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should filter communication by type" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should delete communication" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should show empty state for quotes when no quotes exist" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should display client metrics correctly" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="UI Components Verification › navigation should be properly implemented" classname="pdf-and-email.spec.ts" time="1.46">
 </testcase>
 </testsuite>
-<testsuite name="client-management-improvements.spec.ts" timestamp="2025-11-14T14:26:47.196Z" hostname="firefox" tests="14" failures="0" skipped="14" time="0" errors="0">
-<testcase name="Client Management UI Improvements › should display clients list with enhanced UI" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testsuite name="pdf-and-email.spec.ts" timestamp="2025-11-17T14:15:40.009Z" hostname="firefox" tests="11" failures="2" skipped="0" time="29.138" errors="0">
+<testcase name="PDF Download and Email API Features › quote PDF endpoint should be accessible and return PDF" classname="pdf-and-email.spec.ts" time="2.072">
 </testcase>
-<testcase name="Client Management UI Improvements › should navigate to client detail page" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="PDF Download and Email API Features › quote email endpoint should accept valid recipient" classname="pdf-and-email.spec.ts" time="2.545">
+<failure message="pdf-and-email.spec.ts:91:3 quote email endpoint should accept valid recipient" type="FAILURE">
+<![CDATA[  [firefox] › pdf-and-email.spec.ts:91:3 › PDF Download and Email API Features › quote email endpoint should accept valid recipient 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected value: 500
+    Received array: [200, 201]
+
+      104 |
+      105 |     // Should return success (200 or 201)
+    > 106 |     expect([200, 201]).toContain(emailRes.status());
+          |                        ^
+      107 |   });
+      108 |
+      109 |   test('quote email endpoint should handle empty message', async () => {
+        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:106:24
+]]>
+</failure>
 </testcase>
-<testcase name="Client Management UI Improvements › should display client information on detail page" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="PDF Download and Email API Features › quote email endpoint should handle empty message" classname="pdf-and-email.spec.ts" time="2.612">
+<failure message="pdf-and-email.spec.ts:109:3 quote email endpoint should handle empty message" type="FAILURE">
+<![CDATA[  [firefox] › pdf-and-email.spec.ts:109:3 › PDF Download and Email API Features › quote email endpoint should handle empty message 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected value: 500
+    Received array: [200, 201, 400, 422]
+
+      122 |
+      123 |     // Should handle gracefully
+    > 124 |     expect([200, 201, 400, 422]).toContain(emailRes.status());
+          |                                  ^
+      125 |   });
+      126 |
+      127 |   test('quote PDF should return 404 for non-existent quote', async () => {
+        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:124:34
+]]>
+</failure>
 </testcase>
-<testcase name="Client Management UI Improvements › should display analytics for client" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="PDF Download and Email API Features › quote PDF should return 404 for non-existent quote" classname="pdf-and-email.spec.ts" time="1.854">
 </testcase>
-<testcase name="Client Management UI Improvements › should add tags to client" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="PDF Download and Email API Features › unauthenticated request should not access PDF" classname="pdf-and-email.spec.ts" time="0.008">
 </testcase>
-<testcase name="Client Management UI Improvements › should remove tags from client" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Invoice PDF and Email Features › invoice PDF endpoint should be accessible" classname="pdf-and-email.spec.ts" time="2.317">
 </testcase>
-<testcase name="Client Management UI Improvements › should display communication tabs" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Invoice PDF and Email Features › invoice email endpoint should accept valid recipient" classname="pdf-and-email.spec.ts" time="2.458">
 </testcase>
-<testcase name="Client Management UI Improvements › should log communication with client" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Invoice PDF and Email Features › invoice PDF should return 404 for non-existent invoice" classname="pdf-and-email.spec.ts" time="2.28">
 </testcase>
-<testcase name="Client Management UI Improvements › should display quote history in quotes tab" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="UI Components Verification › quotes page should load without critical errors" classname="pdf-and-email.spec.ts" time="4.158">
 </testcase>
-<testcase name="Client Management UI Improvements › should navigate back to clients list" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="UI Components Verification › app should have proper component structure" classname="pdf-and-email.spec.ts" time="4.495">
 </testcase>
-<testcase name="Client Management UI Improvements › should filter communication by type" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should delete communication" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should show empty state for quotes when no quotes exist" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should display client metrics correctly" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="UI Components Verification › navigation should be properly implemented" classname="pdf-and-email.spec.ts" time="4.339">
 </testcase>
 </testsuite>
-<testsuite name="client-management-improvements.spec.ts" timestamp="2025-11-14T14:26:47.196Z" hostname="webkit" tests="14" failures="0" skipped="14" time="0" errors="0">
-<testcase name="Client Management UI Improvements › should display clients list with enhanced UI" classname="client-management-improvements.spec.ts" time="0">
+<testsuite name="pdf-and-email.spec.ts" timestamp="2025-11-17T14:15:40.009Z" hostname="webkit" tests="11" failures="5" skipped="1" time="23.813" errors="0">
+<testcase name="PDF Download and Email API Features › quote PDF endpoint should be accessible and return PDF" classname="pdf-and-email.spec.ts" time="2.99">
+</testcase>
+<testcase name="PDF Download and Email API Features › quote email endpoint should accept valid recipient" classname="pdf-and-email.spec.ts" time="2.567">
+<failure message="pdf-and-email.spec.ts:91:3 quote email endpoint should accept valid recipient" type="FAILURE">
+<![CDATA[  [webkit] › pdf-and-email.spec.ts:91:3 › PDF Download and Email API Features › quote email endpoint should accept valid recipient 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected value: 500
+    Received array: [200, 201]
+
+      104 |
+      105 |     // Should return success (200 or 201)
+    > 106 |     expect([200, 201]).toContain(emailRes.status());
+          |                        ^
+      107 |   });
+      108 |
+      109 |   test('quote email endpoint should handle empty message', async () => {
+        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:106:24
+]]>
+</failure>
+</testcase>
+<testcase name="PDF Download and Email API Features › quote email endpoint should handle empty message" classname="pdf-and-email.spec.ts" time="2.996">
+<failure message="pdf-and-email.spec.ts:109:3 quote email endpoint should handle empty message" type="FAILURE">
+<![CDATA[  [webkit] › pdf-and-email.spec.ts:109:3 › PDF Download and Email API Features › quote email endpoint should handle empty message 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected value: 500
+    Received array: [200, 201, 400, 422]
+
+      122 |
+      123 |     // Should handle gracefully
+    > 124 |     expect([200, 201, 400, 422]).toContain(emailRes.status());
+          |                                  ^
+      125 |   });
+      126 |
+      127 |   test('quote PDF should return 404 for non-existent quote', async () => {
+        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:124:34
+]]>
+</failure>
+</testcase>
+<testcase name="PDF Download and Email API Features › quote PDF should return 404 for non-existent quote" classname="pdf-and-email.spec.ts" time="0.006">
+<failure message="pdf-and-email.spec.ts:127:3 quote PDF should return 404 for non-existent quote" type="FAILURE">
+<![CDATA[  [webkit] › pdf-and-email.spec.ts:127:3 › PDF Download and Email API Features › quote PDF should return 404 for non-existent quote 
+
+    Error: apiRequestContext.get: Target page, context or browser has been closed
+
+       at setup.ts:65
+
+      63 |   switch (method.toUpperCase()) {
+      64 |     case 'GET':
+    > 65 |       return request.get(url, options);
+         |                      ^
+      66 |     case 'POST':
+      67 |       return request.post(url, options);
+      68 |     case 'PATCH':
+        at makeAuthenticatedRequest (/Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/setup.ts:65:22)
+        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:130:31
+]]>
+</failure>
+</testcase>
+<testcase name="PDF Download and Email API Features › unauthenticated request should not access PDF" classname="pdf-and-email.spec.ts" time="2.133">
+<failure message="pdf-and-email.spec.ts:139:3 unauthenticated request should not access PDF" type="FAILURE">
+<![CDATA[  [webkit] › pdf-and-email.spec.ts:139:3 › PDF Download and Email API Features › unauthenticated request should not access PDF 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected value: 404
+    Received array: [200, 301, 302, 307, 401, 403, 429]
+
+      142 |     
+      143 |     // Should return unauthorized, redirect, or rate limited
+    > 144 |     expect([200, 301, 302, 307, 401, 403, 429]).toContain(response.status());
+          |                                                 ^
+      145 |   });
+      146 | });
+      147 |
+        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:144:49
+]]>
+</failure>
+</testcase>
+<testcase name="Invoice PDF and Email Features › invoice PDF endpoint should be accessible" classname="pdf-and-email.spec.ts" time="2.63">
+</testcase>
+<testcase name="Invoice PDF and Email Features › invoice email endpoint should accept valid recipient" classname="pdf-and-email.spec.ts" time="1.056">
+<properties>
+<property name="skip" value="Invoice not created in setup">
+</property>
+</properties>
 <skipped>
 </skipped>
 </testcase>
-<testcase name="Client Management UI Improvements › should navigate to client detail page" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Invoice PDF and Email Features › invoice PDF should return 404 for non-existent invoice" classname="pdf-and-email.spec.ts" time="1.135">
+<failure message="pdf-and-email.spec.ts:264:3 invoice PDF should return 404 for non-existent invoice" type="FAILURE">
+<![CDATA[  [webkit] › pdf-and-email.spec.ts:264:3 › Invoice PDF and Email Features › invoice PDF should return 404 for non-existent invoice 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 404
+    Received: 429
+
+      271 |     );
+      272 |
+    > 273 |     expect(pdfResponse.status()).toBe(404);
+          |                                  ^
+      274 |   });
+      275 | });
+      276 |
+        at /Users/samanyu/Desktop/AICERA websites and tools/QuoteProGen/tests/e2e/pdf-and-email.spec.ts:273:34
+]]>
+</failure>
 </testcase>
-<testcase name="Client Management UI Improvements › should display client information on detail page" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="UI Components Verification › quotes page should load without critical errors" classname="pdf-and-email.spec.ts" time="2.748">
 </testcase>
-<testcase name="Client Management UI Improvements › should display analytics for client" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="UI Components Verification › app should have proper component structure" classname="pdf-and-email.spec.ts" time="2.805">
 </testcase>
-<testcase name="Client Management UI Improvements › should add tags to client" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should remove tags from client" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should display communication tabs" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should log communication with client" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should display quote history in quotes tab" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should navigate back to clients list" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should filter communication by type" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should delete communication" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should show empty state for quotes when no quotes exist" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Client Management UI Improvements › should display client metrics correctly" classname="client-management-improvements.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="UI Components Verification › navigation should be properly implemented" classname="pdf-and-email.spec.ts" time="2.747">
 </testcase>
 </testsuite>
 </testsuites>

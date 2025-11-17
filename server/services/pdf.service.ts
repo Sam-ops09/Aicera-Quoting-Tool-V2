@@ -1,1019 +1,1524 @@
 import PDFDocument from "pdfkit";
 import { Readable } from "stream";
 import type { Quote, QuoteItem, Client } from "@shared/schema";
+import path from "path";
+import fs from "fs";
 
 interface QuoteWithDetails {
-  quote: Quote;
-  client: Client;
-  items: QuoteItem[];
-  companyName?: string;
-  companyAddress?: string;
-  companyPhone?: string;
-  companyEmail?: string;
-  companyWebsite?: string;
-  companyGSTIN?: string;
+    quote: Quote;
+    client: Client;
+    items: QuoteItem[];
+    companyName?: string;
+    companyAddress?: string;
+    companyPhone?: string;
+    companyEmail?: string;
+    companyWebsite?: string;
+    companyGSTIN?: string;
 }
 
+type InvoicePdfData = QuoteWithDetails & {
+    invoiceNumber: string;
+    dueDate: Date;
+};
+
 export class PDFService {
-  // Page dimensions and margins
-  private static readonly PAGE_WIDTH = 595.28; // A4 width in points
-  private static readonly PAGE_HEIGHT = 841.89; // A4 height in points
-  private static readonly MARGIN_LEFT = 40;
-  private static readonly MARGIN_RIGHT = 40;
-  private static readonly MARGIN_TOP = 100; // Extra space for header
-  private static readonly MARGIN_BOTTOM = 90; // Extra space for footer
-  private static readonly CONTENT_WIDTH = this.PAGE_WIDTH - this.MARGIN_LEFT - this.MARGIN_RIGHT;
+    // Page dimensions and margins
+    private static readonly PAGE_WIDTH = 595.28; // A4 width in points
+    private static readonly PAGE_HEIGHT = 841.89; // A4 height in points
+    private static readonly MARGIN_LEFT = 40;
+    private static readonly MARGIN_RIGHT = 40;
+    private static readonly MARGIN_TOP = 140; // Extra space for header with logo
+    private static readonly MARGIN_BOTTOM = 100; // Reserved for footer
+    private static readonly CONTENT_WIDTH =
+        PDFService.PAGE_WIDTH - PDFService.MARGIN_LEFT - PDFService.MARGIN_RIGHT;
 
-  // Colors - Professional commercial proposal theme
-  private static readonly PRIMARY_COLOR = "#1e3a8a"; // Darker blue for professionalism
-  private static readonly SECONDARY_COLOR = "#475569"; // Slate gray
-  private static readonly ACCENT_COLOR = "#0f172a"; // Dark slate
-  private static readonly LIGHT_GRAY = "#f8fafc"; // Very light gray
-  private static readonly BORDER_COLOR = "#cbd5e1"; // Light slate border
-  private static readonly HEADER_BG = "#1e40af"; // Blue header background
+    // Colors - Professional commercial proposal theme
+    private static readonly PRIMARY_COLOR = "#1e3a8a"; // Darker blue for professionalism
+    private static readonly SECONDARY_COLOR = "#475569"; // Slate gray
+    private static readonly ACCENT_COLOR = "#0f172a"; // Dark slate
+    private static readonly LIGHT_GRAY = "#f8fafc"; // Very light gray
+    private static readonly BORDER_COLOR = "#cbd5e1"; // Light slate border
+    private static readonly HEADER_BG = "#1e40af"; // Blue header background
 
-  static generateQuotePDF(data: QuoteWithDetails): Readable {
-    const doc = new PDFDocument({
-      size: "A4",
-      margins: {
-        top: this.MARGIN_TOP,
-        bottom: this.MARGIN_BOTTOM,
-        left: this.MARGIN_LEFT,
-        right: this.MARGIN_RIGHT,
-      },
-      bufferPages: true,
-    });
-
-    const buffers: Buffer[] = [];
-    doc.on("data", (buffer: Buffer) => buffers.push(buffer));
-
-    // Draw header on first page
-    this.drawHeader(doc, data, "COMMERCIAL PROPOSAL");
-
-    // Draw document info section
-    this.drawDocumentInfo(doc, data);
-
-    // Draw client section
-    this.drawClientSection(doc, data);
-
-    // Draw line items table
-    this.drawLineItemsTable(doc, data.items);
-
-    // Draw totals section
-    this.drawTotalsSection(doc, data.quote);
-
-    // Draw notes if present
-    if (data.quote.notes) {
-      this.drawNotesSection(doc, data.quote.notes);
-    }
-
-    // Draw terms and conditions
-    if (data.quote.termsAndConditions) {
-      this.drawTermsAndConditions(doc, data.quote.termsAndConditions);
-    }
-
-    // Draw advanced sections
-    this.drawAdvancedSections(doc, data.quote);
-
-    // Add page numbers and footers to all pages
-    const pageCount = doc.bufferedPageRange().count;
-    for (let i = 0; i < pageCount; i++) {
-      doc.switchToPage(i);
-      this.drawFooter(doc, data, i + 1, pageCount);
-    }
-
-    doc.end();
-    return Readable.from(buffers);
-  }
-
-  private static drawHeader(
-    doc: InstanceType<typeof PDFDocument>,
-    data: QuoteWithDetails,
-    title: string
-  ) {
-    const headerHeight = 80;
-    const companyName = data.companyName || "OPTIVALUE TEK";
-
-    // Professional header background with gradient effect
-    doc
-      .rect(0, 0, this.PAGE_WIDTH, headerHeight)
-      .fill(this.HEADER_BG);
-
-    // Add a subtle border at bottom of header
-    doc
-      .strokeColor(this.BORDER_COLOR)
-      .lineWidth(0.5)
-      .moveTo(0, headerHeight)
-      .lineTo(this.PAGE_WIDTH, headerHeight)
-      .stroke();
-
-    // Company name - more prominent
-    doc
-      .fontSize(20)
-      .font("Helvetica-Bold")
-      .fillColor("#FFFFFF")
-      .text(companyName, this.MARGIN_LEFT, 25, {
-        width: this.CONTENT_WIDTH * 0.6,
-        align: "left",
-      });
-
-    // Document title - professional styling
-    doc
-      .fontSize(14)
-      .font("Helvetica-Bold")
-      .fillColor("#FFFFFF")
-      .text(title, this.MARGIN_LEFT + this.CONTENT_WIDTH * 0.65, 30, {
-        width: this.CONTENT_WIDTH * 0.35,
-        align: "right",
-      });
-
-    // Add company tagline or subtitle if available
-    if (data.companyWebsite) {
-      doc
-        .fontSize(9)
-        .font("Helvetica")
-        .fillColor("#E0E7FF")
-        .text(data.companyWebsite, this.MARGIN_LEFT, 55, {
-          width: this.CONTENT_WIDTH * 0.6,
-          align: "left",
+    /**
+     * QUOTE PDF
+     */
+    static generateQuotePDF(data: QuoteWithDetails): PDFKit.PDFDocument {
+        const doc = new PDFDocument({
+            size: "A4",
+            margins: {
+                top: this.MARGIN_TOP,
+                bottom: this.MARGIN_BOTTOM,
+                left: this.MARGIN_LEFT,
+                right: this.MARGIN_RIGHT,
+            },
+            bufferPages: true,
         });
-    }
 
-    // Reset position after header
-    doc.y = this.MARGIN_TOP + 15;
-  }
+        // FIRST PAGE HEADER
+        this.drawHeader(doc, data, "COMMERCIAL PROPOSAL");
 
-  private static drawFooter(
-    doc: InstanceType<typeof PDFDocument>,
-    data: QuoteWithDetails,
-    pageNumber: number,
-    totalPages: number
-  ) {
-    const footerHeight = 75;
-    const footerY = this.PAGE_HEIGHT - footerHeight;
+        // MAIN BODY
+        this.drawDocumentInfo(doc, data);
+        this.drawClientSection(doc, data);
+        this.drawLineItemsTable(doc, data, "COMMERCIAL PROPOSAL");
+        this.drawTotalsSection(doc, data.quote);
 
-    // Footer background
-    doc
-      .rect(0, footerY, this.PAGE_WIDTH, footerHeight)
-      .fill(this.LIGHT_GRAY);
-
-    // Top border line
-    doc
-      .strokeColor(this.BORDER_COLOR)
-      .lineWidth(0.5)
-      .moveTo(0, footerY)
-      .lineTo(this.PAGE_WIDTH, footerY)
-      .stroke();
-
-    // Company information - left side
-    doc
-      .fontSize(9)
-      .font("Helvetica-Bold")
-      .fillColor(this.ACCENT_COLOR)
-      .text(
-        data.companyName || "OPTIVALUE TEK",
-        this.MARGIN_LEFT,
-        footerY + 8
-      );
-
-    doc
-      .fontSize(8)
-      .font("Helvetica")
-      .fillColor(this.SECONDARY_COLOR);
-
-    let addressY = doc.y + 2;
-    if (data.companyAddress) {
-      const addressLines = data.companyAddress.split('\n');
-      addressLines.forEach(line => {
-        doc.text(line.trim(), this.MARGIN_LEFT, addressY);
-        addressY = doc.y + 1;
-      });
-    }
-
-    // Contact info - right side
-    const contactX = this.MARGIN_LEFT + this.CONTENT_WIDTH * 0.6;
-    let contactY = footerY + 8;
-
-    doc
-      .fontSize(8)
-      .font("Helvetica")
-      .fillColor(this.SECONDARY_COLOR);
-
-    if (data.companyPhone) {
-      doc.text(`Phone: ${data.companyPhone}`, contactX, contactY);
-      contactY += 10;
-    }
-    if (data.companyEmail) {
-      doc.text(`Email: ${data.companyEmail}`, contactX, contactY);
-      contactY += 10;
-    }
-    if (data.companyWebsite) {
-      doc.text(`Web: ${data.companyWebsite}`, contactX, contactY);
-    }
-
-    // GSTIN if available
-    if (data.companyGSTIN) {
-      doc.text(`GSTIN: ${data.companyGSTIN}`, contactX, contactY + 10);
-    }
-
-    // Page number - centered at bottom
-    doc
-      .fontSize(8)
-      .fillColor(this.SECONDARY_COLOR)
-      .text(
-        `Page ${pageNumber} of ${totalPages}`,
-        this.MARGIN_LEFT,
-        this.PAGE_HEIGHT - 20,
-        {
-          width: this.CONTENT_WIDTH,
-          align: "center",
+        if (data.quote.notes) {
+            this.drawNotesSection(doc, data.quote.notes);
         }
-      );
 
-    // Professional disclaimer
-    doc
-      .fontSize(7)
-      .fillColor(this.SECONDARY_COLOR)
-      .text(
-        "This document contains confidential information. Unauthorized distribution is prohibited.",
-        this.MARGIN_LEFT,
-        this.PAGE_HEIGHT - 12,
-        {
-          width: this.CONTENT_WIDTH,
-          align: "center",
+        if (data.quote.termsAndConditions) {
+            this.drawTermsAndConditions(doc, data.quote.termsAndConditions);
         }
-      );
-  }
 
-  private static drawDocumentInfo(
-    doc: InstanceType<typeof PDFDocument>,
-    data: QuoteWithDetails
-  ) {
-    const startY = doc.y;
-    const boxHeight = 100;
+        this.drawAdvancedSections(doc, data, "COMMERCIAL PROPOSAL");
 
-    // Professional background with subtle styling
-    doc
-      .rect(this.MARGIN_LEFT, startY, this.CONTENT_WIDTH, boxHeight)
-      .fillAndStroke(this.LIGHT_GRAY, this.BORDER_COLOR);
+        // FOOTERS FOR ALL PAGES (after all content is drawn)
+        const pageRange = doc.bufferedPageRange();
+        const pageCount = pageRange.count;
 
-    doc.fillColor(this.ACCENT_COLOR);
+        for (let i = 0; i < pageCount; i++) {
+            doc.switchToPage(i);
+            this.drawFooter(doc, data, i + 1, pageCount, "COMMERCIAL PROPOSAL");
+        }
 
-    // Title
-    doc
-      .fontSize(12)
-      .font("Helvetica-Bold")
-      .text("PROPOSAL DETAILS", this.MARGIN_LEFT + 15, startY + 10);
-
-    // Left column - Primary details
-    const leftColX = this.MARGIN_LEFT + 15;
-    const rightColX = this.MARGIN_LEFT + this.CONTENT_WIDTH * 0.5;
-    let y = startY + 30;
-
-    doc.fontSize(10).font("Helvetica-Bold");
-    doc.text("Proposal Number:", leftColX, y);
-    doc.font("Helvetica").fillColor("#000000");
-    doc.text(data.quote.quoteNumber, leftColX + 120, y);
-
-    y += 18;
-    doc.font("Helvetica-Bold").fillColor(this.ACCENT_COLOR);
-    doc.text("Date:", leftColX, y);
-    doc.font("Helvetica").fillColor("#000000");
-    doc.text(
-      new Date(data.quote.quoteDate).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-      leftColX + 120,
-      y
-    );
-
-    y += 18;
-    const validUntil = new Date(
-      new Date(data.quote.quoteDate).getTime() +
-        data.quote.validityDays * 24 * 60 * 60 * 1000
-    );
-    doc.font("Helvetica-Bold").fillColor(this.ACCENT_COLOR);
-    doc.text("Valid Until:", leftColX, y);
-    doc.font("Helvetica").fillColor("#000000");
-    doc.text(
-      validUntil.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-      leftColX + 120,
-      y
-    );
-
-    // Right column - Additional details
-    y = startY + 30;
-    if (data.quote.referenceNumber) {
-      doc.font("Helvetica-Bold").fillColor(this.ACCENT_COLOR);
-      doc.text("Reference:", rightColX + 15, y);
-      doc.font("Helvetica").fillColor("#000000");
-      doc.text(data.quote.referenceNumber, rightColX + 85, y);
-      y += 18;
+        doc.end();
+        return doc;
     }
 
-    doc.font("Helvetica-Bold").fillColor(this.ACCENT_COLOR);
-    doc.text("Status:", rightColX + 15, y);
-    doc.font("Helvetica").fillColor("#000000");
-
-    // Status with color coding
-    const status = data.quote.status.toUpperCase();
-    const statusColor = status === 'APPROVED' ? '#059669' : status === 'DRAFT' ? '#d97706' : '#dc2626';
-    doc.fillColor(statusColor).text(status, rightColX + 85, y);
-
-    doc.y = startY + boxHeight + 15;
-  }
-
-  private static drawClientSection(
-    doc: InstanceType<typeof PDFDocument>,
-    data: QuoteWithDetails
-  ) {
-    doc.moveDown(0.5);
-    const startY = doc.y;
-    const boxHeight = 110;
-
-    // Section title with professional styling
-    doc
-      .fontSize(12)
-      .font("Helvetica-Bold")
-      .fillColor(this.PRIMARY_COLOR)
-      .text("CLIENT INFORMATION", this.MARGIN_LEFT, startY);
-
-    doc.moveDown(0.3);
-    const contentY = doc.y;
-
-    // Professional border box
-    doc
-      .rect(this.MARGIN_LEFT, contentY, this.CONTENT_WIDTH, boxHeight)
-      .fillAndStroke(this.LIGHT_GRAY, this.BORDER_COLOR);
-
-    // Client details - left side
-    let y = contentY + 15;
-    doc.fillColor("#000000");
-
-    // Company name - prominent
-    doc
-      .fontSize(12)
-      .font("Helvetica-Bold")
-      .fillColor(this.ACCENT_COLOR)
-      .text(data.client.name, this.MARGIN_LEFT + 15, y);
-
-    y += 20;
-    if (data.client.contactPerson) {
-      doc
-        .fontSize(9)
-        .font("Helvetica-Bold")
-        .fillColor(this.SECONDARY_COLOR)
-        .text("Attention:", this.MARGIN_LEFT + 15, y);
-      doc
-        .font("Helvetica")
-        .fillColor("#000000")
-        .text(data.client.contactPerson, this.MARGIN_LEFT + 70, y);
-      y += 14;
-    }
-
-    if (data.client.email) {
-      doc
-        .fontSize(9)
-        .font("Helvetica-Bold")
-        .fillColor(this.SECONDARY_COLOR)
-        .text("Email:", this.MARGIN_LEFT + 15, y);
-      doc
-        .font("Helvetica")
-        .fillColor("#000000")
-        .text(data.client.email, this.MARGIN_LEFT + 70, y);
-      y += 14;
-    }
-
-    if (data.client.phone) {
-      doc
-        .fontSize(9)
-        .font("Helvetica-Bold")
-        .fillColor(this.SECONDARY_COLOR)
-        .text("Phone:", this.MARGIN_LEFT + 15, y);
-      doc
-        .font("Helvetica")
-        .fillColor("#000000")
-        .text(data.client.phone, this.MARGIN_LEFT + 70, y);
-    }
-
-    // Right column for billing address and GSTIN
-    const rightColX = this.MARGIN_LEFT + this.CONTENT_WIDTH * 0.55;
-    y = contentY + 15;
-
-    if (data.client.billingAddress) {
-      doc
-        .fontSize(9)
-        .font("Helvetica-Bold")
-        .fillColor(this.SECONDARY_COLOR)
-        .text("Billing Address:", rightColX, y);
-      y += 14;
-      doc
-        .fontSize(9)
-        .font("Helvetica")
-        .fillColor("#000000")
-        .text(data.client.billingAddress, rightColX, y, {
-          width: this.CONTENT_WIDTH * 0.4,
+    /**
+     * INVOICE PDF
+     */
+    static generateInvoicePDF(data: InvoicePdfData): PDFKit.PDFDocument {
+        const doc = new PDFDocument({
+            size: "A4",
+            margins: {
+                top: this.MARGIN_TOP,
+                bottom: this.MARGIN_BOTTOM,
+                left: this.MARGIN_LEFT,
+                right: this.MARGIN_RIGHT,
+            },
+            bufferPages: true,
         });
-      y = doc.y + 8;
+
+        // Header
+        this.drawHeader(doc, data, "INVOICE");
+
+        // Invoice specific info block
+        this.drawInvoiceInfo(doc, data);
+
+        // Client block
+        this.drawClientSection(doc, data);
+
+        // Line items
+        this.drawLineItemsTable(doc, data, "INVOICE");
+
+        // Totals
+        this.drawTotalsSection(doc, data.quote);
+
+        // Notes (optional)
+        if (data.quote.notes) {
+            this.drawNotesSection(doc, data.quote.notes);
+        }
+
+        // Footer for all pages
+        const pageRange = doc.bufferedPageRange();
+        const pageCount = pageRange.count;
+
+        for (let i = 0; i < pageCount; i++) {
+            doc.switchToPage(i);
+            this.drawFooter(doc, data, i + 1, pageCount, "INVOICE");
+        }
+
+        doc.end();
+        return doc;
     }
 
-    if (data.client.gstin) {
-      doc
-        .fontSize(9)
-        .font("Helvetica-Bold")
-        .fillColor(this.SECONDARY_COLOR)
-        .text("GSTIN:", rightColX, y);
-      doc
-        .font("Helvetica")
-        .fillColor("#000000")
-        .text(data.client.gstin, rightColX + 45, y);
-    }
-
-    doc.y = contentY + boxHeight + 15;
-  }
-
-  private static drawLineItemsTable(
-    doc: InstanceType<typeof PDFDocument>,
-    items: QuoteItem[]
-  ) {
-    doc.moveDown(0.5);
-    const startY = doc.y;
-
-    // Section title with professional styling
-    doc
-      .fontSize(12)
-      .font("Helvetica-Bold")
-      .fillColor(this.PRIMARY_COLOR)
-      .text("PRODUCTS & SERVICES", this.MARGIN_LEFT, startY);
-
-    doc.moveDown(0.5);
-    const tableTop = doc.y;
-    const headerHeight = 30;
-
-    // Professional table header with gradient effect
-    doc
-      .rect(this.MARGIN_LEFT, tableTop, this.CONTENT_WIDTH, headerHeight)
-      .fill(this.PRIMARY_COLOR);
-
-    // Subtle border for header
-    doc
-      .strokeColor(this.BORDER_COLOR)
-      .lineWidth(0.5)
-      .rect(this.MARGIN_LEFT, tableTop, this.CONTENT_WIDTH, headerHeight)
-      .stroke();
-
-    // Column positions - optimized for professional layout
-    const col1X = this.MARGIN_LEFT + 8; // S.No
-    const col1W = 30;
-    const col2X = col1X + col1W + 5; // Description
-    const col2W = this.CONTENT_WIDTH - 240;
-    const col3X = col2X + col2W + 5; // Qty
-    const col3W = 45;
-    const col4X = col3X + col3W + 5; // Unit Price
-    const col4W = 75;
-    const col5X = col4X + col4W + 5; // Subtotal
-    const col5W = 75;
-
-    // Table headers with better typography
-    doc
-      .fontSize(10)
-      .font("Helvetica-Bold")
-      .fillColor("#FFFFFF");
-
-    doc.text("S.No", col1X, tableTop + 10, { width: col1W, align: "center" });
-    doc.text("Description", col2X, tableTop + 10, { width: col2W, align: "left" });
-    doc.text("Qty", col3X, tableTop + 10, { width: col3W, align: "center" });
-    doc.text("Unit Price", col4X, tableTop + 10, { width: col4W, align: "right" });
-    doc.text("Amount", col5X, tableTop + 10, { width: col5W, align: "right" });
-
-    // Table rows
-    let y = tableTop + headerHeight + 5;
-    doc.fillColor("#000000").font("Helvetica");
-
-    items.forEach((item, index) => {
-      // Check if we need a new page
-      if (y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 60) {
+    // ---------------------------------------------------------------------------
+    // UTIL: Add new page + header
+    // ---------------------------------------------------------------------------
+    private static addPageWithHeader(
+        doc: InstanceType<typeof PDFDocument>,
+        data: QuoteWithDetails,
+        title: string
+    ) {
         doc.addPage();
-        y = this.MARGIN_TOP + 10;
-      }
+        this.drawHeader(doc, data, title);
+    }
 
-      const rowHeight = 20;
+    // ---------------------------------------------------------------------------
+    // HEADER / FOOTER
+    // ---------------------------------------------------------------------------
+    private static drawHeader(
+        doc: InstanceType<typeof PDFDocument>,
+        data: QuoteWithDetails,
+        title: string
+    ) {
+        const headerHeight = 140;
+        const clientCompanyName = data.client?.name || "Client";
 
-      // Professional row background with subtle alternating
-      if (index % 2 === 1) {
+        // Clean white background header
         doc
-          .rect(this.MARGIN_LEFT, y - 2, this.CONTENT_WIDTH, rowHeight + 4)
-          .fill("#fafbfc");
-      }
+            .rect(0, 0, this.PAGE_WIDTH, headerHeight)
+            .fill("#FFFFFF");
 
-      // Subtle row border
-      doc
-        .strokeColor("#f1f5f9")
-        .lineWidth(0.3)
-        .moveTo(this.MARGIN_LEFT, y + rowHeight + 2)
-        .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, y + rowHeight + 2)
-        .stroke();
+        // Row 1: Logo (left) and Company Info (right)
+        const row1Y = 20;
+        
+        // Add AICERA Logo on the left
+        try {
+            let logoPath = path.join(process.cwd(), "client", "public", "logo.png");
+            
+            if (!fs.existsSync(logoPath)) {
+                logoPath = path.join(process.cwd(), "client", "public", "AICERA_Logo.png");
+            }
+            
+            if (fs.existsSync(logoPath)) {
+                doc.image(logoPath, this.MARGIN_LEFT, row1Y, {
+                    fit: [60, 60],
+                    align: 'left',
+                    valign: 'top'
+                });
+            } else {
+                doc
+                    .fontSize(16)
+                    .font("Helvetica-Bold")
+                    .fillColor(this.PRIMARY_COLOR)
+                    .text("AICERA", this.MARGIN_LEFT, row1Y + 20);
+            }
+        } catch (error) {
+            console.error("Failed to load logo:", error);
+            doc
+                .fontSize(16)
+                .font("Helvetica-Bold")
+                .fillColor(this.PRIMARY_COLOR)
+                .text("AICERA", this.MARGIN_LEFT, row1Y + 20);
+        }
 
-      // Row data with better typography
-      doc.fillColor("#000000").fontSize(9).font("Helvetica");
+        // Company Info (right aligned, top right)
+        const companyName = data.companyName || "AICERA";
+        const companyInfoWidth = 220;
+        const companyInfoX = this.PAGE_WIDTH - this.MARGIN_RIGHT - companyInfoWidth;
+        let companyInfoY = row1Y;
 
-      // Serial number
-      doc.text(String(index + 1), col1X, y + 6, { width: col1W, align: "center" });
+        doc
+            .fontSize(9)
+            .font("Helvetica-Bold")
+            .fillColor(this.PRIMARY_COLOR)
+            .text(companyName, companyInfoX, companyInfoY, {
+                width: companyInfoWidth,
+                align: "right",
+            });
 
-      // Description with word wrap
-      const descHeight = doc.heightOfString(item.description, {
-        width: col2W - 10,
-      });
-      const actualRowHeight = Math.max(rowHeight, descHeight + 8);
+        companyInfoY += 11;
+        if (data.companyAddress) {
+            const addressLines = data.companyAddress.split("\n").filter((line) => line.trim());
+            const compactAddress = addressLines.slice(0, 2).join(", ");
+            doc
+                .fontSize(7)
+                .font("Helvetica")
+                .fillColor(this.SECONDARY_COLOR)
+                .text(compactAddress, companyInfoX, companyInfoY, {
+                    width: companyInfoWidth,
+                    align: "right",
+                    lineGap: 1,
+                });
+            companyInfoY += 16;
+        }
 
-      doc.text(item.description, col2X, y + 6, {
-        width: col2W - 10,
-        align: "left",
-      });
+        if (data.companyPhone) {
+            doc
+                .fontSize(7)
+                .font("Helvetica")
+                .fillColor(this.SECONDARY_COLOR)
+                .text(`Phone: ${data.companyPhone}`, companyInfoX, companyInfoY, {
+                    width: companyInfoWidth,
+                    align: "right",
+                });
+            companyInfoY += 9;
+        }
 
-      // Quantity
-      doc.text(String(item.quantity), col3X, y + 6, { width: col3W, align: "center" });
+        if (data.companyEmail) {
+            doc
+                .fontSize(7)
+                .font("Helvetica")
+                .fillColor(this.SECONDARY_COLOR)
+                .text(`Email: ${data.companyEmail}`, companyInfoX, companyInfoY, {
+                    width: companyInfoWidth,
+                    align: "right",
+                });
+        }
 
-      // Unit Price
-      doc.text(
-        `₹${Number(item.unitPrice).toFixed(2)}`,
-        col4X,
-        y + 6,
-        { width: col4W, align: "right" }
-      );
+        // Row 2: Title Section (starts after logo row)
+        const titleY = 85;
+        
+        doc
+            .fontSize(20)
+            .font("Helvetica-Bold")
+            .fillColor(this.PRIMARY_COLOR)
+            .text(title, this.MARGIN_LEFT, titleY, {
+                width: this.CONTENT_WIDTH,
+                align: "center",
+            });
 
-      // Subtotal
-      doc.text(
-        `₹${Number(item.subtotal).toFixed(2)}`,
-        col5X,
-        y + 6,
-        { width: col5W, align: "right" }
-      );
+        // Prepared for label
+        doc
+            .fontSize(10)
+            .font("Helvetica")
+            .fillColor(this.SECONDARY_COLOR)
+            .text("Prepared for", this.MARGIN_LEFT, titleY + 25, {
+                width: this.CONTENT_WIDTH,
+                align: "center",
+            });
 
-      y += actualRowHeight + 6;
-    });
+        // Client company name
+        doc
+            .fontSize(14)
+            .font("Helvetica-Bold")
+            .fillColor(this.ACCENT_COLOR)
+            .text(clientCompanyName, this.MARGIN_LEFT, titleY + 38, {
+                width: this.CONTENT_WIDTH,
+                align: "center",
+            });
 
-    // Professional table bottom border
-    doc
-      .strokeColor(this.BORDER_COLOR)
-      .lineWidth(1)
-      .moveTo(this.MARGIN_LEFT, y)
-      .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, y)
-      .stroke();
+        // Separator line
+        doc
+            .strokeColor("#3b82f6")
+            .lineWidth(2)
+            .moveTo(this.MARGIN_LEFT, headerHeight - 5)
+            .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, headerHeight - 5)
+            .stroke();
 
-    doc.y = y + 15;
-  }
-
-  private static drawTotalsSection(
-    doc: InstanceType<typeof PDFDocument>,
-    quote: Quote
-  ) {
-    doc.moveDown(0.5);
-    const startY = doc.y;
-
-    // Professional summary box on the right side
-    const boxWidth = 280;
-    const boxX = this.PAGE_WIDTH - this.MARGIN_RIGHT - boxWidth;
-    let boxHeight = 140;
-
-    // Calculate box height based on what we need to show
-    let lineCount = 2; // subtotal and total
-    if (Number(quote.discount) > 0) lineCount++;
-    if (Number(quote.shippingCharges) > 0) lineCount++;
-    if (Number(quote.cgst) > 0) lineCount++;
-    if (Number(quote.sgst) > 0) lineCount++;
-    if (Number(quote.igst) > 0) lineCount++;
-
-    boxHeight = lineCount * 20 + 50;
-
-    // Professional box with shadow effect
-    doc
-      .rect(boxX + 2, startY + 2, boxWidth, boxHeight)
-      .fill("#e2e8f0");
-
-    doc
-      .rect(boxX, startY, boxWidth, boxHeight)
-      .fillAndStroke("#ffffff", this.BORDER_COLOR);
-
-    // Title
-    doc
-      .fontSize(11)
-      .font("Helvetica-Bold")
-      .fillColor(this.PRIMARY_COLOR)
-      .text("SUMMARY", boxX + 15, startY + 12);
-
-    // Separator line
-    doc
-      .strokeColor(this.BORDER_COLOR)
-      .lineWidth(0.5)
-      .moveTo(boxX + 15, startY + 30)
-      .lineTo(boxX + boxWidth - 15, startY + 30)
-      .stroke();
-
-    doc.fillColor("#000000");
-
-    let y = startY + 40;
-    const labelX = boxX + 15;
-    const valueX = boxX + boxWidth - 20;
-
-    // Subtotal
-    doc.fontSize(10).font("Helvetica");
-    doc.text("Subtotal:", labelX, y);
-    doc.text(`₹${Number(quote.subtotal).toFixed(2)}`, valueX - 90, y, {
-      width: 90,
-      align: "right",
-    });
-    y += 20;
-
-    // Discount
-    if (Number(quote.discount) > 0) {
-      doc.text("Discount:", labelX, y);
-      doc.text(`-₹${Number(quote.discount).toFixed(2)}`, valueX - 90, y, {
-        width: 90,
-        align: "right",
-      });
-      y += 20;
+        // Content Y start
+        doc.y = headerHeight + 15;
     }
 
-    // Shipping
-    if (Number(quote.shippingCharges) > 0) {
-      doc.fontSize(9);
-      doc.text("Shipping & Handling:", labelX, y);
-      doc.text(`₹${Number(quote.shippingCharges).toFixed(2)}`, valueX - 90, y, {
-        width: 90,
-        align: "right",
-      });
-      y += 20;
+    private static drawFooter(
+        doc: InstanceType<typeof PDFDocument>,
+        data: QuoteWithDetails,
+        pageNumber: number,
+        totalPages: number,
+        title: string
+    ) {
+        const footerHeight = 85;
+        const footerY = this.PAGE_HEIGHT - footerHeight - 5;
+
+        // Temporarily disable bottom margin so footer text doesn't trigger a new page
+        const originalBottomMargin = doc.page.margins.bottom;
+        doc.page.margins.bottom = 0;
+
+        // Footer background
+        doc
+            .rect(0, footerY, this.PAGE_WIDTH, footerHeight)
+            .fill("#f8fafc");
+
+        // Top border line (thicker blue line)
+        doc
+            .strokeColor("#3b82f6")
+            .lineWidth(2)
+            .moveTo(0, footerY)
+            .lineTo(this.PAGE_WIDTH, footerY)
+            .stroke();
+
+        const companyName = data.companyName || "AICERA";
+        const footerTitle = `${companyName} | ${title}`;
+
+        // Center title
+        doc
+            .fontSize(9)
+            .font("Helvetica-Bold")
+            .fillColor(this.PRIMARY_COLOR)
+            .text(footerTitle, this.MARGIN_LEFT, footerY + 8, {
+                width: this.CONTENT_WIDTH,
+                align: "center",
+            });
+
+        // Company info section (left side, compact)
+        let infoY = footerY + 26;
+        doc
+            .fontSize(7)
+            .font("Helvetica")
+            .fillColor(this.SECONDARY_COLOR);
+
+        if (data.companyAddress) {
+            const addressLines = data.companyAddress
+                .split("\n")
+                .filter((line) => line.trim());
+            const compactAddress = addressLines.slice(0, 2).join(", ");
+            doc.text(compactAddress, this.MARGIN_LEFT, infoY, {
+                width: this.CONTENT_WIDTH * 0.5,
+                lineGap: 1,
+            });
+            infoY += 18;
+        }
+
+        // Contact info (right side, compact)
+        const contactX = this.PAGE_WIDTH - this.MARGIN_RIGHT - 160;
+        let contactY = footerY + 26;
+
+        if (data.companyPhone) {
+            doc.text(`Ph: ${data.companyPhone}`, contactX, contactY, {
+                width: 160,
+                align: "right",
+            });
+            contactY += 9;
+        }
+        if (data.companyEmail) {
+            doc.text(`Email: ${data.companyEmail}`, contactX, contactY, {
+                width: 160,
+                align: "right",
+            });
+            contactY += 9;
+        }
+        if (data.companyWebsite) {
+            doc.text(`Web: ${data.companyWebsite}`, contactX, contactY, {
+                width: 160,
+                align: "right",
+            });
+            contactY += 9;
+        }
+        if (data.companyGSTIN) {
+            doc.text(`GSTIN: ${data.companyGSTIN}`, contactX, contactY, {
+                width: 160,
+                align: "right",
+            });
+        }
+
+        // Page number (bottom right)
+        doc
+            .fontSize(8)
+            .font("Helvetica")
+            .fillColor(this.SECONDARY_COLOR)
+            .text(
+                `Page ${pageNumber} of ${totalPages}`,
+                this.MARGIN_LEFT,
+                footerY + footerHeight - 12,
+                {
+                    width: this.CONTENT_WIDTH,
+                    align: "right",
+                }
+            );
+
+        // Restore margin
+        doc.page.margins.bottom = originalBottomMargin;
     }
 
-    // Taxes
-    if (Number(quote.cgst) > 0) {
-      doc.fontSize(9);
-      doc.text("CGST (9%):", labelX + 10, y);
-      doc.text(`₹${Number(quote.cgst).toFixed(2)}`, valueX - 90, y, {
-        width: 90,
-        align: "right",
-      });
-      y += 18;
+    // ---------------------------------------------------------------------------
+    // TOP BLOCKS
+    // ---------------------------------------------------------------------------
+    private static drawDocumentInfo(
+        doc: InstanceType<typeof PDFDocument>,
+        data: QuoteWithDetails
+    ) {
+        const startY = doc.y;
+        const labelWidth = 110;
+        const valueX = this.MARGIN_LEFT + labelWidth;
+
+        let y = startY;
+
+        // Quote Number
+        doc
+            .fontSize(10)
+            .font("Helvetica-Bold")
+            .fillColor(this.SECONDARY_COLOR)
+            .text("Quote No.:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+        doc
+            .font("Helvetica")
+            .fillColor("#000000")
+            .text(data.quote.quoteNumber, valueX, y, { continued: false });
+
+        y += 15;
+
+        // Date
+        doc
+            .fontSize(10)
+            .font("Helvetica-Bold")
+            .fillColor(this.SECONDARY_COLOR)
+            .text("Date:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+        doc
+            .font("Helvetica")
+            .fillColor("#000000")
+            .text(
+                new Date(data.quote.quoteDate).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                }),
+                valueX,
+                y
+            );
+
+        y += 15;
+
+        // Payment Terms
+        doc
+            .fontSize(10)
+            .font("Helvetica-Bold")
+            .fillColor(this.SECONDARY_COLOR)
+            .text("Payment Terms:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+        doc
+            .font("Helvetica")
+            .fillColor("#000000")
+            .text("30 days from the date of Invoice", valueX, y);
+
+        y += 15;
+
+        // Quote Validity
+        const validUntil =
+            data.quote.validUntil ||
+            new Date(
+                new Date(data.quote.quoteDate).getTime() +
+                (data.quote.validityDays || 30) * 24 * 60 * 60 * 1000
+            );
+
+        doc
+            .fontSize(10)
+            .font("Helvetica-Bold")
+            .fillColor(this.SECONDARY_COLOR)
+            .text("Quote Validity:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+        doc
+            .font("Helvetica")
+            .fillColor("#000000")
+            .text(
+                `${data.quote.validityDays || 30} days from the quote date`,
+                valueX,
+                y
+            );
+
+        doc.y = y + 20;
     }
 
-    if (Number(quote.sgst) > 0) {
-      doc.text("SGST (9%):", labelX + 10, y);
-      doc.text(`₹${Number(quote.sgst).toFixed(2)}`, valueX - 90, y, {
-        width: 90,
-        align: "right",
-      });
-      y += 18;
+    private static drawClientSection(
+        doc: InstanceType<typeof PDFDocument>,
+        data: QuoteWithDetails
+    ) {
+        const startY = doc.y;
+        const labelWidth = 110;
+        const valueX = this.MARGIN_LEFT + labelWidth;
+
+        // Bill To section
+        doc
+            .fontSize(12)
+            .font("Helvetica-Bold")
+            .fillColor(this.PRIMARY_COLOR)
+            .text("Bill To:", this.MARGIN_LEFT, startY);
+
+        let y = startY + 20;
+
+        doc
+            .fontSize(10)
+            .font("Helvetica-Bold")
+            .fillColor(this.ACCENT_COLOR)
+            .text("Name:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+        doc
+            .font("Helvetica")
+            .fillColor("#000000")
+            .text(data.client.name, valueX, y);
+
+        y += 15;
+
+        if (data.client.billingAddress) {
+            doc
+                .fontSize(10)
+                .font("Helvetica-Bold")
+                .fillColor(this.ACCENT_COLOR)
+                .text("Address:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+            doc
+                .fontSize(10)
+                .font("Helvetica")
+                .fillColor("#000000")
+                .text(data.client.billingAddress, valueX, y, {
+                    width: this.CONTENT_WIDTH - labelWidth - 10,
+                    lineGap: 2,
+                });
+            y = doc.y + 10;
+        }
+
+        if (data.client.phone) {
+            doc
+                .fontSize(10)
+                .font("Helvetica-Bold")
+                .fillColor(this.ACCENT_COLOR)
+                .text("Phone No.:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+            doc
+                .font("Helvetica")
+                .fillColor("#000000")
+                .text(data.client.phone, valueX, y);
+            y += 15;
+        }
+
+        if (data.client.email) {
+            doc
+                .fontSize(10)
+                .font("Helvetica-Bold")
+                .fillColor(this.ACCENT_COLOR)
+                .text("Email ID:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+            doc
+                .font("Helvetica")
+                .fillColor("#1e40af")
+                .text(data.client.email, valueX, y);
+            y += 15;
+        }
+
+        if (data.client.gstin) {
+            doc
+                .fontSize(10)
+                .font("Helvetica-Bold")
+                .fillColor(this.ACCENT_COLOR)
+                .text("GSTIN:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+            doc
+                .font("Helvetica")
+                .fillColor("#000000")
+                .text(data.client.gstin, valueX, y);
+            y += 15;
+        }
+
+        // Attention person
+        const attentionPerson = data.quote.attentionTo || data.client.contactPerson;
+        if (attentionPerson) {
+            doc
+                .fontSize(10)
+                .font("Helvetica-Bold")
+                .fillColor(this.ACCENT_COLOR)
+                .text("Attn to:", this.MARGIN_LEFT, y, { width: labelWidth, align: "left" });
+            doc
+                .font("Helvetica")
+                .fillColor("#000000")
+                .text(attentionPerson, valueX, y);
+            y += 20;
+        }
+
+        // Ship To section (same as Bill To for this template)
+        const shipToX = this.MARGIN_LEFT + this.CONTENT_WIDTH * 0.5;
+        const shipToValueX = shipToX + labelWidth;
+
+        doc
+            .fontSize(12)
+            .font("Helvetica-Bold")
+            .fillColor(this.PRIMARY_COLOR)
+            .text("Ship To:", shipToX, startY);
+
+        y = startY + 20;
+
+        doc
+            .fontSize(10)
+            .font("Helvetica-Bold")
+            .fillColor(this.ACCENT_COLOR)
+            .text("Name:", shipToX, y, { width: labelWidth, align: "left" });
+        doc
+            .font("Helvetica")
+            .fillColor("#000000")
+            .text(data.client.name, shipToValueX, y);
+
+        y += 15;
+
+        if (data.client.billingAddress) {
+            doc
+                .fontSize(10)
+                .font("Helvetica-Bold")
+                .fillColor(this.ACCENT_COLOR)
+                .text("Address:", shipToX, y, { width: labelWidth, align: "left" });
+            doc
+                .fontSize(10)
+                .font("Helvetica")
+                .fillColor("#000000")
+                .text(data.client.billingAddress, shipToValueX, y, {
+                    width: this.CONTENT_WIDTH * 0.5 - labelWidth - 10,
+                    lineGap: 2,
+                });
+        }
+
+        doc.y = Math.max(doc.y, y) + 30;
     }
 
-    if (Number(quote.igst) > 0) {
-      doc.text("IGST (18%):", labelX + 10, y);
-      doc.text(`₹${Number(quote.igst).toFixed(2)}`, valueX - 90, y, {
-        width: 90,
-        align: "right",
-      });
-      y += 18;
+    private static drawInvoiceInfo(
+        doc: InstanceType<typeof PDFDocument>,
+        data: InvoicePdfData
+    ) {
+        const startY = doc.y;
+        const boxHeight = 85;
+        const labelWidth = 110;
+
+        doc
+            .rect(this.MARGIN_LEFT, startY, this.CONTENT_WIDTH, boxHeight)
+            .fillAndStroke("#f8fafc", "#cbd5e1");
+
+        doc
+            .rect(this.MARGIN_LEFT, startY, this.CONTENT_WIDTH, 28)
+            .fill("#dbeafe");
+
+        doc
+            .fontSize(11)
+            .font("Helvetica-Bold")
+            .fillColor(this.PRIMARY_COLOR)
+            .text("INVOICE DETAILS", this.MARGIN_LEFT + 15, startY + 9);
+
+        const leftColX = this.MARGIN_LEFT + 15;
+        const leftValueX = leftColX + labelWidth;
+        const rightColX = this.MARGIN_LEFT + this.CONTENT_WIDTH * 0.52;
+        const rightValueX = rightColX + labelWidth;
+
+        let y = startY + 40;
+
+        doc.fontSize(9).font("Helvetica-Bold").fillColor(this.SECONDARY_COLOR);
+        doc.text("Invoice Number:", leftColX, y, { width: labelWidth, align: "left" });
+        doc.font("Helvetica").fillColor("#000000");
+        doc.text(data.invoiceNumber, leftValueX, y);
+
+        y += 17;
+
+        doc.fontSize(9).font("Helvetica-Bold").fillColor(this.SECONDARY_COLOR);
+        doc.text("Invoice Date:", leftColX, y, { width: labelWidth, align: "left" });
+        doc.font("Helvetica").fillColor("#000000");
+        doc.text(
+            new Date(data.quote.quoteDate).toLocaleDateString(),
+            leftValueX,
+            y
+        );
+
+        // Right column
+        y = startY + 40;
+        doc.fontSize(9).font("Helvetica-Bold").fillColor(this.SECONDARY_COLOR);
+        doc.text("Due Date:", rightColX, y, { width: labelWidth, align: "left" });
+        doc.font("Helvetica").fillColor("#000000");
+        doc.text(
+            data.dueDate.toLocaleDateString(),
+            rightValueX,
+            y
+        );
+
+        y += 17;
+        doc.fontSize(9).font("Helvetica-Bold").fillColor(this.SECONDARY_COLOR);
+        doc.text("Quote Number:", rightColX, y, { width: labelWidth, align: "left" });
+        doc.font("Helvetica").fillColor("#000000");
+        doc.text(data.quote.quoteNumber, rightValueX, y);
+
+        doc.y = startY + boxHeight + 20;
     }
 
-    // Total with professional highlight
-    y += 8;
-    doc
-      .rect(boxX + 10, y - 3, boxWidth - 20, 28)
-      .fill(this.PRIMARY_COLOR);
+    // ---------------------------------------------------------------------------
+    // LINE ITEMS TABLE
+    // ---------------------------------------------------------------------------
 
-    doc
-      .fontSize(12)
-      .font("Helvetica-Bold")
-      .fillColor("#FFFFFF");
-    doc.text("TOTAL AMOUNT:", labelX + 5, y + 6);
-    doc.text(`₹${Number(quote.total).toFixed(2)}`, valueX - 110, y + 6, {
-      width: 110,
-      align: "right",
-    });
+    private static drawProductsTableHeader(
+        doc: InstanceType<typeof PDFDocument>
+    ) {
+        const tableTop = doc.y;
+        const headerHeight = 28;
 
-    doc.y = startY + boxHeight + 15;
-  }
+        // Header background
+        doc
+            .rect(this.MARGIN_LEFT, tableTop, this.CONTENT_WIDTH, headerHeight)
+            .fill(this.PRIMARY_COLOR);
 
-  private static drawNotesSection(
-    doc: InstanceType<typeof PDFDocument>,
-    notes: string
-  ) {
-    // Check if we need a new page
-    if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 120) {
-      doc.addPage();
-    }
+        // Column positions
+        const col1X = this.MARGIN_LEFT + 10; // S.No
+        const col1W = 35;
+        const col2X = col1X + col1W; // Description
+        const col2W = this.CONTENT_WIDTH - 235;
+        const col3X = col2X + col2W; // Qty
+        const col3W = 50;
+        const col4X = col3X + col3W; // Unit Price
+        const col4W = 75;
+        const col5X = col4X + col4W; // Amount
+        const col5W = 75;
 
-    doc.moveDown(1);
+        // Header text
+        doc
+            .fontSize(9.5)
+            .font("Helvetica-Bold")
+            .fillColor("#FFFFFF");
 
-    // Professional section header
-    doc
-      .fontSize(12)
-      .font("Helvetica-Bold")
-      .fillColor(this.PRIMARY_COLOR)
-      .text("NOTES", this.MARGIN_LEFT, doc.y);
-
-    doc.moveDown(0.5);
-
-    // Notes box with professional styling
-    const notesHeight = doc.heightOfString(notes, {
-      width: this.CONTENT_WIDTH - 20,
-      fontSize: 9,
-    }) + 20;
-
-    doc
-      .rect(this.MARGIN_LEFT, doc.y, this.CONTENT_WIDTH, notesHeight)
-      .fillAndStroke(this.LIGHT_GRAY, this.BORDER_COLOR);
-
-    doc
-      .fontSize(9)
-      .font("Helvetica")
-      .fillColor("#000000")
-      .text(notes, this.MARGIN_LEFT + 10, doc.y + 10, {
-        width: this.CONTENT_WIDTH - 20,
-        align: "left",
-      });
-
-    doc.y = doc.y + notesHeight + 15;
-  }
-
-  private static drawTermsAndConditions(
-    doc: InstanceType<typeof PDFDocument>,
-    terms: string
-  ) {
-    // Check if we need a new page
-    if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 180) {
-      doc.addPage();
-    }
-
-    doc.moveDown(1);
-
-    // Professional section header
-    doc
-      .fontSize(12)
-      .font("Helvetica-Bold")
-      .fillColor(this.PRIMARY_COLOR)
-      .text("TERMS & CONDITIONS", this.MARGIN_LEFT, doc.y);
-
-    doc.moveDown(0.5);
-
-    // Split terms into bullet points if they contain line breaks
-    const termLines = terms.split("\n").filter((line) => line.trim());
-
-    // Calculate height for terms box
-    let termsHeight = 20; // padding
-    termLines.forEach((line) => {
-      const trimmedLine = line.trim();
-      if (trimmedLine) {
-        termsHeight += doc.heightOfString(
-          trimmedLine.match(/^[\d•\-\*]/) ? trimmedLine : `• ${trimmedLine}`,
-          { width: this.CONTENT_WIDTH - 20, fontSize: 8 }
-        ) + 6;
-      }
-    });
-
-    // Terms box with professional styling
-    doc
-      .rect(this.MARGIN_LEFT, doc.y, this.CONTENT_WIDTH, termsHeight)
-      .fillAndStroke(this.LIGHT_GRAY, this.BORDER_COLOR);
-
-    doc.fontSize(8).font("Helvetica").fillColor("#000000");
-
-    let currentY = doc.y + 10;
-    termLines.forEach((line) => {
-      if (currentY > doc.y + termsHeight - 20) {
-        // If we exceed the box, we'll need to handle this differently
-        // For now, just continue
-      }
-
-      const trimmedLine = line.trim();
-      if (trimmedLine) {
-        // Add bullet point if line doesn't start with one
-        const displayLine = trimmedLine.match(/^[\d•\-\*]/) ? trimmedLine : `• ${trimmedLine}`;
-        doc.text(displayLine, this.MARGIN_LEFT + 10, currentY, {
-          width: this.CONTENT_WIDTH - 20,
-          align: "left",
+        doc.text("S.No", col1X, tableTop + 9, { width: col1W, align: "center" });
+        doc.text("Description", col2X + 5, tableTop + 9, {
+            width: col2W - 10,
+            align: "left",
         });
-        currentY += doc.heightOfString(displayLine, {
-          width: this.CONTENT_WIDTH - 20,
-          fontSize: 8
-        }) + 4;
-      }
-    });
+        doc.text("Qty", col3X, tableTop + 9, { width: col3W, align: "center" });
+        doc.text("Unit Price", col4X, tableTop + 9, {
+            width: col4W,
+            align: "right",
+        });
+        doc.text("Subtotal", col5X, tableTop + 9, {
+            width: col5W,
+            align: "right",
+        });
 
-    doc.y = doc.y + termsHeight + 15;
-  }
-
-  private static drawAdvancedSections(doc: InstanceType<typeof PDFDocument>, quote: Quote) {
-    // Check if we need a new page for advanced sections
-    if (doc.y > 650) {
-      doc.addPage();
+        return {
+            startY: tableTop + headerHeight,
+            col1X,
+            col1W,
+            col2X,
+            col2W,
+            col3X,
+            col3W,
+            col4X,
+            col4W,
+            col5X,
+            col5W,
+        };
     }
 
-    // Bill of Materials
-    if (quote.bomSection) {
-      try {
-        const bomData = JSON.parse(quote.bomSection);
-        if (bomData && bomData.length > 0) {
-          doc.moveDown(1);
-          doc.fontSize(14).font("Helvetica-Bold").text("BILL OF MATERIALS (BOM)");
-          doc.moveDown(0.5);
+    private static drawLineItemsTable(
+        doc: InstanceType<typeof PDFDocument>,
+        data: QuoteWithDetails,
+        headerTitle: string
+    ) {
+        const items = data.items;
 
-          bomData.forEach((item: any, index: number) => {
-            if (doc.y > 700) doc.addPage();
+        doc.moveDown(0.5);
+        const startY = doc.y;
 
-            doc.fontSize(11).font("Helvetica-Bold").text(`Item ${index + 1}: ${item.partNumber}`);
-            doc.fontSize(9).font("Helvetica");
-            doc.text(`Description: ${item.description}`);
-            if (item.manufacturer) doc.text(`Manufacturer: ${item.manufacturer}`);
-            doc.text(`Quantity: ${item.quantity} ${item.unitOfMeasure}`);
-            if (item.specifications) doc.text(`Specifications: ${item.specifications}`);
-            if (item.notes) doc.text(`Notes: ${item.notes}`);
-            doc.moveDown(0.5);
-          });
-        }
-      } catch (e) {
-        console.error("Failed to parse BOM section:", e);
-      }
-    }
+        // Section title
+        doc
+            .fontSize(11)
+            .font("Helvetica-Bold")
+            .fillColor(this.PRIMARY_COLOR)
+            .text("PRODUCTS & SERVICES", this.MARGIN_LEFT, startY);
 
-    // Service Level Agreement
-    if (quote.slaSection) {
-      try {
-        const slaData = JSON.parse(quote.slaSection);
-        if (slaData && (slaData.overview || slaData.metrics?.length > 0)) {
-          if (doc.y > 650) doc.addPage();
+        doc.moveDown(0.5);
 
-          doc.moveDown(1);
-          doc.fontSize(14).font("Helvetica-Bold").text("SERVICE LEVEL AGREEMENT (SLA)");
-          doc.moveDown(0.5);
+        let headerInfo = this.drawProductsTableHeader(doc);
+        let y = headerInfo.startY;
 
-          if (slaData.overview) {
-            doc.fontSize(11).font("Helvetica-Bold").text("Overview");
-            doc.fontSize(9).font("Helvetica").text(slaData.overview, { width: 500 });
-            doc.moveDown(0.5);
-          }
+        doc.fillColor("#000000").font("Helvetica");
 
-          if (slaData.responseTime || slaData.resolutionTime || slaData.availability || slaData.supportHours) {
-            doc.fontSize(11).font("Helvetica-Bold").text("Service Commitments");
-            doc.fontSize(9).font("Helvetica");
-            if (slaData.responseTime) doc.text(`Response Time: ${slaData.responseTime}`);
-            if (slaData.resolutionTime) doc.text(`Resolution Time: ${slaData.resolutionTime}`);
-            if (slaData.availability) doc.text(`System Availability: ${slaData.availability}`);
-            if (slaData.supportHours) doc.text(`Support Hours: ${slaData.supportHours}`);
-            doc.moveDown(0.5);
-          }
+        items.forEach((item, index) => {
+            // Need new page?
+            if (y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 80) {
+                this.addPageWithHeader(doc, data, headerTitle);
 
-          if (slaData.metrics && slaData.metrics.length > 0) {
-            doc.fontSize(11).font("Helvetica-Bold").text("Performance Metrics");
-            doc.fontSize(9).font("Helvetica");
-            slaData.metrics.forEach((metric: any) => {
-              if (doc.y > 700) doc.addPage();
-              doc.font("Helvetica-Bold").text(`• ${metric.name} - Target: ${metric.target}`);
-              doc.font("Helvetica").text(`  ${metric.description}`, { indent: 10 });
-              if (metric.penalty) doc.text(`  Penalty: ${metric.penalty}`, { indent: 10 });
+                doc.moveDown(0.5);
+                doc
+                    .fontSize(11)
+                    .font("Helvetica-Bold")
+                    .fillColor(this.PRIMARY_COLOR)
+                    .text("PRODUCTS & SERVICES (contd.)", this.MARGIN_LEFT, doc.y);
+
+                doc.moveDown(0.5);
+                headerInfo = this.drawProductsTableHeader(doc);
+                y = headerInfo.startY;
+                doc.fillColor("#000000").font("Helvetica");
+            }
+
+            const minRowHeight = 22;
+            const descHeight = doc.heightOfString(item.description, {
+                width: headerInfo.col2W - 15,
             });
-            doc.moveDown(0.5);
-          }
-        }
-      } catch (e) {
-        console.error("Failed to parse SLA section:", e);
-      }
-    }
+            const actualRowHeight = Math.max(minRowHeight, descHeight + 10);
 
-    // Project Timeline
-    if (quote.timelineSection) {
-      try {
-        const timelineData = JSON.parse(quote.timelineSection);
-        if (timelineData && (timelineData.projectOverview || timelineData.milestones?.length > 0)) {
-          if (doc.y > 650) doc.addPage();
+            // Alternating row background
+            if (index % 2 === 0) {
+                doc
+                    .rect(this.MARGIN_LEFT, y, this.CONTENT_WIDTH, actualRowHeight)
+                    .fill("#fafbfc");
+            } else {
+                doc
+                    .rect(this.MARGIN_LEFT, y, this.CONTENT_WIDTH, actualRowHeight)
+                    .fill("#ffffff");
+            }
 
-          doc.moveDown(1);
-          doc.fontSize(14).font("Helvetica-Bold").text("PROJECT TIMELINE");
-          doc.moveDown(0.5);
+            // Row border
+            doc
+                .strokeColor("#e2e8f0")
+                .lineWidth(0.5)
+                .moveTo(this.MARGIN_LEFT, y + actualRowHeight)
+                .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, y + actualRowHeight)
+                .stroke();
 
-          if (timelineData.projectOverview) {
-            doc.fontSize(11).font("Helvetica-Bold").text("Project Overview");
-            doc.fontSize(9).font("Helvetica").text(timelineData.projectOverview, { width: 500 });
-            doc.moveDown(0.5);
-          }
+            doc.fillColor("#000000").fontSize(9).font("Helvetica");
 
-          if (timelineData.startDate || timelineData.endDate) {
-            doc.fontSize(9).font("Helvetica");
-            if (timelineData.startDate) doc.text(`Project Start: ${new Date(timelineData.startDate).toLocaleDateString()}`);
-            if (timelineData.endDate) doc.text(`Project End: ${new Date(timelineData.endDate).toLocaleDateString()}`);
-            doc.moveDown(0.5);
-          }
+            const textY = y + (actualRowHeight - 12) / 2;
 
-          if (timelineData.milestones && timelineData.milestones.length > 0) {
-            doc.fontSize(11).font("Helvetica-Bold").text("Milestones & Phases");
-            doc.moveDown(0.3);
-
-            timelineData.milestones.forEach((milestone: any, index: number) => {
-              if (doc.y > 700) doc.addPage();
-
-              doc.fontSize(10).font("Helvetica-Bold").text(`${index + 1}. ${milestone.name} (${milestone.status})`);
-              doc.fontSize(9).font("Helvetica");
-              if (milestone.description) doc.text(milestone.description);
-              if (milestone.startDate || milestone.endDate || milestone.duration) {
-                let dateStr = "";
-                if (milestone.startDate) dateStr += `Start: ${new Date(milestone.startDate).toLocaleDateString()}`;
-                if (milestone.endDate) dateStr += ` | End: ${new Date(milestone.endDate).toLocaleDateString()}`;
-                if (milestone.duration) dateStr += ` | Duration: ${milestone.duration}`;
-                doc.text(dateStr);
-              }
-              if (milestone.deliverables) doc.text(`Deliverables: ${milestone.deliverables}`);
-              doc.moveDown(0.5);
+            // S.No
+            doc.text(String(index + 1), headerInfo.col1X, textY, {
+                width: headerInfo.col1W,
+                align: "center",
             });
-          }
+
+            // Description
+            doc.text(item.description, headerInfo.col2X + 5, y + 6, {
+                width: headerInfo.col2W - 15,
+                align: "left",
+            });
+
+            // Qty
+            doc.text(String(item.quantity), headerInfo.col3X, textY, {
+                width: headerInfo.col3W,
+                align: "center",
+            });
+
+            // Unit Price
+            doc.text(
+                `₹${Number(item.unitPrice).toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                })}`,
+                headerInfo.col4X,
+                textY,
+                { width: headerInfo.col4W, align: "right" }
+            );
+
+            // Amount
+            doc.text(
+                `₹${Number(item.subtotal).toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                })}`,
+                headerInfo.col5X,
+                textY,
+                { width: headerInfo.col5W, align: "right" }
+            );
+
+            y += actualRowHeight;
+        });
+
+        // Bottom border of table
+        doc
+            .strokeColor(this.PRIMARY_COLOR)
+            .lineWidth(1.5)
+            .moveTo(this.MARGIN_LEFT, y)
+            .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, y)
+            .stroke();
+
+        doc.y = y + 20;
+    }
+
+    // ---------------------------------------------------------------------------
+    // TOTALS
+    // ---------------------------------------------------------------------------
+    private static drawTotalsSection(
+        doc: InstanceType<typeof PDFDocument>,
+        quote: Quote
+    ) {
+        doc.moveDown(0.5);
+        const startY = doc.y;
+
+        const boxWidth = 270;
+        const boxX = this.PAGE_WIDTH - this.MARGIN_RIGHT - boxWidth;
+
+        let lineCount = 2; // subtotal + total
+        if (Number(quote.discount) > 0) lineCount++;
+        if (Number(quote.shippingCharges) > 0) lineCount++;
+        if (Number(quote.cgst) > 0) lineCount++;
+        if (Number(quote.sgst) > 0) lineCount++;
+        if (Number(quote.igst) > 0) lineCount++;
+
+        const boxHeight = lineCount * 19 + 58;
+
+        // Shadow
+        doc.rect(boxX + 2, startY + 2, boxWidth, boxHeight).fill("#d1d5db");
+
+        // Main
+        doc.rect(boxX, startY, boxWidth, boxHeight).fillAndStroke("#ffffff", "#cbd5e1");
+
+        // Title bar
+        doc.rect(boxX, startY, boxWidth, 26).fill("#dbeafe");
+
+        doc
+            .fontSize(10)
+            .font("Helvetica-Bold")
+            .fillColor(this.PRIMARY_COLOR)
+            .text("FINANCIAL SUMMARY", boxX + 15, startY + 8);
+
+        doc.fillColor("#000000");
+
+        let y = startY + 38;
+        const labelX = boxX + 15;
+        const valueX = boxX + boxWidth - 20;
+
+        const formatCurrency = (v: number) =>
+            `₹${Number(v).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            })}`;
+
+        doc.fontSize(9.5).font("Helvetica");
+        doc.fillColor(this.SECONDARY_COLOR).text("Subtotal:", labelX, y);
+        doc.fillColor("#000000");
+        doc.text(formatCurrency(Number(quote.subtotal)), valueX - 100, y, {
+            width: 100,
+            align: "right",
+        });
+        y += 19;
+
+        if (Number(quote.discount) > 0) {
+            doc.fillColor(this.SECONDARY_COLOR).text("Discount:", labelX, y);
+            doc.fillColor("#dc2626");
+            doc.text(`-${formatCurrency(Number(quote.discount))}`, valueX - 100, y, {
+                width: 100,
+                align: "right",
+            });
+            y += 19;
         }
-      } catch (e) {
-        console.error("Failed to parse Timeline section:", e);
-      }
-    }
-  }
 
-  static generateInvoicePDF(
-    data: QuoteWithDetails & {
-      invoiceNumber: string;
-      dueDate: Date;
-    }
-  ): Readable {
-    const doc = new PDFDocument({
-      size: "A4",
-      margin: 50,
-    });
+        if (Number(quote.shippingCharges) > 0) {
+            doc.fillColor(this.SECONDARY_COLOR).text("Shipping & Handling:", labelX, y);
+            doc.fillColor("#000000");
+            doc.text(formatCurrency(Number(quote.shippingCharges)), valueX - 100, y, {
+                width: 100,
+                align: "right",
+            });
+            y += 19;
+        }
 
-    const buffers: Buffer[] = [];
-    doc.on("data", (buffer: Buffer) => buffers.push(buffer));
+        doc.fontSize(8.5);
 
-    // Header
-    doc.fontSize(20).font("Helvetica-Bold").text("INVOICE", { align: "center" });
-    doc.moveDown(0.5);
-    doc.fontSize(10).font("Helvetica").text("─".repeat(80), { align: "center" });
-    doc.moveDown(0.5);
+        if (Number(quote.cgst) > 0) {
+            doc.fillColor(this.SECONDARY_COLOR).text("CGST (9%):", labelX + 10, y);
+            doc.fillColor("#000000");
+            doc.text(formatCurrency(Number(quote.cgst)), valueX - 100, y, {
+                width: 100,
+                align: "right",
+            });
+            y += 17;
+        }
 
-    // Company Info (left)
-    doc
-      .fontSize(12)
-      .font("Helvetica-Bold")
-      .text(data.companyName || "Your Company");
-    doc
-      .fontSize(10)
-      .font("Helvetica")
-      .text(data.companyAddress || "Company Address")
-      .moveDown(0.5);
+        if (Number(quote.sgst) > 0) {
+            doc.fillColor(this.SECONDARY_COLOR).text("SGST (9%):", labelX + 10, y);
+            doc.fillColor("#000000");
+            doc.text(formatCurrency(Number(quote.sgst)), valueX - 100, y, {
+                width: 100,
+                align: "right",
+            });
+            y += 17;
+        }
 
-    // Invoice Details (right side)
-    const rightX = 400;
-    doc.fontSize(10).font("Helvetica");
-    doc.text(`Invoice #: ${data.invoiceNumber}`, rightX, doc.y);
-    doc.text(`Quote #: ${data.quote.quoteNumber}`, rightX);
-    doc.text(`Date: ${new Date(data.quote.quoteDate).toLocaleDateString()}`, rightX);
-    doc.text(`Due Date: ${data.dueDate.toLocaleDateString()}`, rightX);
+        if (Number(quote.igst) > 0) {
+            doc.fillColor(this.SECONDARY_COLOR).text("IGST (18%):", labelX + 10, y);
+            doc.fillColor("#000000");
+            doc.text(formatCurrency(Number(quote.igst)), valueX - 100, y, {
+                width: 100,
+                align: "right",
+            });
+            y += 17;
+        }
 
-    doc.moveDown(1);
+        y += 5;
+        doc.rect(boxX, y - 4, boxWidth, 30).fill(this.PRIMARY_COLOR);
 
-    // Bill To Section
-    doc.fontSize(11).font("Helvetica-Bold").text("BILL TO:");
-    doc.fontSize(10).font("Helvetica");
-    doc.text(data.client.name);
-    if (data.client.contactPerson) {
-      doc.text(`Attn: ${data.client.contactPerson}`);
-    }
-    if (data.client.email) {
-      doc.text(`Email: ${data.client.email}`);
-    }
-    if (data.client.phone) {
-      doc.text(`Phone: ${data.client.phone}`);
-    }
-    if (data.client.billingAddress) {
-      doc.text(data.client.billingAddress);
+        doc
+            .fontSize(11)
+            .font("Helvetica-Bold")
+            .fillColor("#FFFFFF")
+            .text("TOTAL AMOUNT:", labelX, y + 8);
+
+        doc.fontSize(12);
+        doc.text(formatCurrency(Number(quote.total)), valueX - 120, y + 7, {
+            width: 120,
+            align: "right",
+        });
+
+        doc.y = startY + boxHeight + 20;
     }
 
-    doc.moveDown(0.5);
+    // ---------------------------------------------------------------------------
+    // NOTES / TERMS
+    // ---------------------------------------------------------------------------
+    private static drawNotesSection(
+        doc: InstanceType<typeof PDFDocument>,
+        notes: string
+    ) {
+        if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 120) {
+            doc.addPage();
+            // header is already drawn on this page by earlier logic
+        }
 
-    // Line Items Table
-    this.drawLineItemsTable(doc, data.items);
+        doc.moveDown(0.8);
+        doc
+            .fontSize(11)
+            .font("Helvetica-Bold")
+            .fillColor(this.PRIMARY_COLOR)
+            .text("NOTES", this.MARGIN_LEFT, doc.y);
 
-    doc.moveDown(0.5);
+        doc.moveDown(0.4);
 
-    // Totals Section
-    this.drawTotalsSection(doc, data.quote);
+        doc.fontSize(9).font("Helvetica");
+        const notesHeight =
+            doc.heightOfString(notes, {
+                width: this.CONTENT_WIDTH - 20,
+            }) + 20;
 
-    doc.moveDown(1);
+        doc
+            .rect(this.MARGIN_LEFT, doc.y, this.CONTENT_WIDTH, notesHeight)
+            .fillAndStroke("#fffbeb", "#fbbf24");
 
-    // Footer
-    doc.fontSize(9).font("Helvetica").text("─".repeat(80), { align: "center" });
-    doc.text("Thank you for your business!", { align: "center" });
+        doc
+            .fontSize(9)
+            .font("Helvetica")
+            .fillColor("#78350f")
+            .text(notes, this.MARGIN_LEFT + 10, doc.y + 10, {
+                width: this.CONTENT_WIDTH - 20,
+                align: "left",
+                lineGap: 3,
+            });
 
-    doc.end();
+        doc.y = doc.y + notesHeight + 15;
+    }
 
-    return Readable.from(buffers);
-  }
+    private static drawTermsAndConditions(
+        doc: InstanceType<typeof PDFDocument>,
+        terms: string
+    ) {
+        if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 180) {
+            doc.addPage();
+        }
+
+        doc.moveDown(0.8);
+        doc
+            .fontSize(11)
+            .font("Helvetica-Bold")
+            .fillColor(this.PRIMARY_COLOR)
+            .text("TERMS & CONDITIONS", this.MARGIN_LEFT, doc.y);
+
+        doc.moveDown(0.4);
+
+        const termLines = terms.split("\n").filter((line) => line.trim());
+
+        doc.fontSize(8.5).font("Helvetica");
+        let termsHeight = 20;
+
+        termLines.forEach((line) => {
+            const trimmedLine = line.trim();
+            if (!trimmedLine) return;
+            const displayText = trimmedLine.match(/^[\d•\-*]/)
+                ? trimmedLine
+                : `• ${trimmedLine}`;
+            termsHeight +=
+                doc.heightOfString(displayText, {
+                    width: this.CONTENT_WIDTH - 20,
+                }) + 6;
+        });
+
+        doc
+            .rect(this.MARGIN_LEFT, doc.y, this.CONTENT_WIDTH, termsHeight)
+            .fillAndStroke("#f8fafc", "#cbd5e1");
+
+        doc.fontSize(8.5).font("Helvetica").fillColor("#1e293b");
+
+        let currentY = doc.y + 10;
+        termLines.forEach((line) => {
+            const trimmedLine = line.trim();
+            if (!trimmedLine) return;
+
+            const displayLine = trimmedLine.match(/^[\d•\-*]/)
+                ? trimmedLine
+                : `• ${trimmedLine}`;
+
+            doc.text(displayLine, this.MARGIN_LEFT + 10, currentY, {
+                width: this.CONTENT_WIDTH - 20,
+                align: "left",
+                lineGap: 2,
+            });
+
+            currentY +=
+                doc.heightOfString(displayLine, {
+                    width: this.CONTENT_WIDTH - 20,
+                }) + 4;
+        });
+
+        doc.y = doc.y + termsHeight + 15;
+    }
+
+    // ---------------------------------------------------------------------------
+    // ADVANCED SECTIONS (BOM, SLA, TIMELINE)
+    // ---------------------------------------------------------------------------
+    private static drawAdvancedSections(
+        doc: InstanceType<typeof PDFDocument>,
+        data: QuoteWithDetails,
+        headerTitle: string
+    ) {
+        const quote = data.quote;
+
+        // Ensure some space at bottom before adding advanced sections
+        if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 150) {
+            this.addPageWithHeader(doc, data, headerTitle);
+        }
+
+        // ---------------------- BOM ----------------------
+        if (quote.bomSection) {
+            try {
+                const bomData = JSON.parse(quote.bomSection);
+                if (bomData && bomData.length > 0) {
+                    doc.moveDown(0.8);
+
+                    doc
+                        .fontSize(11)
+                        .font("Helvetica-Bold")
+                        .fillColor(this.PRIMARY_COLOR)
+                        .text("BILL OF MATERIALS (BOM)", this.MARGIN_LEFT, doc.y);
+
+                    doc.moveDown(0.5);
+
+                    bomData.forEach((item: any, index: number) => {
+                        if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 120) {
+                            this.addPageWithHeader(doc, data, headerTitle);
+                            doc.moveDown(0.5);
+                        }
+
+                        const itemStartY = doc.y;
+                        const itemHeight = 80;
+
+                        doc
+                            .rect(this.MARGIN_LEFT, itemStartY, this.CONTENT_WIDTH, itemHeight)
+                            .fillAndStroke("#f8fafc", "#cbd5e1");
+
+                        doc
+                            .fontSize(10)
+                            .font("Helvetica-Bold")
+                            .fillColor(this.ACCENT_COLOR)
+                            .text(
+                                `Item ${index + 1}: ${item.partNumber || ""}`,
+                                this.MARGIN_LEFT + 10,
+                                itemStartY + 8
+                            );
+
+                        let y = itemStartY + 25;
+                        doc.fontSize(9).font("Helvetica").fillColor("#000000");
+
+                        if (item.description) {
+                            doc.text(`Description: ${item.description}`, this.MARGIN_LEFT + 10, y, {
+                                width: this.CONTENT_WIDTH - 20,
+                            });
+                            y = doc.y + 3;
+                        }
+
+                        if (item.manufacturer) {
+                            doc.text(
+                                `Manufacturer: ${item.manufacturer}`,
+                                this.MARGIN_LEFT + 10,
+                                y
+                            );
+                            y += 12;
+                        }
+
+                        if (item.quantity) {
+                            doc.text(
+                                `Quantity: ${item.quantity} ${
+                                    item.unitOfMeasure || "units"
+                                }`,
+                                this.MARGIN_LEFT + 10,
+                                y
+                            );
+                            y += 12;
+                        }
+
+                        if (item.specifications) {
+                            doc.text(
+                                `Specifications: ${item.specifications}`,
+                                this.MARGIN_LEFT + 10,
+                                y,
+                                {
+                                    width: this.CONTENT_WIDTH - 20,
+                                }
+                            );
+                        }
+
+                        doc.y = itemStartY + itemHeight + 8;
+                    });
+                }
+            } catch (e) {
+                console.error("Failed to parse BOM section:", e);
+            }
+        }
+
+        // ---------------------- SLA ----------------------
+        if (quote.slaSection) {
+            try {
+                const slaData = JSON.parse(quote.slaSection);
+                if (slaData && (slaData.overview || slaData.metrics?.length > 0)) {
+                    if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 150) {
+                        this.addPageWithHeader(doc, data, headerTitle);
+                    }
+
+                    doc.moveDown(0.8);
+                    doc
+                        .fontSize(11)
+                        .font("Helvetica-Bold")
+                        .fillColor(this.PRIMARY_COLOR)
+                        .text("SERVICE LEVEL AGREEMENT (SLA)", this.MARGIN_LEFT, doc.y);
+
+                    doc.moveDown(0.5);
+
+                    if (slaData.overview) {
+                        doc
+                            .fontSize(9)
+                            .font("Helvetica")
+                            .fillColor("#000000")
+                            .text(slaData.overview, this.MARGIN_LEFT, doc.y, {
+                                width: this.CONTENT_WIDTH,
+                                lineGap: 2,
+                            });
+                        doc.moveDown(0.5);
+                    }
+
+                    if (
+                        slaData.responseTime ||
+                        slaData.resolutionTime ||
+                        slaData.availability ||
+                        slaData.supportHours
+                    ) {
+                        const boxStartY = doc.y;
+                        const boxHeight = 70;
+
+                        doc
+                            .rect(this.MARGIN_LEFT, boxStartY, this.CONTENT_WIDTH, boxHeight)
+                            .fillAndStroke("#ecfdf5", "#10b981");
+
+                        let y = boxStartY + 10;
+                        doc.fontSize(9).font("Helvetica").fillColor("#065f46");
+
+                        if (slaData.responseTime) {
+                            doc.text(
+                                `✓ Response Time: ${slaData.responseTime}`,
+                                this.MARGIN_LEFT + 10,
+                                y
+                            );
+                            y += 15;
+                        }
+                        if (slaData.resolutionTime) {
+                            doc.text(
+                                `✓ Resolution Time: ${slaData.resolutionTime}`,
+                                this.MARGIN_LEFT + 10,
+                                y
+                            );
+                            y += 15;
+                        }
+                        if (slaData.availability) {
+                            doc.text(
+                                `✓ System Availability: ${slaData.availability}`,
+                                this.MARGIN_LEFT + 10,
+                                y
+                            );
+                            y += 15;
+                        }
+                        if (slaData.supportHours) {
+                            doc.text(
+                                `✓ Support Hours: ${slaData.supportHours}`,
+                                this.MARGIN_LEFT + 10,
+                                y
+                            );
+                        }
+
+                        doc.y = boxStartY + boxHeight + 10;
+                    }
+
+                    if (slaData.metrics && slaData.metrics.length > 0) {
+                        doc.moveDown(0.3);
+                        doc
+                            .fontSize(10)
+                            .font("Helvetica-Bold")
+                            .fillColor(this.SECONDARY_COLOR)
+                            .text("Performance Metrics:", this.MARGIN_LEFT, doc.y);
+
+                        doc.moveDown(0.3);
+
+                        slaData.metrics.forEach((metric: any) => {
+                            if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 80) {
+                                this.addPageWithHeader(doc, data, headerTitle);
+                            }
+
+                            doc
+                                .fontSize(9)
+                                .font("Helvetica-Bold")
+                                .fillColor("#000000");
+                            doc.text(
+                                `• ${metric.name} - Target: ${metric.target}`,
+                                this.MARGIN_LEFT + 5,
+                                doc.y
+                            );
+
+                            if (metric.description) {
+                                doc.font("Helvetica").fillColor(this.SECONDARY_COLOR);
+                                doc.text(metric.description, this.MARGIN_LEFT + 15, doc.y + 2, {
+                                    width: this.CONTENT_WIDTH - 20,
+                                });
+                            }
+
+                            doc.moveDown(0.3);
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to parse SLA section:", e);
+            }
+        }
+
+        // ---------------------- TIMELINE ----------------------
+        if (quote.timelineSection) {
+            try {
+                const timelineData = JSON.parse(quote.timelineSection);
+                if (
+                    timelineData &&
+                    (timelineData.projectOverview || timelineData.milestones?.length > 0)
+                ) {
+                    if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 150) {
+                        this.addPageWithHeader(doc, data, headerTitle);
+                    }
+
+                    doc.moveDown(0.8);
+                    doc
+                        .fontSize(11)
+                        .font("Helvetica-Bold")
+                        .fillColor(this.PRIMARY_COLOR)
+                        .text("PROJECT TIMELINE", this.MARGIN_LEFT, doc.y);
+
+                    doc.moveDown(0.5);
+
+                    if (timelineData.projectOverview) {
+                        doc
+                            .fontSize(9)
+                            .font("Helvetica")
+                            .fillColor("#000000")
+                            .text(timelineData.projectOverview, this.MARGIN_LEFT, doc.y, {
+                                width: this.CONTENT_WIDTH,
+                                lineGap: 2,
+                            });
+                        doc.moveDown(0.4);
+                    }
+
+                    if (timelineData.startDate || timelineData.endDate) {
+                        const dateBoxY = doc.y;
+                        doc
+                            .rect(this.MARGIN_LEFT, dateBoxY, this.CONTENT_WIDTH, 35)
+                            .fillAndStroke("#dbeafe", "#3b82f6");
+
+                        doc
+                            .fontSize(9)
+                            .font("Helvetica-Bold")
+                            .fillColor(this.PRIMARY_COLOR);
+
+                        let y = dateBoxY + 10;
+
+                        if (timelineData.startDate) {
+                            doc.text(
+                                `Project Start: ${new Date(
+                                    timelineData.startDate
+                                ).toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                })}`,
+                                this.MARGIN_LEFT + 10,
+                                y
+                            );
+                            y += 14;
+                        }
+
+                        if (timelineData.endDate) {
+                            doc.text(
+                                `Project End: ${new Date(
+                                    timelineData.endDate
+                                ).toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                })}`,
+                                this.MARGIN_LEFT + 10,
+                                y
+                            );
+                        }
+
+                        doc.y = dateBoxY + 45;
+                    }
+
+                    if (timelineData.milestones && timelineData.milestones.length > 0) {
+                        doc.moveDown(0.3);
+
+                        timelineData.milestones.forEach((milestone: any, index: number) => {
+                            if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 80) {
+                                this.addPageWithHeader(doc, data, headerTitle);
+                            }
+
+                            const milestoneY = doc.y;
+                            const milestoneHeight = 60;
+
+                            let statusColor = "#cbd5e1";
+                            let statusBg = "#f8fafc";
+                            if (milestone.status === "Completed") {
+                                statusColor = "#10b981";
+                                statusBg = "#ecfdf5";
+                            } else if (milestone.status === "In Progress") {
+                                statusColor = "#f59e0b";
+                                statusBg = "#fffbeb";
+                            } else if (milestone.status === "Pending") {
+                                statusColor = "#3b82f6";
+                                statusBg = "#eff6ff";
+                            }
+
+                            doc
+                                .rect(
+                                    this.MARGIN_LEFT,
+                                    milestoneY,
+                                    this.CONTENT_WIDTH,
+                                    milestoneHeight
+                                )
+                                .fillAndStroke(statusBg, statusColor);
+
+                            doc
+                                .fontSize(10)
+                                .font("Helvetica-Bold")
+                                .fillColor(this.ACCENT_COLOR)
+                                .text(
+                                    `${index + 1}. ${milestone.name}`,
+                                    this.MARGIN_LEFT + 10,
+                                    milestoneY + 8
+                                );
+
+                            // Status badge
+                            doc.fontSize(8).fillColor(statusColor);
+                            doc.text(
+                                `[${milestone.status || "Not Started"}]`,
+                                this.MARGIN_LEFT + 10,
+                                milestoneY + 24
+                            );
+
+                            let y = milestoneY + 24;
+                            doc.fontSize(8.5).font("Helvetica").fillColor("#000000");
+
+                            if (milestone.startDate || milestone.endDate || milestone.duration) {
+                                let dateStr = "";
+                                if (milestone.startDate) {
+                                    dateStr += `Start: ${new Date(
+                                        milestone.startDate
+                                    ).toLocaleDateString("en-US", {
+                                        month: "short",
+                                        day: "numeric",
+                                    })}`;
+                                }
+                                if (milestone.endDate) {
+                                    dateStr += ` | End: ${new Date(
+                                        milestone.endDate
+                                    ).toLocaleDateString("en-US", {
+                                        month: "short",
+                                        day: "numeric",
+                                    })}`;
+                                }
+                                if (milestone.duration) {
+                                    dateStr += ` | Duration: ${milestone.duration}`;
+                                }
+                                doc.text(dateStr, this.MARGIN_LEFT + 80, y);
+                            }
+
+                            if (milestone.description) {
+                                doc.text(
+                                    milestone.description,
+                                    this.MARGIN_LEFT + 10,
+                                    y + 12,
+                                    {
+                                        width: this.CONTENT_WIDTH - 20,
+                                    }
+                                );
+                            }
+
+                            doc.y = milestoneY + milestoneHeight + 8;
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to parse Timeline section:", e);
+            }
+        }
+    }
 }
