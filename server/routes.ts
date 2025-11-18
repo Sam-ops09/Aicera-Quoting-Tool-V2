@@ -816,6 +816,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             }
             const items = await storage.getQuoteItems(quote.id);
 
+            const creator = await storage.getUser(quote.createdBy);
+
             // Fetch company settings
             const settings = await storage.getAllSettings();
             const companyName = settings.find((s) => s.key === "company_name")?.value || "OPTIVALUE TEK";
@@ -835,6 +837,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 companyEmail,
                 companyWebsite,
                 companyGSTIN,
+                preparedBy: creator?.name,
             });
 
             res.setHeader("Content-Type", "application/pdf");
@@ -881,6 +884,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       const items = await storage.getQuoteItems(quote.id);
 
+      const creator = await storage.getUser(quote.createdBy);
+
       // Fetch company settings
       const settings = await storage.getAllSettings();
       const companyName = settings.find((s) => s.key === "company_name")?.value || "OPTIVALUE TEK";
@@ -901,6 +906,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         companyEmail,
         companyWebsite,
         companyGSTIN,
+        preparedBy: creator?.name,
       });
 
       // Convert stream to buffer
@@ -1279,6 +1285,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       const items = await storage.getQuoteItems(quote.id);
 
+      const creator = await storage.getUser(quote.createdBy);
+
       // Fetch company settings
       const settings = await storage.getAllSettings();
       const companyName = settings.find((s) => s.key === "company_name")?.value || "OPTIVALUE TEK";
@@ -1298,6 +1306,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         companyEmail,
         companyWebsite,
         companyGSTIN,
+        preparedBy: creator?.name,
         invoiceNumber: invoice.invoiceNumber,
         dueDate: new Date(invoice.dueDate),
       });
@@ -1343,6 +1352,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       const items = await storage.getQuoteItems(quote.id);
 
+      const creator = await storage.getUser(quote.createdBy);
+
       // Fetch company settings
       const settings = await storage.getAllSettings();
       const companyName = settings.find((s) => s.key === "company_name")?.value || "OPTIVALUE TEK";
@@ -1363,6 +1374,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         companyEmail,
         companyWebsite,
         companyGSTIN,
+        preparedBy: creator?.name,
         invoiceNumber: invoice.invoiceNumber,
         dueDate: new Date(invoice.dueDate),
       });

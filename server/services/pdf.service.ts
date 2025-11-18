@@ -14,8 +14,8 @@ interface QuoteWithDetails {
     companyEmail?: string;
     companyWebsite?: string;
     companyGSTIN?: string;
-    // Optional extras if you have them in your model:
-    // preparedBy?: string; abstract?: string;
+    preparedBy?: string;
+    abstract?: string;
 }
 
 type InvoicePdfData = QuoteWithDetails & {
@@ -46,33 +46,33 @@ export class PDFService {
 
     // ===== PUBLIC APIS =========================================================
     static generateQuotePDF(data: QuoteWithDetails): PDFKit.PDFDocument {
-        console.log("=== PDF Generation Debug ===");
-        console.log("Quote:", {
-            quoteNumber: data.quote?.quoteNumber,
-            status: data.quote?.status,
-            quoteDate: data.quote?.quoteDate,
-            validityDays: data.quote?.validityDays,
-            subtotal: data.quote?.subtotal,
-            total: data.quote?.total,
-            notes: data.quote?.notes ? "Present" : "Missing",
-            termsAndConditions: data.quote?.termsAndConditions ? "Present" : "Missing",
-        });
-        console.log("Client:", {
-            name: data.client?.name,
-            email: data.client?.email,
-            phone: data.client?.phone,
-            billingAddress: data.client?.billingAddress ? "Present" : "Missing",
-            shippingAddress: data.client?.shippingAddress ? "Present" : "Missing",
-            gstin: data.client?.gstin,
-        });
-        console.log("Items count:", data.items?.length || 0);
-        console.log("Company:", {
-            companyName: data.companyName,
-            companyAddress: data.companyAddress ? "Present" : "Missing",
-            companyPhone: data.companyPhone,
-            companyEmail: data.companyEmail,
-        });
-        console.log("============================");
+        // console.log("=== PDF Generation Debug ===");
+        // console.log("Quote:", {
+        //     quoteNumber: data.quote?.quoteNumber,
+        //     status: data.quote?.status,
+        //     quoteDate: data.quote?.quoteDate,
+        //     validityDays: data.quote?.validityDays,
+        //     subtotal: data.quote?.subtotal,
+        //     total: data.quote?.total,
+        //     notes: data.quote?.notes ? "Present" : "Missing",
+        //     termsAndConditions: data.quote?.termsAndConditions ? "Present" : "Missing",
+        // });
+        // console.log("Client:", {
+        //     name: data.client?.name,
+        //     email: data.client?.email,
+        //     phone: data.client?.phone,
+        //     billingAddress: data.client?.billingAddress ? "Present" : "Missing",
+        //     shippingAddress: data.client?.shippingAddress ? "Present" : "Missing",
+        //     gstin: data.client?.gstin,
+        // });
+        // console.log("Items count:", data.items?.length || 0);
+        // console.log("Company:", {
+        //     companyName: data.companyName,
+        //     companyAddress: data.companyAddress ? "Present" : "Missing",
+        //     companyPhone: data.companyPhone,
+        //     companyEmail: data.companyEmail,
+        // });
+        // console.log("============================");
 
         const doc = new PDFDocument({
             size: "A4",
@@ -188,31 +188,60 @@ export class PDFService {
             });
 
         const abstractY = 600;
+        const bottomY = this.PAGE_HEIGHT - 100;
+        const authorText = `Author: ${data.preparedBy || data.companyName || "AICERA Systems"}`;
+        const maxAbstractHeight = bottomY - (abstractY + 30) - 20;
+        
         doc.fontSize(14).font("Helvetica-Bold").fillColor("#1f2937")
             .text("Abstract", 0, abstractY, {
                 width: this.PAGE_WIDTH,
                 align: "center",
             });
 
-        const abstractText = (data as any).abstract || data.quote?.notes || 
-            "This commercial proposal outlines a comprehensive solution designed to address specific business needs and achieve strategic objectives.";
+        const abstractText = data.abstract ||
+            `This commercial proposal outlines a comprehensive solution designed to address the specific needs of ${data.client.name} in enhancing their operations and achieving strategic objectives. Our approach leverages industry-leading technologies, innovative methodologies, and customized services to deliver measurable value and sustainable growth.`;
         
-        doc.fontSize(10).font("Helvetica").fillColor("#374151")
-            .text(abstractText, this.MARGIN_LEFT + 20, abstractY + 30, { 
-                width: this.CONTENT_WIDTH - 40, 
-                align: "justify",
-                lineGap: 4 
-            });
-
-        const bottomY = this.PAGE_HEIGHT - 80;
-        const authorText = `Author: ${(data as any).preparedBy || data.companyName || "AICERA Systems"}`;
+        doc.fontSize(10).font("Helvetica").fillColor("#374151");
+        
+        const abstractOptions = {
+            width: this.CONTENT_WIDTH - 40,
+            align: "justify" as const,
+            lineGap: 4
+        };
+        
+        let finalAbstractText = abstractText;
+        let abstractHeight = doc.heightOfString(finalAbstractText, abstractOptions);
+        
+        while (abstractHeight > maxAbstractHeight && finalAbstractText.length > 0) {
+            finalAbstractText = finalAbstractText.slice(0, -1);
+            abstractHeight = doc.heightOfString(finalAbstractText + "...", abstractOptions);
+        }
+        
+        if (finalAbstractText.length < abstractText.length) {
+            finalAbstractText = finalAbstractText.trim() + "...";
+        }
+        
+        const beforePageCount = doc.bufferedPageRange().count;
+        const currentY = doc.y;
+        
+        doc.text(finalAbstractText, this.MARGIN_LEFT + 20, abstractY + 30, abstractOptions);
+        
+        const afterPageCount = doc.bufferedPageRange().count;
+        
+        if (afterPageCount > beforePageCount) {
+            doc.switchToPage(0);
+        }
+        
+        doc.y = bottomY;
         doc.fontSize(11).font("Helvetica").fillColor("#6b7280")
-            .text(authorText, 0, bottomY, {
-                width: this.PAGE_WIDTH,
-                align: "center",
+            .text(authorText, this.MARGIN_LEFT, bottomY, {
+                width: this.CONTENT_WIDTH,
+                align: "right"
             });
 
-        doc.addPage();
+        if (afterPageCount === beforePageCount) {
+            doc.addPage();
+        }
     }
 
     private static drawWaveHeader(doc: InstanceType<typeof PDFDocument>) {
@@ -1022,6 +1051,6 @@ export class PDFService {
 
     private static currency(v: number | string): string {
         const n = Number(v) || 0;
-        return `₹${n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        return `Rs. ${n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 }
