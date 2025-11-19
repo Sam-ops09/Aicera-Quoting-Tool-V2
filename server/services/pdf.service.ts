@@ -19,25 +19,27 @@ interface QuoteWithDetails {
 }
 
 export class PDFService {
-    // Page geometry
+    // Page geometry - Optimized for A4
     private static readonly PAGE_WIDTH = 595.28; // A4
     private static readonly PAGE_HEIGHT = 841.89;
-    private static readonly MARGIN_LEFT = 40;
-    private static readonly MARGIN_RIGHT = 40;
-    private static readonly MARGIN_TOP = 130;
-    private static readonly MARGIN_BOTTOM = 80;
+    private static readonly MARGIN_LEFT = 35;
+    private static readonly MARGIN_RIGHT = 35;
+    private static readonly MARGIN_TOP = 100;
+    private static readonly MARGIN_BOTTOM = 60;
     private static readonly CONTENT_WIDTH =
         PDFService.PAGE_WIDTH - PDFService.MARGIN_LEFT - PDFService.MARGIN_RIGHT;
 
-    // Palette (close to your existing)
-    private static readonly PRIMARY = "#1e3a8a";     // header/table header
-    private static readonly PRIMARY_LIGHT = "#1e40af";
-    private static readonly TEXT = "#0f172a";
-    private static readonly MUTED = "#475569";
-    private static readonly BORDER = "#cbd5e1";
+    private static readonly PRIMARY = "#0f172a";
+    private static readonly PRIMARY_LIGHT = "#1e293b";
+    private static readonly ACCENT = "#3b82f6";
+    private static readonly ACCENT_LIGHT = "#60a5fa";
+    private static readonly TEXT = "#1e293b";
+    private static readonly MUTED = "#64748b";
+    private static readonly BORDER = "#e2e8f0";
     private static readonly BG_SOFT = "#f8fafc";
-    private static readonly BG_ALT = "#fafbfc";
-    private static readonly ACCENT_LINE = "#3b82f6";
+    private static readonly BG_ALT = "#f1f5f9";
+    private static readonly SUCCESS = "#10b981";
+    private static readonly WARNING = "#f59e0b";
 
     // ===== PUBLIC APIS =========================================================
     static generateQuotePDF(data: QuoteWithDetails): PDFKit.PDFDocument {
@@ -128,39 +130,42 @@ export class PDFService {
             console.error("Logo error:", e);
         }
 
-        const companyNameY = 360;
-        doc.fontSize(48).font("Helvetica-Bold").fillColor("#1a202c")
+        const companyNameY = 365;
+        doc.fontSize(52).font("Helvetica-Bold").fillColor("#0f172a")
             .text(data.companyName?.toLowerCase() || "aicera", 0, companyNameY, {
                 width: this.PAGE_WIDTH,
                 align: "center",
             });
 
-        const titleY = 450;
-        doc.fontSize(22).font("Helvetica-Oblique").fillColor("#374151")
+        const titleY = 460;
+        doc.fontSize(26).font("Helvetica-Bold").fillColor("#3b82f6")
             .text("Commercial Proposal", 0, titleY, {
                 width: this.PAGE_WIDTH,
                 align: "center",
             });
 
-        doc.fontSize(18).font("Helvetica-Oblique").fillColor("#374151")
-            .text("For", 0, titleY + 35, {
+        doc.fontSize(20).font("Helvetica").fillColor("#64748b")
+            .text("for", 0, titleY + 40, {
                 width: this.PAGE_WIDTH,
                 align: "center",
             });
 
-        doc.fontSize(22).font("Helvetica-Oblique").fillColor("#374151")
-            .text(data.client.name, 0, titleY + 65, {
+        doc.fontSize(24).font("Helvetica-Bold").fillColor("#1e293b")
+            .text(data.client.name, 0, titleY + 70, {
                 width: this.PAGE_WIDTH,
                 align: "center",
             });
 
-        const abstractY = 600;
+        const abstractY = 610;
         const bottomY = this.PAGE_HEIGHT - 100;
-        const authorText = `Author: ${data.preparedBy || data.companyName || "AICERA Systems"}`;
-        const maxAbstractHeight = bottomY - (abstractY + 30) - 20;
+        const authorText = `Prepared by: ${data.preparedBy || data.companyName || "AICERA Systems"}`;
+        const maxAbstractHeight = bottomY - (abstractY + 40) - 25;
 
-        doc.fontSize(14).font("Helvetica-Bold").fillColor("#1f2937")
-            .text("Abstract", 0, abstractY, {
+        doc.rect(this.MARGIN_LEFT, abstractY - 8, this.CONTENT_WIDTH, 2)
+            .fill("#3b82f6");
+
+        doc.fontSize(16).font("Helvetica-Bold").fillColor("#1e293b")
+            .text("Abstract", 0, abstractY + 8, {
                 width: this.PAGE_WIDTH,
                 align: "center",
             });
@@ -168,12 +173,12 @@ export class PDFService {
         const abstractText = data.abstract ||
             `This commercial proposal outlines a comprehensive solution designed to address the specific needs of ${data.client.name} in enhancing their operations and achieving strategic objectives. Our approach leverages industry-leading technologies, innovative methodologies, and customized services to deliver measurable value and sustainable growth.`;
 
-        doc.fontSize(10).font("Helvetica").fillColor("#374151");
+        doc.fontSize(10.5).font("Helvetica").fillColor("#475569");
 
         const abstractOptions = {
-            width: this.CONTENT_WIDTH - 40,
+            width: this.CONTENT_WIDTH - 60,
             align: "justify" as const,
-            lineGap: 4
+            lineGap: 5
         };
 
         let finalAbstractText = abstractText;
@@ -191,7 +196,7 @@ export class PDFService {
         const beforePageCount = doc.bufferedPageRange().count;
         const currentY = doc.y;
 
-        doc.text(finalAbstractText, this.MARGIN_LEFT + 20, abstractY + 30, abstractOptions);
+        doc.text(finalAbstractText, this.MARGIN_LEFT + 30, abstractY + 40, abstractOptions);
 
         const afterPageCount = doc.bufferedPageRange().count;
 
@@ -200,8 +205,11 @@ export class PDFService {
         }
 
         doc.y = bottomY;
-        doc.fontSize(11).font("Helvetica").fillColor("#6b7280")
-            .text(authorText, this.MARGIN_LEFT, bottomY, {
+        doc.rect(this.MARGIN_LEFT, bottomY - 6, this.CONTENT_WIDTH, 1)
+            .fill("#cbd5e1");
+        
+        doc.fontSize(10).font("Helvetica-Bold").fillColor("#3b82f6")
+            .text(authorText, this.MARGIN_LEFT, bottomY + 4, {
                 width: this.CONTENT_WIDTH,
                 align: "right"
             });
@@ -215,26 +223,27 @@ export class PDFService {
         doc.save();
 
         const waveColors = [
-            { color: "#3b5998", opacity: 0.9 },
-            { color: "#5677b8", opacity: 0.8 },
-            { color: "#7191cc", opacity: 0.7 },
+            { color: "#1e40af", opacity: 0.95 },
+            { color: "#3b82f6", opacity: 0.85 },
+            { color: "#60a5fa", opacity: 0.75 },
+            { color: "#93c5fd", opacity: 0.65 },
         ];
 
         waveColors.forEach((wave, index) => {
-            const yOffset = index * 30;
-            const height = 120 - yOffset;
+            const yOffset = index * 25;
+            const height = 140 - yOffset;
 
             doc.fillColor(wave.color).fillOpacity(wave.opacity);
 
             doc.moveTo(0, yOffset);
 
-            for (let x = 0; x <= this.PAGE_WIDTH; x += this.PAGE_WIDTH / 3) {
-                const cp1x = x + this.PAGE_WIDTH / 6;
-                const cp1y = yOffset + height * 0.3 + Math.sin(x / 50 + index) * 20;
-                const cp2x = x + this.PAGE_WIDTH / 3;
-                const cp2y = yOffset + height * 0.6 + Math.cos(x / 50 + index) * 20;
-                const endX = x + this.PAGE_WIDTH / 2;
-                const endY = yOffset + height * 0.8;
+            for (let x = 0; x <= this.PAGE_WIDTH; x += this.PAGE_WIDTH / 4) {
+                const cp1x = x + this.PAGE_WIDTH / 8;
+                const cp1y = yOffset + height * 0.25 + Math.sin(x / 40 + index) * 25;
+                const cp2x = x + this.PAGE_WIDTH / 4;
+                const cp2y = yOffset + height * 0.5 + Math.cos(x / 40 + index) * 25;
+                const endX = x + this.PAGE_WIDTH / 3;
+                const endY = yOffset + height * 0.7 + Math.sin(x / 30 + index * 2) * 15;
 
                 doc.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
             }
@@ -254,9 +263,9 @@ export class PDFService {
         data: QuoteWithDetails,
         title: string
     ) {
-        const headerH = 120;
-        const logoSize = 50;
-        const topMargin = 25;
+        const headerH = 95;
+        const logoSize = 40;
+        const topMargin = 18;
 
         doc.rect(0, 0, this.PAGE_WIDTH, headerH).fill("#FFFFFF");
 
@@ -282,23 +291,23 @@ export class PDFService {
         const companyInfoX = this.PAGE_WIDTH - this.MARGIN_RIGHT - companyInfoW;
         let yy = topMargin;
 
-        doc.fontSize(11).font("Helvetica-Bold").fillColor(this.PRIMARY)
+        doc.fontSize(10).font("Helvetica-Bold").fillColor(this.PRIMARY)
             .text(data.companyName || "AICERA Systems Private Limited", companyInfoX, yy, {
                 width: companyInfoW,
                 align: "right",
             });
 
-        yy += 14;
+        yy += 12;
         if (data.companyAddress) {
             const addressLines = data.companyAddress.split("\n").filter(Boolean);
             const compactAddress = addressLines.slice(0, 2).join(", ");
-            doc.fontSize(8).font("Helvetica").fillColor(this.MUTED)
+            doc.fontSize(7).font("Helvetica").fillColor(this.MUTED)
                 .text(compactAddress, companyInfoX, yy, {
                     width: companyInfoW,
                     align: "right",
                     lineGap: 1
                 });
-            yy += 18;
+            yy += 16;
         } else {
             yy += 10;
         }
@@ -315,19 +324,20 @@ export class PDFService {
                 });
         }
 
-        const titleY = 80;
-        doc.fontSize(18).font("Helvetica-Bold").fillColor(this.PRIMARY)
+        const titleY = 66;
+        doc.fontSize(18).font("Helvetica-Bold").fillColor(this.ACCENT)
             .text(title, this.MARGIN_LEFT, titleY, {
                 width: this.CONTENT_WIDTH,
                 align: "center"
             });
 
-        doc.strokeColor(this.ACCENT_LINE).lineWidth(2)
-            .moveTo(this.MARGIN_LEFT, headerH - 3)
-            .lineTo(this.PAGE_WIDTH - this.MARGIN_RIGHT, headerH - 3)
-            .stroke();
+        doc.rect(this.MARGIN_LEFT, headerH - 4, this.CONTENT_WIDTH, 3)
+            .fill(this.ACCENT);
+        
+        doc.rect(this.MARGIN_LEFT, headerH - 1, this.CONTENT_WIDTH * 0.4, 1)
+            .fill(this.ACCENT_LIGHT);
 
-        doc.y = headerH + 10;
+        doc.y = headerH + 8;
     }
 
     private static drawFooter(
@@ -337,26 +347,27 @@ export class PDFService {
         total: number,
         title: string
     ) {
-        const footerH = 70;
+        const footerH = 55;
         const footerY = this.PAGE_HEIGHT - footerH;
 
         const oldBottom = doc.page.margins.bottom;
         doc.page.margins.bottom = 0;
 
-        doc.rect(0, footerY, this.PAGE_WIDTH, footerH).fill("#f8fafc");
+        doc.rect(0, footerY, this.PAGE_WIDTH, footerH).fill(this.BG_SOFT);
 
-        doc.strokeColor(this.ACCENT_LINE).lineWidth(2)
-            .moveTo(0, footerY)
-            .lineTo(this.PAGE_WIDTH, footerY)
-            .stroke();
+        doc.rect(0, footerY, this.PAGE_WIDTH, 3)
+            .fill(this.ACCENT);
+        
+        doc.rect(0, footerY, this.PAGE_WIDTH * 0.3, 1)
+            .fill(this.ACCENT_LIGHT);
 
-        let y = footerY + 12;
+        let y = footerY + 10;
 
         const footerTitle = `${data.companyName || "AICERA Systems Private Limited"}`;
-        doc.fontSize(10).font("Helvetica-Bold").fillColor(this.PRIMARY)
+        doc.fontSize(9).font("Helvetica-Bold").fillColor(this.PRIMARY)
             .text(footerTitle, 0, y, { width: this.PAGE_WIDTH, align: "center" });
 
-        y += 14;
+        y += 12;
 
         const addressParts: string[] = [];
         if (data.companyAddress) {
@@ -373,7 +384,7 @@ export class PDFService {
                     align: "center",
                     lineGap: 1
                 });
-            y += 10;
+            y += 9;
         }
 
         const contactParts: string[] = [];
@@ -387,7 +398,7 @@ export class PDFService {
                     width: this.PAGE_WIDTH,
                     align: "center"
                 });
-            y += 9;
+            y += 8;
         }
 
         if (data.companyGSTIN) {
@@ -398,8 +409,8 @@ export class PDFService {
                 });
         }
 
-        doc.fontSize(8).font("Helvetica").fillColor(this.MUTED)
-            .text(`Page ${page} of ${total}`, this.MARGIN_LEFT, footerY + footerH - 10, {
+        doc.fontSize(7).font("Helvetica").fillColor(this.MUTED)
+            .text(`Page ${page} of ${total}`, this.MARGIN_LEFT, footerY + footerH - 9, {
                 width: this.CONTENT_WIDTH,
                 align: "center",
             });
@@ -419,11 +430,11 @@ export class PDFService {
         let y = y0;
 
         const row = (label: string, value: string) => {
-            doc.fontSize(10).font("Helvetica-Bold").fillColor(this.MUTED)
+            doc.fontSize(9).font("Helvetica-Bold").fillColor(this.MUTED)
                 .text(label, this.MARGIN_LEFT, y);
             doc.font("Helvetica").fillColor(this.TEXT)
                 .text(value || "—", valueX, y);
-            y += 18;
+            y += 16;
         };
 
         row("Company Name:", data.companyName || "AICERA");
@@ -448,27 +459,32 @@ export class PDFService {
         doc: InstanceType<typeof PDFDocument>,
         data: QuoteWithDetails
     ) {
+        // Check if we need a new page (estimate ~160 height needed for client info)
+        if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 160) {
+            this.addPageWithHeader(doc, data, "COMMERCIAL PROPOSAL");
+        }
+
         const startY = doc.y;
         const labelW = 120;
 
         // Left (Bill To)
-        doc.fontSize(12).font("Helvetica-Bold").fillColor(this.PRIMARY)
+        doc.fontSize(11).font("Helvetica-Bold").fillColor(this.PRIMARY)
             .text("Bill To:", this.MARGIN_LEFT, startY);
 
-        let ly = startY + 22;
+        let ly = startY + 20;
         const vX = this.MARGIN_LEFT + labelW + 5;
 
         const put = (lab: string, val?: string, color?: string) => {
-            doc.fontSize(10).font("Helvetica-Bold").fillColor(this.TEXT)
+            doc.fontSize(9).font("Helvetica-Bold").fillColor(this.TEXT)
                 .text(lab, this.MARGIN_LEFT, ly);
             doc.font("Helvetica").fillColor(color || this.TEXT)
                 .text(val || "—", vX, ly, { width: this.CONTENT_WIDTH * 0.46 - labelW, lineGap: 2 });
-            ly += 18;
+            ly += 16;
         };
 
         put("Name:", data.client.name);
         if (data.client.billingAddress) {
-            doc.fontSize(10).font("Helvetica-Bold").fillColor(this.TEXT)
+            doc.fontSize(9).font("Helvetica-Bold").fillColor(this.TEXT)
                 .text("Address:", this.MARGIN_LEFT, ly);
             const h = doc.heightOfString(data.client.billingAddress, {
                 width: this.CONTENT_WIDTH * 0.46 - labelW, lineGap: 2,
@@ -477,7 +493,7 @@ export class PDFService {
                 .text(data.client.billingAddress, vX, ly, {
                     width: this.CONTENT_WIDTH * 0.46 - labelW, lineGap: 2,
                 });
-            ly += h + 12;
+            ly += h + 10;
         }
         put("Phone No.:", data.client.phone || undefined);
         put("Email ID:", data.client.email || undefined, this.PRIMARY_LIGHT);
@@ -488,23 +504,23 @@ export class PDFService {
         // Right (Ship To)
         const rightX = this.MARGIN_LEFT + this.CONTENT_WIDTH * 0.52;
         const rvX = rightX + labelW + 5;
-        doc.fontSize(12).font("Helvetica-Bold").fillColor(this.PRIMARY)
+        doc.fontSize(11).font("Helvetica-Bold").fillColor(this.PRIMARY)
             .text("Ship To:", rightX, startY);
 
-        let ry = startY + 22;
+        let ry = startY + 20;
 
         const putR = (lab: string, val?: string, color?: string) => {
-            doc.fontSize(10).font("Helvetica-Bold").fillColor(this.TEXT)
+            doc.fontSize(9).font("Helvetica-Bold").fillColor(this.TEXT)
                 .text(lab, rightX, ry);
             doc.font("Helvetica").fillColor(color || this.TEXT)
                 .text(val || "—", rvX, ry, { width: this.CONTENT_WIDTH * 0.46 - labelW, lineGap: 2 });
-            ry += 18;
+            ry += 16;
         };
 
         putR("Name:", data.client.name);
         const shipAddress = data.client.shippingAddress || data.client.billingAddress;
         if (shipAddress) {
-            doc.fontSize(10).font("Helvetica-Bold").fillColor(this.TEXT)
+            doc.fontSize(9).font("Helvetica-Bold").fillColor(this.TEXT)
                 .text("Address:", rightX, ry);
             const h = doc.heightOfString(shipAddress, {
                 width: this.CONTENT_WIDTH * 0.46 - labelW, lineGap: 2,
@@ -513,10 +529,10 @@ export class PDFService {
                 .text(shipAddress, rvX, ry, {
                     width: this.CONTENT_WIDTH * 0.46 - labelW, lineGap: 2,
                 });
-            ry += h + 12;
+            ry += h + 10;
         }
 
-        doc.y = Math.max(ly, ry) + 10;
+        doc.y = Math.max(ly, ry) + 8;
     }
 
     // ===== PRODUCTS TABLE (Template columns) ===================================
@@ -524,6 +540,11 @@ export class PDFService {
         doc: InstanceType<typeof PDFDocument>,
         data: QuoteWithDetails
     ) {
+        // Check if we need a new page before starting products section
+        if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 100) {
+            this.addPageWithHeader(doc, data, "COMMERCIAL PROPOSAL");
+        }
+
         // Section title
         doc.fontSize(11).font("Helvetica-Bold").fillColor(this.PRIMARY)
             .text("PRODUCTS & SERVICES", this.MARGIN_LEFT, doc.y);
@@ -550,7 +571,13 @@ export class PDFService {
         for (let i = 0; i < items.length; i++) {
             const item = items[i];
 
-            if (y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 60) {
+            // Calculate row height before checking pagination
+            const minH = 24;
+            const descH = doc.heightOfString(item.description, { width: hdr.col2W - 16, lineGap: 2 });
+            const rowH = Math.max(minH, descH + 14);
+
+            // Check if this row will fit on current page, otherwise create new page
+            if (y + rowH > this.PAGE_HEIGHT - this.MARGIN_BOTTOM) {
                 this.addPageWithHeader(doc, data, "COMMERCIAL PROPOSAL");
                 doc.fontSize(11).font("Helvetica-Bold").fillColor(this.PRIMARY)
                     .text("PRODUCTS & SERVICES (contd.)", this.MARGIN_LEFT, doc.y);
@@ -560,11 +587,6 @@ export class PDFService {
                 Object.assign(hdr, again);
                 doc.fillColor(this.TEXT).font("Helvetica").fontSize(9);
             }
-
-            // Row height (wrap description)
-            const minH = 28;
-            const descH = doc.heightOfString(item.description, { width: hdr.col2W - 16, lineGap: 2 });
-            const rowH = Math.max(minH, descH + 16);
 
             // Row background
             doc.rect(this.MARGIN_LEFT, y, this.CONTENT_WIDTH, rowH)
@@ -609,7 +631,7 @@ export class PDFService {
 
     private static drawProductsHeader(doc: InstanceType<typeof PDFDocument>) {
         const top = doc.y;
-        const headerH = 32;
+        const headerH = 28;
 
         doc.rect(this.MARGIN_LEFT, top, this.CONTENT_WIDTH, headerH).fill(this.PRIMARY);
 
@@ -624,8 +646,8 @@ export class PDFService {
         const col5X = col4X + col4W;
         const col5W = this.CONTENT_WIDTH - (col1W + col2W + col3W + col4W) - 5;
 
-        const ty = top + 11;
-        doc.fontSize(10).font("Helvetica-Bold").fillColor("#FFFFFF");
+        const ty = top + 9;
+        doc.fontSize(9).font("Helvetica-Bold").fillColor("#FFFFFF");
 
         doc.text("SN", col1X, ty, { width: col1W, align: "center" });
         doc.text("Product Description", col2X + 8, ty, { width: col2W - 16, align: "left" });
@@ -650,21 +672,30 @@ export class PDFService {
         doc: InstanceType<typeof PDFDocument>,
         data: QuoteWithDetails
     ) {
-        if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 120) {
+        const notesText = data.quote.notes || "—";
+        const notesW = this.CONTENT_WIDTH * 0.58;
+
+        // Calculate approximate height needed
+        const estimatedNotesH = Math.max(
+            90,
+            doc.heightOfString(notesText, { width: notesW - 20, lineGap: 3 }) + 20
+        );
+        const estimatedHeight = estimatedNotesH + 35; // Add some buffer
+
+        // Check if we have enough space for the entire section
+        if (doc.y + estimatedHeight > this.PAGE_HEIGHT - this.MARGIN_BOTTOM) {
             this.addPageWithHeader(doc, data, "COMMERCIAL PROPOSAL");
         }
 
-        const sectionY = doc.y + 6;
+        const sectionY = doc.y + 5;
 
         // Left: Notes box title
-        doc.fontSize(11).font("Helvetica-Bold").fillColor(this.PRIMARY)
+        doc.fontSize(10).font("Helvetica-Bold").fillColor(this.PRIMARY)
             .text("Special notes and instructions", this.MARGIN_LEFT, sectionY);
 
-        const notesText = data.quote.notes || "—";
-        const notesTop = sectionY + 18;
-        const notesW = this.CONTENT_WIDTH * 0.58;
+        const notesTop = sectionY + 16;
         const notesH = Math.max(
-            100,
+            90,
             doc.heightOfString(notesText, { width: notesW - 20, lineGap: 3 }) + 20
         );
 
@@ -678,24 +709,24 @@ export class PDFService {
         const rightW = this.CONTENT_WIDTH - (notesW + 16);
         const company = data.companyName || "AICERA Systems Private Limited";
 
-        doc.fontSize(11).font("Helvetica-Bold").fillColor(this.PRIMARY)
+        doc.fontSize(10).font("Helvetica-Bold").fillColor(this.PRIMARY)
             .text(`For ${company},`, rightX, sectionY, { width: rightW });
 
         const sigTop = notesTop;
-        const sigH = Math.max(100, notesH);
+        const sigH = Math.max(90, notesH);
         doc.rect(rightX, sigTop, rightW, sigH).fillAndStroke("#ffffff", this.BORDER);
 
         // signature line
-        const lineY = sigTop + sigH - 28;
+        const lineY = sigTop + sigH - 26;
         doc.strokeColor(this.TEXT).lineWidth(0.8)
             .moveTo(rightX + 20, lineY)
             .lineTo(rightX + rightW - 20, lineY)
             .stroke();
 
-        doc.fontSize(10).font("Helvetica").fillColor(this.TEXT)
-            .text("Authorized Signatory", rightX + 20, lineY + 6);
+        doc.fontSize(9).font("Helvetica").fillColor(this.TEXT)
+            .text("Authorized Signatory", rightX + 20, lineY + 5);
 
-        doc.y = Math.max(notesTop + notesH, sigTop + sigH) + 18;
+        doc.y = Math.max(notesTop + notesH, sigTop + sigH) + 14;
     }
 
     // ===== TERMS & CONDITIONS (table like the template) ========================
@@ -708,18 +739,18 @@ export class PDFService {
 
         if (rows.length === 0) return;
 
-        if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 150) {
+        if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 120) {
             this.addPageWithHeader(doc, data, "COMMERCIAL PROPOSAL");
         }
 
-        doc.fontSize(11).font("Helvetica-Bold").fillColor(this.PRIMARY)
+        doc.fontSize(10).font("Helvetica-Bold").fillColor(this.PRIMARY)
             .text("Terms & Conditions", this.MARGIN_LEFT, doc.y);
 
-        doc.moveDown(0.5);
+        doc.moveDown(0.4);
 
         // Table header
         const top = doc.y;
-        const headerH = 28;
+        const headerH = 26;
         const w = this.CONTENT_WIDTH;
 
         // Columns: SN | Parameters | Details
@@ -729,30 +760,31 @@ export class PDFService {
         const col3X = col2X + col2W;
 
         doc.rect(this.MARGIN_LEFT, top, w, headerH).fill(this.PRIMARY);
-        doc.fontSize(10).font("Helvetica-Bold").fillColor("#FFFFFF");
-        doc.text("SN", col1X, top + 9, { width: col1W, align: "center" });
-        doc.text("Parameters", col2X + 6, top + 9, { width: col2W - 12, align: "left" });
-        doc.text("Details", col3X + 6, top + 9, { width: col3W - 12, align: "left" });
+        doc.fontSize(9).font("Helvetica-Bold").fillColor("#FFFFFF");
+        doc.text("SN", col1X, top + 8, { width: col1W, align: "center" });
+        doc.text("Parameters", col2X + 6, top + 8, { width: col2W - 12, align: "left" });
+        doc.text("Details", col3X + 6, top + 8, { width: col3W - 12, align: "left" });
 
         let y = top + headerH;
 
         rows.forEach((r, i) => {
-            // new page if needed
-            if (y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 60) {
+            // Calculate row height before checking pagination
+            const detailsH = Math.max(
+                22,
+                doc.heightOfString(r.details || "—", { width: col3W - 12, lineGap: 2 }) + 10
+            );
+
+            // Check if this row will fit on current page, otherwise create new page
+            if (y + detailsH > this.PAGE_HEIGHT - this.MARGIN_BOTTOM) {
                 this.addPageWithHeader(doc, data, "COMMERCIAL PROPOSAL");
                 // re-draw header
                 doc.rect(this.MARGIN_LEFT, doc.y, w, headerH).fill(this.PRIMARY);
-                doc.fontSize(10).font("Helvetica-Bold").fillColor("#FFFFFF");
-                doc.text("SN", col1X, doc.y + 9, { width: col1W, align: "center" });
-                doc.text("Parameters", col2X + 6, doc.y + 9, { width: col2W - 12, align: "left" });
-                doc.text("Details", col3X + 6, doc.y + 9, { width: col3W - 12, align: "left" });
+                doc.fontSize(9).font("Helvetica-Bold").fillColor("#FFFFFF");
+                doc.text("SN", col1X, doc.y + 8, { width: col1W, align: "center" });
+                doc.text("Parameters", col2X + 6, doc.y + 8, { width: col2W - 12, align: "left" });
+                doc.text("Details", col3X + 6, doc.y + 8, { width: col3W - 12, align: "left" });
                 y = doc.y + headerH;
             }
-
-            const detailsH = Math.max(
-                24,
-                doc.heightOfString(r.details || "—", { width: col3W - 12, lineGap: 2 }) + 12
-            );
 
             // row bg
             doc.rect(this.MARGIN_LEFT, y, w, detailsH).fill(i % 2 === 0 ? this.BG_ALT : "#FFFFFF");
@@ -763,15 +795,15 @@ export class PDFService {
                 .stroke();
 
             // text
-            doc.fontSize(9).font("Helvetica").fillColor(this.TEXT);
-            doc.text(String(i + 1), col1X, y + 7, { width: col1W, align: "center" });
-            doc.text(r.param || "—", col2X + 6, y + 7, { width: col2W - 12, align: "left" });
-            doc.text(r.details || "—", col3X + 6, y + 7, { width: col3W - 12, align: "left", lineGap: 2 });
+            doc.fontSize(8.5).font("Helvetica").fillColor(this.TEXT);
+            doc.text(String(i + 1), col1X, y + 6, { width: col1W, align: "center" });
+            doc.text(r.param || "—", col2X + 6, y + 6, { width: col2W - 12, align: "left" });
+            doc.text(r.details || "—", col3X + 6, y + 6, { width: col3W - 12, align: "left", lineGap: 2 });
 
             y += detailsH;
         });
 
-        doc.y = y + 16;
+        doc.y = y + 12;
     }
 
     private static parseTerms(terms: string): Array<{ param: string; details: string }> {
@@ -824,19 +856,20 @@ export class PDFService {
         try { bom = JSON.parse(raw) } catch { /* ignore */ }
         if (!Array.isArray(bom) || bom.length === 0) return;
 
-        if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 140) {
+        if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 120) {
             this.addPageWithHeader(doc, data, "COMMERCIAL PROPOSAL");
         }
 
         // Annexure title
-        doc.fontSize(12).font("Helvetica-Bold").fillColor(this.PRIMARY)
+        doc.fontSize(11).font("Helvetica-Bold").fillColor(this.PRIMARY)
             .text("Annexure 1", this.MARGIN_LEFT, doc.y);
 
-        doc.moveDown(0.5);
+        doc.moveDown(0.4);
 
         // Group by product (expects array of parts; if each entry already is one product, just list)
         bom.forEach((entry: any, idx: number) => {
-            if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 120) {
+            // Check if we need a new page before starting a new product section (need ~70 for header)
+            if (doc.y > this.PAGE_HEIGHT - this.MARGIN_BOTTOM - 80) {
                 this.addPageWithHeader(doc, data, "COMMERCIAL PROPOSAL");
             }
 
@@ -846,25 +879,25 @@ export class PDFService {
                 entry?.product ||
                 `Item ${idx + 1}`;
 
-            doc.fontSize(11).font("Helvetica-Bold").fillColor(this.TEXT)
+            doc.fontSize(10).font("Helvetica-Bold").fillColor(this.TEXT)
                 .text(heading, this.MARGIN_LEFT, doc.y);
 
-            doc.moveDown(0.3);
+            doc.moveDown(0.25);
 
             const boxY = doc.y;
-            const hMin = 90;
+            const hMin = 80;
             // Compose a compact module table (Module | Description | Qty) like the template’s blocks
             const w = this.CONTENT_WIDTH;
             const col1W = 120, col2W = w - (col1W + 60), col3W = 60;
             const col1X = this.MARGIN_LEFT, col2X = col1X + col1W, col3X = col2X + col2W;
 
             // header
-            const headerH = 26;
+            const headerH = 24;
             doc.rect(this.MARGIN_LEFT, boxY, w, headerH).fill(this.PRIMARY);
-            doc.fontSize(10).font("Helvetica-Bold").fillColor("#FFFFFF");
-            doc.text("Module", col1X + 6, boxY + 8, { width: col1W - 12 });
-            doc.text("Description", col2X + 6, boxY + 8, { width: col2W - 12 });
-            doc.text("Qty", col3X, boxY + 8, { width: col3W, align: "center" });
+            doc.fontSize(9).font("Helvetica-Bold").fillColor("#FFFFFF");
+            doc.text("Module", col1X + 6, boxY + 7, { width: col1W - 12 });
+            doc.text("Description", col2X + 6, boxY + 7, { width: col2W - 12 });
+            doc.text("Qty", col3X, boxY + 7, { width: col3W, align: "center" });
 
             let y = boxY + headerH;
 
@@ -880,12 +913,31 @@ export class PDFService {
                 rows.splice(0, 0, ...guess);
             }
 
-            doc.fontSize(9).font("Helvetica").fillColor(this.TEXT);
+            doc.fontSize(8.5).font("Helvetica").fillColor(this.TEXT);
             rows.forEach((r, i2) => {
                 const rowH = Math.max(
-                    24,
-                    doc.heightOfString(String(r?.description || ""), { width: col2W - 12, lineGap: 2 }) + 12
+                    22,
+                    doc.heightOfString(String(r?.description || ""), { width: col2W - 12, lineGap: 2 }) + 10
                 );
+
+                // Check if this row will fit on current page
+                if (y + rowH > this.PAGE_HEIGHT - this.MARGIN_BOTTOM) {
+                    this.addPageWithHeader(doc, data, "COMMERCIAL PROPOSAL");
+                    // Re-draw header for this product on new page
+                    doc.fontSize(10).font("Helvetica-Bold").fillColor(this.TEXT)
+                        .text(heading + " (contd.)", this.MARGIN_LEFT, doc.y);
+                    doc.moveDown(0.25);
+
+                    const newBoxY = doc.y;
+                    doc.rect(this.MARGIN_LEFT, newBoxY, w, headerH).fill(this.PRIMARY);
+                    doc.fontSize(9).font("Helvetica-Bold").fillColor("#FFFFFF");
+                    doc.text("Module", col1X + 6, newBoxY + 7, { width: col1W - 12 });
+                    doc.text("Description", col2X + 6, newBoxY + 7, { width: col2W - 12 });
+                    doc.text("Qty", col3X, newBoxY + 7, { width: col3W, align: "center" });
+                    y = newBoxY + headerH;
+                    doc.fontSize(8.5).font("Helvetica").fillColor(this.TEXT);
+                }
+
                 // bg
                 doc.rect(this.MARGIN_LEFT, y, w, rowH).fill(i2 % 2 === 0 ? this.BG_ALT : "#FFFFFF");
                 // border
@@ -895,14 +947,14 @@ export class PDFService {
                     .stroke();
 
                 doc.fillColor(this.TEXT);
-                doc.text(String(r?.module || "—"), col1X + 6, y + 7, { width: col1W - 12 });
-                doc.text(String(r?.description || "—"), col2X + 6, y + 7, { width: col2W - 12, lineGap: 2 });
-                doc.text(String(r?.qty ?? "—"), col3X, y + 7, { width: col3W, align: "center" });
+                doc.text(String(r?.module || "—"), col1X + 6, y + 6, { width: col1W - 12 });
+                doc.text(String(r?.description || "—"), col2X + 6, y + 6, { width: col2W - 12, lineGap: 2 });
+                doc.text(String(r?.qty ?? "—"), col3X, y + 6, { width: col3W, align: "center" });
 
                 y += rowH;
             });
 
-            doc.y = Math.max(y, boxY + hMin) + 16;
+            doc.y = Math.max(y, boxY + hMin) + 12;
         });
     }
 
@@ -923,7 +975,12 @@ export class PDFService {
         if (Number(quote.sgst) > 0) lines.push({ label: "SGST (9%):", value: Number(quote.sgst) });
         if (Number(quote.igst) > 0) lines.push({ label: "IGST (18%):", value: Number(quote.igst) });
 
-        const boxH = lines.length * 20 + 60;
+        const boxH = lines.length * 18 + 54;
+
+        // Check if totals box will fit on current page, if not we can't split it so leave more space
+        if (doc.y + boxH > this.PAGE_HEIGHT - this.MARGIN_BOTTOM) {
+            doc.addPage();
+        }
 
         // Shadow + box
         doc.rect(x + 2, doc.y + 2, w, boxH).fill("#d1d5db");
@@ -931,33 +988,33 @@ export class PDFService {
         doc.rect(x, boxTop, w, boxH).fillAndStroke("#ffffff", this.BORDER);
 
         // Title
-        doc.rect(x, boxTop, w, 28).fill("#dbeafe");
-        doc.fontSize(10).font("Helvetica-Bold").fillColor(this.PRIMARY)
-            .text("FINANCIAL SUMMARY", x + 15, boxTop + 9);
+        doc.rect(x, boxTop, w, 26).fill("#dbeafe");
+        doc.fontSize(9.5).font("Helvetica-Bold").fillColor(this.PRIMARY)
+            .text("FINANCIAL SUMMARY", x + 15, boxTop + 8);
 
         // Lines
-        let y = boxTop + 40;
+        let y = boxTop + 36;
         const labelX = x + 15;
         const valueW = 120;
         const valueX = x + w - 15 - valueW;
 
-        doc.fontSize(9.5).font("Helvetica");
+        doc.fontSize(9).font("Helvetica");
         lines.forEach((ln) => {
             doc.fillColor(this.MUTED).text(ln.label, labelX, y);
             doc.fillColor(ln.color || this.TEXT)
                 .text(this.currency(ln.value), valueX, y, { width: valueW, align: "right" });
-            y += 20;
+            y += 18;
         });
 
         // Total band
-        y += 5;
-        doc.rect(x, y - 4, w, 32).fill(this.PRIMARY);
-        doc.fontSize(11).font("Helvetica-Bold").fillColor("#FFFFFF")
-            .text("TOTAL AMOUNT:", labelX, y + 9);
-        doc.fontSize(12).font("Helvetica").fillColor("#FFFFFF")
-            .text(this.currency(Number(quote.total) || 0), valueX - 10, y + 8, { width: valueW + 10, align: "right" });
+        y += 4;
+        doc.rect(x, y - 3, w, 30).fill(this.PRIMARY);
+        doc.fontSize(10).font("Helvetica-Bold").fillColor("#FFFFFF")
+            .text("TOTAL AMOUNT:", labelX, y + 8);
+        doc.fontSize(11).font("Helvetica").fillColor("#FFFFFF")
+            .text(this.currency(Number(quote.total) || 0), valueX - 10, y + 7, { width: valueW + 10, align: "right" });
 
-        doc.y = boxTop + boxH + 20;
+        doc.y = boxTop + boxH + 16;
     }
 
 
