@@ -18,11 +18,6 @@ interface QuoteWithDetails {
     abstract?: string;
 }
 
-type InvoicePdfData = QuoteWithDetails & {
-    invoiceNumber: string;
-    dueDate: Date;
-};
-
 export class PDFService {
     // Page geometry
     private static readonly PAGE_WIDTH = 595.28; // A4
@@ -109,34 +104,6 @@ export class PDFService {
         return doc;
     }
 
-    static generateInvoicePDF(data: InvoicePdfData): PDFKit.PDFDocument {
-        const doc = new PDFDocument({
-            size: "A4",
-            margins: {
-                top: this.MARGIN_TOP,
-                bottom: this.MARGIN_BOTTOM,
-                left: this.MARGIN_LEFT,
-                right: this.MARGIN_RIGHT,
-            },
-            bufferPages: true,
-        });
-
-        this.drawHeader(doc, data, "INVOICE");
-        this.drawInvoiceInfo(doc, data);
-        this.drawClientTwoColumn(doc, data);
-        this.drawProductsSection(doc, data);
-        this.drawTotalsBox(doc, data.quote);
-
-        const range = doc.bufferedPageRange();
-        const total = range.count;
-        for (let i = 0; i < total; i++) {
-            doc.switchToPage(i);
-            this.drawFooter(doc, data, i + 1, total, "INVOICE");
-        }
-
-        doc.end();
-        return doc;
-    }
 
     // ===== COVER ===============================================================
     private static drawCoverPage(
@@ -152,7 +119,7 @@ export class PDFService {
             }
             if (fs.existsSync(logoPath)) {
                 const logoY = 180;
-                doc.image(logoPath, this.PAGE_WIDTH / 2 - 80, logoY, { 
+                doc.image(logoPath, this.PAGE_WIDTH / 2 - 80, logoY, {
                     fit: [160, 160],
                     align: 'center'
                 });
@@ -174,13 +141,13 @@ export class PDFService {
                 width: this.PAGE_WIDTH,
                 align: "center",
             });
-        
+
         doc.fontSize(18).font("Helvetica-Oblique").fillColor("#374151")
             .text("For", 0, titleY + 35, {
                 width: this.PAGE_WIDTH,
                 align: "center",
             });
-        
+
         doc.fontSize(22).font("Helvetica-Oblique").fillColor("#374151")
             .text(data.client.name, 0, titleY + 65, {
                 width: this.PAGE_WIDTH,
@@ -191,7 +158,7 @@ export class PDFService {
         const bottomY = this.PAGE_HEIGHT - 100;
         const authorText = `Author: ${data.preparedBy || data.companyName || "AICERA Systems"}`;
         const maxAbstractHeight = bottomY - (abstractY + 30) - 20;
-        
+
         doc.fontSize(14).font("Helvetica-Bold").fillColor("#1f2937")
             .text("Abstract", 0, abstractY, {
                 width: this.PAGE_WIDTH,
@@ -200,38 +167,38 @@ export class PDFService {
 
         const abstractText = data.abstract ||
             `This commercial proposal outlines a comprehensive solution designed to address the specific needs of ${data.client.name} in enhancing their operations and achieving strategic objectives. Our approach leverages industry-leading technologies, innovative methodologies, and customized services to deliver measurable value and sustainable growth.`;
-        
+
         doc.fontSize(10).font("Helvetica").fillColor("#374151");
-        
+
         const abstractOptions = {
             width: this.CONTENT_WIDTH - 40,
             align: "justify" as const,
             lineGap: 4
         };
-        
+
         let finalAbstractText = abstractText;
         let abstractHeight = doc.heightOfString(finalAbstractText, abstractOptions);
-        
+
         while (abstractHeight > maxAbstractHeight && finalAbstractText.length > 0) {
             finalAbstractText = finalAbstractText.slice(0, -1);
             abstractHeight = doc.heightOfString(finalAbstractText + "...", abstractOptions);
         }
-        
+
         if (finalAbstractText.length < abstractText.length) {
             finalAbstractText = finalAbstractText.trim() + "...";
         }
-        
+
         const beforePageCount = doc.bufferedPageRange().count;
         const currentY = doc.y;
-        
+
         doc.text(finalAbstractText, this.MARGIN_LEFT + 20, abstractY + 30, abstractOptions);
-        
+
         const afterPageCount = doc.bufferedPageRange().count;
-        
+
         if (afterPageCount > beforePageCount) {
             doc.switchToPage(0);
         }
-        
+
         doc.y = bottomY;
         doc.fontSize(11).font("Helvetica").fillColor("#6b7280")
             .text(authorText, this.MARGIN_LEFT, bottomY, {
@@ -246,7 +213,7 @@ export class PDFService {
 
     private static drawWaveHeader(doc: InstanceType<typeof PDFDocument>) {
         doc.save();
-        
+
         const waveColors = [
             { color: "#3b5998", opacity: 0.9 },
             { color: "#5677b8", opacity: 0.8 },
@@ -256,11 +223,11 @@ export class PDFService {
         waveColors.forEach((wave, index) => {
             const yOffset = index * 30;
             const height = 120 - yOffset;
-            
+
             doc.fillColor(wave.color).fillOpacity(wave.opacity);
-            
+
             doc.moveTo(0, yOffset);
-            
+
             for (let x = 0; x <= this.PAGE_WIDTH; x += this.PAGE_WIDTH / 3) {
                 const cp1x = x + this.PAGE_WIDTH / 6;
                 const cp1y = yOffset + height * 0.3 + Math.sin(x / 50 + index) * 20;
@@ -268,10 +235,10 @@ export class PDFService {
                 const cp2y = yOffset + height * 0.6 + Math.cos(x / 50 + index) * 20;
                 const endX = x + this.PAGE_WIDTH / 2;
                 const endY = yOffset + height * 0.8;
-                
+
                 doc.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
             }
-            
+
             doc.lineTo(this.PAGE_WIDTH, 0)
                .lineTo(0, 0)
                .closePath()
@@ -299,7 +266,7 @@ export class PDFService {
                 logoPath = path.join(process.cwd(), "client", "public", "logo.png");
             }
             if (fs.existsSync(logoPath)) {
-                doc.image(logoPath, this.MARGIN_LEFT, topMargin, { 
+                doc.image(logoPath, this.MARGIN_LEFT, topMargin, {
                     fit: [logoSize, logoSize]
                 });
             } else {
@@ -326,10 +293,10 @@ export class PDFService {
             const addressLines = data.companyAddress.split("\n").filter(Boolean);
             const compactAddress = addressLines.slice(0, 2).join(", ");
             doc.fontSize(8).font("Helvetica").fillColor(this.MUTED)
-                .text(compactAddress, companyInfoX, yy, { 
-                    width: companyInfoW, 
-                    align: "right", 
-                    lineGap: 1 
+                .text(compactAddress, companyInfoX, yy, {
+                    width: companyInfoW,
+                    align: "right",
+                    lineGap: 1
                 });
             yy += 18;
         } else {
@@ -339,20 +306,20 @@ export class PDFService {
         const contactLine: string[] = [];
         if (data.companyPhone) contactLine.push(`Ph: ${data.companyPhone}`);
         if (data.companyEmail) contactLine.push(`Email: ${data.companyEmail}`);
-        
+
         if (contactLine.length > 0) {
             doc.fontSize(7).font("Helvetica").fillColor(this.MUTED)
-                .text(contactLine.join(" | "), companyInfoX, yy, { 
-                    width: companyInfoW, 
-                    align: "right" 
+                .text(contactLine.join(" | "), companyInfoX, yy, {
+                    width: companyInfoW,
+                    align: "right"
                 });
         }
 
         const titleY = 80;
         doc.fontSize(18).font("Helvetica-Bold").fillColor(this.PRIMARY)
-            .text(title, this.MARGIN_LEFT, titleY, { 
-                width: this.CONTENT_WIDTH, 
-                align: "center" 
+            .text(title, this.MARGIN_LEFT, titleY, {
+                width: this.CONTENT_WIDTH,
+                align: "center"
             });
 
         doc.strokeColor(this.ACCENT_LINE).lineWidth(2)
@@ -377,14 +344,14 @@ export class PDFService {
         doc.page.margins.bottom = 0;
 
         doc.rect(0, footerY, this.PAGE_WIDTH, footerH).fill("#f8fafc");
-        
+
         doc.strokeColor(this.ACCENT_LINE).lineWidth(2)
             .moveTo(0, footerY)
             .lineTo(this.PAGE_WIDTH, footerY)
             .stroke();
 
         let y = footerY + 12;
-        
+
         const footerTitle = `${data.companyName || "AICERA Systems Private Limited"}`;
         doc.fontSize(10).font("Helvetica-Bold").fillColor(this.PRIMARY)
             .text(footerTitle, 0, y, { width: this.PAGE_WIDTH, align: "center" });
@@ -398,11 +365,11 @@ export class PDFService {
                 addressParts.push(addressLines.join(", "));
             }
         }
-        
+
         if (addressParts.length > 0) {
             doc.fontSize(7).font("Helvetica").fillColor(this.MUTED)
-                .text(addressParts[0], this.MARGIN_LEFT, y, { 
-                    width: this.CONTENT_WIDTH, 
+                .text(addressParts[0], this.MARGIN_LEFT, y, {
+                    width: this.CONTENT_WIDTH,
                     align: "center",
                     lineGap: 1
                 });
@@ -413,27 +380,27 @@ export class PDFService {
         if (data.companyPhone) contactParts.push(`Phone: ${data.companyPhone}`);
         if (data.companyEmail) contactParts.push(`Email: ${data.companyEmail}`);
         if (data.companyWebsite) contactParts.push(`Web: ${data.companyWebsite}`);
-        
+
         if (contactParts.length > 0) {
             doc.fontSize(7).font("Helvetica").fillColor(this.MUTED)
-                .text(contactParts.join(" | "), 0, y, { 
-                    width: this.PAGE_WIDTH, 
-                    align: "center" 
+                .text(contactParts.join(" | "), 0, y, {
+                    width: this.PAGE_WIDTH,
+                    align: "center"
                 });
             y += 9;
         }
 
         if (data.companyGSTIN) {
             doc.fontSize(7).font("Helvetica").fillColor(this.MUTED)
-                .text(`GSTIN: ${data.companyGSTIN}`, 0, y, { 
-                    width: this.PAGE_WIDTH, 
-                    align: "center" 
+                .text(`GSTIN: ${data.companyGSTIN}`, 0, y, {
+                    width: this.PAGE_WIDTH,
+                    align: "center"
                 });
         }
 
         doc.fontSize(8).font("Helvetica").fillColor(this.MUTED)
             .text(`Page ${page} of ${total}`, this.MARGIN_LEFT, footerY + footerH - 10, {
-                width: this.CONTENT_WIDTH, 
+                width: this.CONTENT_WIDTH,
                 align: "center",
             });
 
@@ -468,8 +435,8 @@ export class PDFService {
             year: "numeric", month: "short", day: "numeric",
         }));
         row("Payment Terms:", "30 days from the date of Invoice");
-        
-        const validityText = data.quote.validUntil 
+
+        const validityText = data.quote.validUntil
             ? `Valid until ${new Date(data.quote.validUntil).toLocaleDateString("en-IN", { year: "numeric", month: "short", day: "numeric" })}`
             : `${data.quote.validityDays || 15} days from the quote date`;
         row("Quote Validity:", validityText);
@@ -566,7 +533,7 @@ export class PDFService {
         let y = hdr.startY;
 
         const items = data.items || [];
-        
+
         if (items.length === 0) {
             const noItemsY = hdr.startY + 20;
             doc.fontSize(10).font("Helvetica-Oblique").fillColor(this.MUTED)
@@ -659,7 +626,7 @@ export class PDFService {
 
         const ty = top + 11;
         doc.fontSize(10).font("Helvetica-Bold").fillColor("#FFFFFF");
-        
+
         doc.text("SN", col1X, ty, { width: col1W, align: "center" });
         doc.text("Product Description", col2X + 8, ty, { width: col2W - 16, align: "left" });
         doc.text("Qty", col3X, ty, { width: col3W, align: "center" });
@@ -993,51 +960,6 @@ export class PDFService {
         doc.y = boxTop + boxH + 20;
     }
 
-    // ===== INVOICE INFO (if you use invoice generation) ========================
-    private static drawInvoiceInfo(
-        doc: InstanceType<typeof PDFDocument>, data: InvoicePdfData
-    ) {
-        const startY = doc.y;
-        const boxH = 90;
-        const labelW = 120;
-
-        doc.rect(this.MARGIN_LEFT, startY, this.CONTENT_WIDTH, boxH).fillAndStroke(this.BG_SOFT, this.BORDER);
-        doc.rect(this.MARGIN_LEFT, startY, this.CONTENT_WIDTH, 30).fill("#dbeafe");
-
-        doc.fontSize(11).font("Helvetica-Bold").fillColor(this.PRIMARY)
-            .text("INVOICE DETAILS", this.MARGIN_LEFT + 15, startY + 10);
-
-        const leftX = this.MARGIN_LEFT + 15;
-        const leftVX = leftX + labelW + 5;
-        const rightX = this.MARGIN_LEFT + this.CONTENT_WIDTH * 0.52;
-        const rightVX = rightX + labelW + 5;
-
-        let y = startY + 45;
-        doc.fontSize(9).font("Helvetica-Bold").fillColor(this.MUTED)
-            .text("Invoice Number:", leftX, y);
-        doc.font("Helvetica").fillColor(this.TEXT)
-            .text(data.invoiceNumber, leftVX, y);
-        y += 20;
-
-        doc.font("Helvetica-Bold").fillColor(this.MUTED)
-            .text("Invoice Date:", leftX, y);
-        doc.font("Helvetica").fillColor(this.TEXT)
-            .text(new Date(data.quote.quoteDate).toLocaleDateString("en-IN"), leftVX, y);
-
-        y = startY + 45;
-        doc.font("Helvetica-Bold").fillColor(this.MUTED)
-            .text("Due Date:", rightX, y);
-        doc.font("Helvetica").fillColor(this.TEXT)
-            .text(data.dueDate.toLocaleDateString("en-IN"), rightVX, y);
-        y += 20;
-
-        doc.font("Helvetica-Bold").fillColor(this.MUTED)
-            .text("Quote Number:", rightX, y);
-        doc.font("Helvetica").fillColor(this.TEXT)
-            .text(data.quote.quoteNumber, rightVX, y);
-
-        doc.y = startY + boxH + 25;
-    }
 
     // ===== UTILITIES ===========================================================
     private static addPageWithHeader(

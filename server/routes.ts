@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import { nanoid } from "nanoid";
 import { storage } from "./storage";
 import { PDFService } from "./services/pdf.service";
+import { InvoicePDFService } from "./services/invoice-pdf.service";
 import { EmailService } from "./services/email.service";
 import { analyticsService } from "./services/analytics.service";
 import { pricingService } from "./services/pricing.service";
@@ -1296,7 +1297,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const companyWebsite = settings.find((s) => s.key === "company_website")?.value || "";
       const companyGSTIN = settings.find((s) => s.key === "company_gstin")?.value || "";
 
-      const pdfStream = PDFService.generateInvoicePDF({
+      const pdfStream = InvoicePDFService.generateInvoicePDF({
         quote,
         client,
         items,
@@ -1309,6 +1310,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         preparedBy: creator?.name,
         invoiceNumber: invoice.invoiceNumber,
         dueDate: new Date(invoice.dueDate),
+        paidAmount: invoice.paidAmount,
+        paymentStatus: invoice.paymentStatus,
       });
 
       res.setHeader("Content-Type", "application/pdf");
@@ -1364,7 +1367,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const companyGSTIN = settings.find((s) => s.key === "company_gstin")?.value || "";
 
       // Generate PDF for attachment
-      const pdfStream = PDFService.generateInvoicePDF({
+      const pdfStream = InvoicePDFService.generateInvoicePDF({
         quote,
         client,
         items,
@@ -1377,6 +1380,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         preparedBy: creator?.name,
         invoiceNumber: invoice.invoiceNumber,
         dueDate: new Date(invoice.dueDate),
+        paidAmount: invoice.paidAmount,
+        paymentStatus: invoice.paymentStatus,
       });
 
       // Convert stream to buffer
