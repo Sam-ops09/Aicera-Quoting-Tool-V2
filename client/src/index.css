@@ -285,4 +285,26 @@
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
     inset: -1px;
   }
+
+  /* Custom scrollbar for payment history */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800 rounded-full;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-[#0046FF]/40 hover:bg-[#0046FF]/60 rounded-full;
+  }
+
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(221 100% 50% / 0.4) hsl(0 0% 96%);
+  }
+
+  .dark .custom-scrollbar {
+    scrollbar-color: hsl(221 100% 60% / 0.4) hsl(0 0% 20%);
+  }
 }

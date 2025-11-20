@@ -3,11 +3,10 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Receipt, Eye, Download, Send, Loader2, Filter } from "lucide-react";
+import { Search, Receipt, Eye, Download, Send, Loader2, Filter, DollarSign, TrendingUp, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { useLocation } from "wouter";
-import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -122,32 +121,101 @@ export default function Invoices() {
         </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-sm text-muted-foreground">Total Revenue</div>
-            <div className="text-2xl font-bold text-primary">₹{stats.totalRevenue.toLocaleString()}</div>
+      {/* Enhanced Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="hover:shadow-lg transition-all duration-300 border-2 hover:border-[#0046FF]/30">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex-1">
+                <div className="text-sm font-medium text-muted-foreground font-['Open_Sans'] mb-1">
+                  Total Revenue
+                </div>
+                <div className="text-3xl font-bold text-[#001BB7] dark:text-blue-300">
+                  ₹{stats.totalRevenue.toLocaleString()}
+                </div>
+              </div>
+              <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 rounded-lg">
+                <DollarSign className="h-6 w-6 text-[#0046FF]" />
+              </div>
+            </div>
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <Receipt className="h-3 w-3" />
+              <span>From {stats.total} invoices</span>
+            </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-sm text-muted-foreground">Collected</div>
-            <div className="text-2xl font-bold text-green-600">₹{stats.totalPaid.toLocaleString()}</div>
+
+        <Card className="hover:shadow-lg transition-all duration-300 border-2 hover:border-green-300">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex-1">
+                <div className="text-sm font-medium text-muted-foreground font-['Open_Sans'] mb-1">
+                  Collected
+                </div>
+                <div className="text-3xl font-bold text-green-700 dark:text-green-400">
+                  ₹{stats.totalPaid.toLocaleString()}
+                </div>
+              </div>
+              <div className="p-3 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900 dark:to-green-800 rounded-lg">
+                <CheckCircle2 className="h-6 w-6 text-green-600" />
+              </div>
+            </div>
+            <div className="flex items-center gap-1 text-xs text-green-700 dark:text-green-400">
+              <TrendingUp className="h-3 w-3" />
+              <span>{stats.paid} paid invoices</span>
+            </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-sm text-muted-foreground">Outstanding</div>
-            <div className="text-2xl font-bold text-orange-600">₹{(stats.totalRevenue - stats.totalPaid).toLocaleString()}</div>
+
+        <Card className="hover:shadow-lg transition-all duration-300 border-2 hover:border-orange-300">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex-1">
+                <div className="text-sm font-medium text-muted-foreground font-['Open_Sans'] mb-1">
+                  Outstanding
+                </div>
+                <div className="text-3xl font-bold text-[#FF8040] dark:text-orange-400">
+                  ₹{(stats.totalRevenue - stats.totalPaid).toLocaleString()}
+                </div>
+              </div>
+              <div className="p-3 bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900 dark:to-orange-800 rounded-lg">
+                <AlertCircle className="h-6 w-6 text-[#FF8040]" />
+              </div>
+            </div>
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <span>{stats.partial + stats.pending} pending payment</span>
+            </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-sm text-muted-foreground">Total Invoices</div>
-            <div className="text-2xl font-bold">{stats.total}</div>
-            <div className="text-xs text-muted-foreground mt-1">
-              {stats.paid} paid • {stats.partial} partial • {stats.pending} pending
+
+        <Card className="hover:shadow-lg transition-all duration-300 border-2 hover:border-purple-300">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex-1">
+                <div className="text-sm font-medium text-muted-foreground font-['Open_Sans'] mb-1">
+                  Total Invoices
+                </div>
+                <div className="text-3xl font-bold text-purple-700 dark:text-purple-400">
+                  {stats.total}
+                </div>
+              </div>
+              <div className="p-3 bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 rounded-lg">
+                <Receipt className="h-6 w-6 text-purple-600" />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-1 text-xs font-['Open_Sans']">
+              <div className="text-center">
+                <div className="font-bold text-green-700 dark:text-green-400">{stats.paid}</div>
+                <div className="text-muted-foreground">Paid</div>
+              </div>
+              <div className="text-center">
+                <div className="font-bold text-yellow-700 dark:text-yellow-400">{stats.partial}</div>
+                <div className="text-muted-foreground">Partial</div>
+              </div>
+              <div className="text-center">
+                <div className="font-bold text-blue-700 dark:text-blue-400">{stats.pending}</div>
+                <div className="text-muted-foreground">Pending</div>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -184,75 +252,126 @@ export default function Invoices() {
 
       {filteredInvoices && filteredInvoices.length > 0 ? (
         <div className="space-y-4">
-          {filteredInvoices.map((invoice) => (
-            <Card key={invoice.id} className="hover-elevate" data-testid={`invoice-card-${invoice.id}`}>
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-2 flex-1">
-                    <div className="flex items-center gap-3">
-                      <h3 className="text-lg font-semibold">{invoice.invoiceNumber}</h3>
-                      <Badge className={getStatusColor(invoice.paymentStatus)}>
-                        {invoice.paymentStatus}
-                      </Badge>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm font-['Open_Sans']">
-                      <div>
-                        <span className="text-muted-foreground">Client:</span>
-                        <p className="font-medium">{invoice.clientName}</p>
+          {filteredInvoices.map((invoice) => {
+            const outstanding = Number(invoice.total) - Number(invoice.paidAmount);
+            const percentPaid = (Number(invoice.paidAmount) / Number(invoice.total)) * 100;
+
+            return (
+              <Card
+                key={invoice.id}
+                className="hover:shadow-lg hover:border-[#0046FF]/30 transition-all duration-300 cursor-pointer border-2"
+                data-testid={`invoice-card-${invoice.id}`}
+                onClick={() => setLocation(`/invoices/${invoice.id}`)}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="space-y-3 flex-1">
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <h3 className="text-lg font-bold text-[#001BB7] dark:text-blue-300">
+                          {invoice.invoiceNumber}
+                        </h3>
+                        <Badge className={getStatusColor(invoice.paymentStatus)}>
+                          {invoice.paymentStatus}
+                        </Badge>
+                        {invoice.paymentStatus === 'overdue' && (
+                          <Badge variant="destructive" className="animate-pulse">
+                            <AlertCircle className="h-3 w-3 mr-1" />
+                            Overdue
+                          </Badge>
+                        )}
                       </div>
-                      <div>
-                        <span className="text-muted-foreground">Due Date:</span>
-                        <p className="font-medium">{new Date(invoice.dueDate).toLocaleDateString()}</p>
+
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm font-['Open_Sans']">
+                        <div>
+                          <span className="text-xs text-muted-foreground block mb-1">Client</span>
+                          <p className="font-semibold text-foreground">{invoice.clientName}</p>
+                        </div>
+                        <div>
+                          <span className="text-xs text-muted-foreground block mb-1">Due Date</span>
+                          <p className="font-medium">{new Date(invoice.dueDate).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })}</p>
+                        </div>
+                        <div>
+                          <span className="text-xs text-muted-foreground block mb-1">Total Amount</span>
+                          <p className="font-bold text-[#0046FF] dark:text-blue-400">
+                            ₹{Number(invoice.total).toLocaleString()}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-xs text-muted-foreground block mb-1">Outstanding</span>
+                          <p className="font-bold text-[#FF8040] dark:text-orange-400">
+                            ₹{outstanding.toLocaleString()}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <span className="text-muted-foreground">Total:</span>
-                        <p className="font-semibold text-primary">₹{Number(invoice.total).toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Paid:</span>
-                        <p className="font-medium">₹{Number(invoice.paidAmount).toLocaleString()}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setLocation(`/invoices/${invoice.id}`)}
-                      data-testid={`button-view-invoice-${invoice.id}`}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setDownloadingInvoiceId(invoice.id);
-                        downloadPdfMutation.mutate(invoice.id);
-                        setTimeout(() => setDownloadingInvoiceId(null), 2000);
-                      }}
-                      disabled={downloadingInvoiceId === invoice.id}
-                      data-testid={`button-download-invoice-${invoice.id}`}
-                    >
-                      {downloadingInvoiceId === invoice.id ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <Download className="h-4 w-4" />
+
+                      {/* Payment Progress Bar */}
+                      {percentPaid > 0 && (
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-xs text-muted-foreground">
+                            <span>Payment Progress</span>
+                            <span className="font-bold text-[#0046FF]">{percentPaid.toFixed(1)}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                            <div
+                              className={`h-full transition-all duration-300 ${
+                                percentPaid >= 100 
+                                  ? 'bg-gradient-to-r from-green-500 to-green-600' 
+                                  : 'bg-gradient-to-r from-[#0046FF] to-[#001BB7]'
+                              }`}
+                              style={{ width: `${Math.min(percentPaid, 100)}%` }}
+                            />
+                          </div>
+                        </div>
                       )}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setLocation(`/invoices/${invoice.id}`)}
-                      data-testid={`button-email-invoice-${invoice.id}`}
-                    >
-                      <Send className="h-4 w-4" />
-                    </Button>
+                    </div>
+
+                    <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="hover:bg-blue-50 hover:border-[#0046FF] hover:text-[#0046FF] transition-colors"
+                        onClick={() => setLocation(`/invoices/${invoice.id}`)}
+                        data-testid={`button-view-invoice-${invoice.id}`}
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="hover:bg-green-50 hover:border-green-600 hover:text-green-600 transition-colors"
+                        onClick={() => {
+                          setDownloadingInvoiceId(invoice.id);
+                          downloadPdfMutation.mutate(invoice.id);
+                          setTimeout(() => setDownloadingInvoiceId(null), 2000);
+                        }}
+                        disabled={downloadingInvoiceId === invoice.id}
+                        data-testid={`button-download-invoice-${invoice.id}`}
+                      >
+                        {downloadingInvoiceId === invoice.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Download className="h-4 w-4" />
+                        )}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="hover:bg-purple-50 hover:border-purple-600 hover:text-purple-600 transition-colors"
+                        onClick={() => setLocation(`/invoices/${invoice.id}`)}
+                        data-testid={`button-email-invoice-${invoice.id}`}
+                      >
+                        <Send className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       ) : (
         <Card>
